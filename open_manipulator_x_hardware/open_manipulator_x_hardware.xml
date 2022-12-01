@@ -1,0 +1,9 @@
+<library path="open_manipulator_x_hardware">
+  <class name="open_manipulator_x_hardware/OpenManipulatorXSystem"
+         type="open_manipulator_x_hardware::OpenManipulatorXSystem"
+         base_class_type="hardware_interface::SystemInterface">
+    <description>
+      Hardware system controller for OpenManipulatorX
+    </description>
+  </class>
+</library>

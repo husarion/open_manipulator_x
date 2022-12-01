@@ -1,0 +1,353 @@
+<?xml version="1.0"?>
+<!-- OpenManipulator-X -->
+<!--
+Copied and modified from open_manipulator-x example -
+https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipulator_description/urdf/open_manipulator.urdf.xacro
+-->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="open_manipulator_x" params="parent_link xyz rpy tf_prefix:=None use_sim">
+
+    <xacro:if value="${tf_prefix == 'None'}">
+      <xacro:property name="tf_prefix_ext" value="" />
+    </xacro:if>
+    <xacro:unless value="${tf_prefix == 'None'}">
+      <xacro:property name="tf_prefix_ext" value="${tf_prefix}_" />
+    </xacro:unless>
+
+    <joint name="${parent_link}_to_${tf_prefix_ext}link1" type="fixed">
+      <origin xyz="${xyz}" rpy="${rpy}" />
+      <parent link="${parent_link}" />
+      <child link="${tf_prefix_ext}link1" />
+    </joint>
+
+    <xacro:property
+      name="meshes_file_direction"
+      value="file://$(find ros_components_description)/meshes/open_manipulator_x" />
+
+    <link name="${tf_prefix_ext}link1">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="${meshes_file_direction}/link1.stl" scale="0.001 0.001 0.001" />
+        </geometry>
+        <material name="grey" />
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="${meshes_file_direction}/link1.stl" scale="0.001 0.001 0.001" />
+        </geometry>
+      </collision>
+
+      <inertial>
+        <origin xyz="3.0876154e-04 0.0000000e+00 -1.2176461e-04" />
+        <mass value="7.9119962e-02" />
+        <inertia ixx="1.2505234e-05" ixy="0.0" ixz="-1.7855208e-07"
+          iyy="2.1898364e-05" iyz="0.0"
+          izz="1.9267361e-05" />
+      </inertial>
+    </link>
+
+    <joint name="${tf_prefix_ext}joint1" type="revolute">
+      <parent link="${tf_prefix_ext}link1" />
+      <child link="${tf_prefix_ext}link2" />
+      <origin xyz="0.012 0.0 0.017" rpy="0 0 0" />
+      <axis xyz="0 0 1" />
+      <limit velocity="4.8" effort="1" lower="${-pi*0.9}" upper="${pi*0.9}" />
+      <dynamics damping="0.1" />
+    </joint>
+
+    <link name="${tf_prefix_ext}link2">
+      <visual>
+        <origin xyz="0 0 0.019" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="${meshes_file_direction}/link2.stl" scale="0.001 0.001 0.001" />
+        </geometry>
+        <material name="grey" />
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0.019" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="${meshes_file_direction}/link2.stl" scale="0.001 0.001 0.001" />
+        </geometry>
+      </collision>
+
+      <inertial>
+        <origin xyz="-3.0184870e-04 5.4043684e-04 ${0.018 + 2.9433464e-02}" />
+        <mass value="9.8406837e-02" />
+        <inertia ixx="3.4543422e-05" ixy="-1.6031095e-08" ixz="-3.8375155e-07"
+          iyy="3.2689329e-05" iyz="2.8511935e-08"
+          izz="1.8850320e-05" />
+      </inertial>
+    </link>
+
+    <joint name="${tf_prefix_ext}joint2" type="revolute">
+      <parent link="${tf_prefix_ext}link2" />
+      <child link="${tf_prefix_ext}link3" />
+      <origin xyz="0.0 0.0 0.0595" rpy="0 0 0" />
+      <axis xyz="0 1 0" />
+      <limit velocity="4.8" effort="1" lower="${-pi*0.57}" upper="${pi*0.5}" />
+      <dynamics damping="0.1" />
+    </joint>
+
+    <link name="${tf_prefix_ext}link3">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="${meshes_file_direction}/link3.stl" scale="0.001 0.001 0.001" />
+        </geometry>
+        <material name="grey" />
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="${meshes_file_direction}/link3.stl" scale="0.001 0.001 0.001" />
+        </geometry>
+      </collision>
+
+      <inertial>
+        <origin xyz="1.0308393e-02 3.7743363e-04 1.0170197e-01" />
+        <mass value="1.3850917e-01" />
+        <inertia ixx="3.3055381e-04" ixy="-9.7940978e-08" ixz="-3.8505711e-05"
+          iyy="3.4290447e-04" iyz="-1.5717516e-06"
+          izz="6.0346498e-05" />
+      </inertial>
+    </link>
+
+    <joint name="${tf_prefix_ext}joint3" type="revolute">
+      <parent link="${tf_prefix_ext}link3" />
+      <child link="${tf_prefix_ext}link4" />
+      <origin xyz="0.024 0 0.128" rpy="0 0 0" />
+      <axis xyz="0 1 0" />
+      <limit velocity="4.8" effort="1" lower="${-pi*0.3}" upper="${pi*0.44}" />
+      <dynamics damping="0.1" />
+    </joint>
+
+    <link name="${tf_prefix_ext}link4">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="${meshes_file_direction}/link4.stl" scale="0.001 0.001 0.001" />
+        </geometry>
+        <material name="grey" />
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="${meshes_file_direction}/link4.stl" scale="0.001 0.001 0.001" />
+        </geometry>
+      </collision>
+
+      <inertial>
+        <origin xyz="9.0909590e-02 3.8929816e-04 2.2413279e-04" />
+        <mass value="1.3274562e-01" />
+        <inertia ixx="3.0654178e-05" ixy="-1.2764155e-06" ixz="-2.6874417e-07"
+          iyy="2.4230292e-04" iyz="1.1559550e-08"
+          izz="2.5155057e-04" />
+      </inertial>
+    </link>
+
+    <joint name="${tf_prefix_ext}joint4" type="revolute">
+      <parent link="${tf_prefix_ext}link4" />
+      <child link="${tf_prefix_ext}link5" />
+      <origin xyz="0.124 0.0 0.0" rpy="0 0 0" />
+      <axis xyz="0 1 0" />
+      <limit velocity="4.8" effort="1" lower="${-pi*0.57}" upper="${pi*0.65}" />
+      <dynamics damping="0.1" />
+    </joint>
+
+    <link name="${tf_prefix_ext}link5">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="${meshes_file_direction}/link5.stl" scale="0.001 0.001 0.001" />
+        </geometry>
+        <material name="grey" />
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="${meshes_file_direction}/link5.stl" scale="0.001 0.001 0.001" />
+        </geometry>
+      </collision>
+
+      <inertial>
+        <origin xyz="4.4206755e-02 3.6839985e-07 8.9142216e-03" />
+        <mass value="1.4327573e-01" />
+        <inertia ixx="8.0870749e-05" ixy="0.0" ixz="-1.0157896e-06"
+          iyy="7.5980465e-05" iyz="0.0"
+          izz="9.3127351e-05" />
+      </inertial>
+    </link>
+
+    <joint name="${tf_prefix_ext}gripper_left_joint" type="prismatic">
+      <parent link="${tf_prefix_ext}link5" />
+      <child link="${tf_prefix_ext}gripper_left_link" />
+      <origin xyz="0.0817 0.021 0.0" rpy="0 0 0" />
+      <axis xyz="0 1 0" />
+      <limit velocity="4.8" effort="1" lower="-0.010" upper="0.019" />
+      <dynamics damping="0.1" />
+    </joint>
+
+    <link name="${tf_prefix_ext}gripper_left_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="${meshes_file_direction}/gripper_left_palm.stl" scale="0.001 0.001 0.001" />
+        </geometry>
+        <material name="grey" />
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="${meshes_file_direction}/gripper_left_palm.stl" scale="0.001 0.001 0.001" />
+        </geometry>
+      </collision>
+
+      <inertial>
+        <origin xyz="0 0 0" />
+        <mass value="1.0e-03" />
+        <inertia ixx="1.0e-06" ixy="0.0" ixz="0.0"
+          iyy="1.0e-06" iyz="0.0"
+          izz="1.0e-06" />
+      </inertial>
+    </link>
+
+    <joint name="${tf_prefix_ext}gripper_right_joint" type="prismatic">
+      <parent link="${tf_prefix_ext}link5" />
+      <child link="${tf_prefix_ext}gripper_right_link" />
+      <origin xyz="0.0817 -0.021 0" rpy="0 0 0" />
+      <axis xyz="0 -1 0" />
+      <limit velocity="4.8" effort="1" lower="-0.010" upper="0.019" />
+      <mimic joint="${tf_prefix_ext}gripper_left_joint" multiplier="1" />
+      <dynamics damping="0.1" />
+    </joint>
+
+    <link name="${tf_prefix_ext}gripper_right_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="${meshes_file_direction}/gripper_right_palm.stl" scale="0.001 0.001 0.001" />
+        </geometry>
+        <material name="grey" />
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="${meshes_file_direction}/gripper_right_palm.stl" scale="0.001 0.001 0.001" />
+        </geometry>
+      </collision>
+
+      <inertial>
+        <origin xyz="0 0 0" />
+        <mass value="1.0e-03" />
+        <inertia ixx="1.0e-06" ixy="0.0" ixz="0.0"
+          iyy="1.0e-06" iyz="0.0"
+          izz="1.0e-06" />
+      </inertial>
+    </link>
+
+    <joint name="${tf_prefix_ext}end_effector_joint" type="fixed">
+      <parent link="${tf_prefix_ext}link5" />
+      <child link="${tf_prefix_ext}end_effector_link" />
+      <origin xyz="0.126 0.0 0.0" rpy="0 0 0" />
+    </joint>
+
+    <link name="${tf_prefix_ext}end_effector_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.01 0.01 0.01" />
+        </geometry>
+        <material name="red" />
+      </visual>
+    </link>
+
+
+    <ros2_control name="manipulator" type="system">
+
+      <xacro:if value="$(arg use_sim)">
+        <hardware>
+          <!-- <plugin>gazebo_ros2_control/GazeboSystem</plugin> -->
+          <plugin>ign_ros2_control/IgnitionSystem</plugin>
+        </hardware>
+      </xacro:if>
+
+      <xacro:unless value="$(arg use_sim)">
+        <hardware>
+          <plugin>open_manipulator_x_hardware/OpenManipulatorXSystem</plugin>
+          <param name="opencr_id">200</param>
+          <param name="opencr_usb_port">/dev/ttyUSB0</param>
+          <param name="opencr_baud_rate">115200</param>
+          <param name="dxl_joints_profile_acceleration">100</param>
+          <param name="dxl_joints_profile_velocity">500</param>
+          <param name="dxl_gripper_profile_acceleration">20</param>
+          <param name="dxl_gripper_profile_velocity">200</param>
+        </hardware>
+      </xacro:unless>
+
+
+      <joint name="${tf_prefix_ext}joint1">
+        <command_interface name="position">
+          <param name="min">${-pi*0.9}</param>
+          <param name="max">${pi*0.9}</param>
+        </command_interface>
+        <state_interface name="position" />
+        <state_interface name="velocity" />
+      </joint>
+      <joint name="${tf_prefix_ext}joint2">
+        <command_interface name="position">
+          <param name="min">${-pi*0.57}</param>
+          <param name="max">${pi*0.5}</param>
+        </command_interface>
+        <state_interface name="position" />
+        <state_interface name="velocity" />
+      </joint>
+      <joint name="${tf_prefix_ext}joint3">
+        <command_interface name="position">
+          <param name="min">${-pi*0.3}</param>
+          <param name="max">${pi*0.44}</param>
+        </command_interface>
+        <state_interface name="position" />
+        <state_interface name="velocity" />
+      </joint>
+      <joint name="${tf_prefix_ext}joint4">
+        <command_interface name="position">
+          <param name="min">${-pi*0.57}</param>
+          <param name="max">${pi*0.65}</param>
+        </command_interface>
+        <state_interface name="position" />
+        <state_interface name="velocity" />
+      </joint>
+      <joint name="${tf_prefix_ext}gripper_left_joint">
+        <command_interface name="position">
+          <param name="min">-0.010</param>
+          <param name="max">0.019</param>
+        </command_interface>
+        <state_interface name="position" />
+        <state_interface name="velocity" />
+      </joint>
+      <!-- <joint name="${tf_prefix_ext}gripper_right_joint">
+        <param name="mimic">gripper_left_joint</param>
+        <param name="multiplier">1</param>
+        <command_interface name="position">
+          <param name="min">-0.010</param>
+          <param name="max">0.019</param>
+        </command_interface>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint> -->
+
+    </ros2_control>
+
+  </xacro:macro>
+
+</robot>
