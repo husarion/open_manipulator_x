@@ -203,13 +203,11 @@ return_type OpenManipulatorXSystem::read(const rclcpp::Time&, const rclcpp::Dura
 
   // Receive current angles from all actuators
   std::vector<robotis_manipulator::ActuatorValue> result_actuator = actuator_->receiveJointActuatorValue(joint_dxl_id_);
-  // RCLCPP_INFO(logger, "Can'AWEDSAF");
   if (result_actuator.size() == 0)
   {
     RCLCPP_ERROR(logger, "Can't read joint states");
     return return_type::OK;
   }
-  // RCLCPP_INFO(logger, "2");
 
   int i = 0;
   for (const auto& result_joint : result_actuator)
@@ -218,22 +216,17 @@ return_type OpenManipulatorXSystem::read(const rclcpp::Time&, const rclcpp::Dura
     dxl_velocities_[i] = result_joint.velocity;
     ++i;
   }
-  // RCLCPP_INFO(logger, "3");
 
   robotis_manipulator::ActuatorValue result_tool = tool_->receiveToolActuatorValue();
-  // RCLCPP_INFO(logger, "31");
 
   dxl_positions_[4] = result_tool.position;
   // Velocity is always set to 0 in gripper dynamixel implementation
   dxl_velocities_[4] = result_tool.velocity;
 
-  // RCLCPP_INFO(logger, "4");
 
   dxl_positions_[5] = result_tool.position;
   // Velocity is always set to 0 in gripper dynamixel implementation
   dxl_velocities_[5] = result_tool.velocity;
-
-  // RCLCPP_INFO(logger, "5");
 
   return return_type::OK;
 }
