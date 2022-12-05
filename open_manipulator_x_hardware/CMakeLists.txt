@@ -17,22 +17,31 @@ endif()
 # Find ament packages and libraries for ament and system dependencies
 ################################################################################
 find_package(ament_cmake REQUIRED)
-find_package(dynamixel_sdk REQUIRED)
 find_package(hardware_interface REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(dynamixel_workbench_toolbox REQUIRED)
+find_package(robotis_manipulator REQUIRED)
+
+include_directories(
+  include
+)
+
+set(dependencies_lib
+  "dynamixel_workbench_toolbox"
+  "robotis_manipulator"
+)
 
 add_library(${PROJECT_NAME} SHARED
-  src/dynamixel_sdk_wrapper.cpp
-  src/opencr.cpp
-  src/open_manipulator_x_system.cpp
+  "src/dynamixel.cpp"
+  "src/open_manipulator_x_system.cpp"
 )
 
 ament_target_dependencies(${PROJECT_NAME}
-  dynamixel_sdk
   hardware_interface
   pluginlib
   rclcpp
+  ${dependencies_lib}
 )
 
 target_include_directories(${PROJECT_NAME}
@@ -63,10 +72,11 @@ ament_export_include_directories(include)
 ament_export_libraries(${PROJECT_NAME})
 
 ament_export_dependencies(
-  dynamixel_sdk
   hardware_interface
   pluginlib
   rclcpp
+  dynamixel_workbench_toolbox
+  robotis_manipulator
 )
 
 ament_package()

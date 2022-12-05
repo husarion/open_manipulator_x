@@ -284,9 +284,9 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
       <xacro:unless value="$(arg use_sim)">
         <hardware>
           <plugin>open_manipulator_x_hardware/OpenManipulatorXSystem</plugin>
-          <param name="opencr_id">200</param>
-          <param name="opencr_usb_port">/dev/ttyUSB0</param>
-          <param name="opencr_baud_rate">115200</param>
+          <param name="usb_port">/dev/ttyUSB0</param>
+          <param name="baud_rate">115200</param>
+          <param name="control_period">0.01</param>
           <param name="dxl_joints_profile_acceleration">100</param>
           <param name="dxl_joints_profile_velocity">500</param>
           <param name="dxl_gripper_profile_acceleration">20</param>
@@ -335,7 +335,7 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
         <state_interface name="position" />
         <state_interface name="velocity" />
       </joint>
-      <!-- <joint name="${tf_prefix_ext}gripper_right_joint">
+      <joint name="${tf_prefix_ext}gripper_right_joint">
         <param name="mimic">gripper_left_joint</param>
         <param name="multiplier">1</param>
         <command_interface name="position">
@@ -344,7 +344,7 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
         </command_interface>
         <state_interface name="position"/>
         <state_interface name="velocity"/>
-      </joint> -->
+      </joint>
 
     </ros2_control>
 

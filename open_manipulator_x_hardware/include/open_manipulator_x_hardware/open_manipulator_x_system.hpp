@@ -31,7 +31,7 @@
 #include "hardware_interface/system_interface.hpp"
 #include "hardware_interface/handle.hpp"
 
-#include "open_manipulator_x_hardware/opencr.hpp"
+#include "open_manipulator_x_hardware/dynamixel.h"
 
 namespace open_manipulator_x_hardware
 {
@@ -79,10 +79,12 @@ public:
   return_type write(const rclcpp::Time&, const rclcpp::Duration&) override;
 
 private:
-  uint8_t id_;
   std::string usb_port_;
-  uint32_t baud_rate_;
-  uint8_t heartbeat_;
+  std::string baud_rate_;
+  double control_period_;
+
+  std::vector<uint8_t> joint_dxl_id_ = {11, 12, 13, 14};
+  uint8_t gripper_dxl_id_ = 15;
 
   std::array<int32_t, 4> joints_acceleration_;
   std::array<int32_t, 4> joints_velocity_;
@@ -90,7 +92,8 @@ private:
   int32_t gripper_acceleration_;
   int32_t gripper_velocity_;
 
-  std::unique_ptr<OpenCR> opencr_;
+  std::unique_ptr<dynamixel::JointDynamixelProfileControl> actuator_;
+  std::unique_ptr<dynamixel::GripperDynamixel> tool_;
 
   std::vector<double> dxl_joint_commands_;
   std::vector<double> dxl_gripper_commands_;
