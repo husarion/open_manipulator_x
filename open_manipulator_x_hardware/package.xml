@@ -2,13 +2,13 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>open_manipulator_x_hardware</name>
-  <version>2.0.1</version>
+  <version>1.0.0</version>
   <description>
     ROS 2 package for open_manipulator_x_hardware
   </description>
+  <author email="thlim@robotis.com">Darby Lim</author>
   <maintainer email="willson@robotis.com">Will Son</maintainer>
   <license>Apache 2.0</license>
-  <author email="thlim@robotis.com">Darby Lim</author>
   <buildtool_depend>ament_cmake</buildtool_depend>
   <depend>hardware_interface</depend>
   <depend>pluginlib</depend>
