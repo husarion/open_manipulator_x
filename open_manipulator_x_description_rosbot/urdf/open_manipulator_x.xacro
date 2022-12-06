@@ -25,6 +25,10 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
       name="meshes_file_direction"
       value="file://$(find ros_components_description)/meshes/open_manipulator_x" />
 
+    <material name="grey">
+      <color rgba="0.05 0.05 0.05 1.0" />
+    </material>
+
     <link name="${tf_prefix_ext}link1">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -262,13 +266,13 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
     </joint>
 
     <link name="${tf_prefix_ext}end_effector_link">
-      <visual>
+      <!-- <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
           <box size="0.01 0.01 0.01" />
         </geometry>
         <material name="red" />
-      </visual>
+      </visual> -->
     </link>
 
 
@@ -335,7 +339,7 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
         <state_interface name="position" />
         <state_interface name="velocity" />
       </joint>
-      <joint name="${tf_prefix_ext}gripper_right_joint">
+      <!-- <joint name="${tf_prefix_ext}gripper_right_joint">
         <param name="mimic">gripper_left_joint</param>
         <param name="multiplier">1</param>
         <command_interface name="position">
@@ -344,7 +348,7 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
         </command_interface>
         <state_interface name="position"/>
         <state_interface name="velocity"/>
-      </joint>
+      </joint> -->
 
     </ros2_control>
 

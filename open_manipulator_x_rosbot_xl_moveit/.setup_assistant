@@ -7,7 +7,7 @@ moveit_setup_assistant_config:
   package_settings:
     author_name: Maciej Stępień
     author_email: maciej.stepien@husarion.com
-    generated_timestamp: 1670239564
+    generated_timestamp: 1670263952
   control_xacro:
     command:
       - position
