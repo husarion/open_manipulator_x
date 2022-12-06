@@ -219,14 +219,14 @@ return_type OpenManipulatorXSystem::read(const rclcpp::Time&, const rclcpp::Dura
 
   robotis_manipulator::ActuatorValue result_tool = tool_->receiveToolActuatorValue();
 
-  dxl_positions_[4] = result_tool.position;
+  dxl_positions_[4] = result_tool.position * RAD_TO_METER;
   // Velocity is always set to 0 in gripper dynamixel implementation
-  dxl_velocities_[4] = result_tool.velocity;
+  dxl_velocities_[4] = result_tool.velocity * RPM_TO_RAD_PER_SEC;
 
 
-  dxl_positions_[5] = result_tool.position;
+  dxl_positions_[5] = result_tool.position * RAD_TO_METER;
   // Velocity is always set to 0 in gripper dynamixel implementation
-  dxl_velocities_[5] = result_tool.velocity;
+  dxl_velocities_[5] = result_tool.velocity * RPM_TO_RAD_PER_SEC;
 
   return return_type::OK;
 }
@@ -252,7 +252,7 @@ return_type OpenManipulatorXSystem::write(const rclcpp::Time&, const rclcpp::Dur
   }
 
   robotis_manipulator::ActuatorValue tool_cmd;
-  tool_cmd.position = dxl_gripper_commands_[0];
+  tool_cmd.position = dxl_gripper_commands_[0]/RAD_TO_METER;
   tool_cmd.velocity = 0.0;
   tool_cmd.acceleration = 0.0;
   tool_cmd.effort = 0.0;

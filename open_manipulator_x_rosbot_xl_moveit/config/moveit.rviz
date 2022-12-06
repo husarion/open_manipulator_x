@@ -1,15 +1,17 @@
 Panels:
   - Class: rviz_common/Displays
-    Help Height: 85
+    Help Height: 0
     Name: Displays
     Property Tree Widget:
       Expanded:
         - /MotionPlanning1
+        - /MotionPlanning1/Scene Geometry1
+        - /MotionPlanning1/Scene Robot1
         - /MotionPlanning1/Planning Request1
         - /MotionPlanning1/Planning Metrics1
         - /MotionPlanning1/Planned Path1
       Splitter Ratio: 0.5
-    Tree Height: 212
+    Tree Height: 297
   - Class: rviz_common/Help
     Name: Help
   - Class: rviz_common/Views
@@ -323,10 +325,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.6399999260902405
+      Pitch: 1.0249996185302734
       Target Frame: base_link
       Value: Orbit (rviz_default_plugins)
-      Yaw: 2.390186309814453
+      Yaw: 2.6701886653900146
     Saved: ~
 Window Geometry:
   Displays:

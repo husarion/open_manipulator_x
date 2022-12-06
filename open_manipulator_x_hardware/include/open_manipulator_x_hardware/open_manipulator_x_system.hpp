@@ -40,6 +40,9 @@ using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface
 using StateInterface = hardware_interface::StateInterface;
 using CommandInterface = hardware_interface::CommandInterface;
 
+constexpr double RPM_TO_RAD_PER_SEC = 0.104719755;
+constexpr double RAD_TO_METER = -0.015;
+
 class OpenManipulatorXSystem : public hardware_interface::SystemInterface
 {
 public:
