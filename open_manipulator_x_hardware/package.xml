@@ -12,6 +12,7 @@
   <buildtool_depend>ament_cmake</buildtool_depend>
   <depend>hardware_interface</depend>
   <depend>robotis_manipulator</depend>
+  <depend>dynamixel_workbench_toolbox</depend>
   <depend>pluginlib</depend>
   <depend>rclcpp</depend>
   <export>
