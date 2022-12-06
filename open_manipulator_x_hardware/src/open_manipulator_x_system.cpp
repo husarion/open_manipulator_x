@@ -66,6 +66,17 @@ CallbackReturn OpenManipulatorXSystem::on_init(const hardware_interface::Hardwar
   void* p_joint_dxl_mode_arg = &joint_dxl_mode_arg;
   actuator_->setMode(joint_dxl_id_, p_joint_dxl_mode_arg);
 
+  // Set joint actuator parameter
+  std::string joint_dxl_opt_arg[2];
+  void* p_joint_dxl_opt_arg = &joint_dxl_opt_arg;
+  joint_dxl_opt_arg[0] = "Profile_Acceleration";
+  joint_dxl_opt_arg[1] = info_.hardware_parameters["dxl_joints_profile_acceleration"];
+  actuator_->setMode(joint_dxl_id_, p_joint_dxl_opt_arg);
+
+  joint_dxl_opt_arg[0] = "Profile_Velocity";
+  joint_dxl_opt_arg[1] = info_.hardware_parameters["dxl_joints_profile_velocity"];
+  actuator_->setMode(joint_dxl_id_, p_joint_dxl_opt_arg);
+
   tool_ = std::make_unique<dynamixel::GripperDynamixel>();
 
   tool_->init(gripper_dxl_id_, p_dxl_comm_arg);
