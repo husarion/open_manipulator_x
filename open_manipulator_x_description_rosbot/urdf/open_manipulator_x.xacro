@@ -23,7 +23,7 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
 
     <xacro:property
       name="meshes_file_direction"
-      value="file://$(find ros_components_description)/meshes/open_manipulator_x" />
+      value="file://$(find open_manipulator_x_description_rosbot)/meshes" />
 
     <material name="grey">
       <color rgba="0.05 0.05 0.05 1.0" />
