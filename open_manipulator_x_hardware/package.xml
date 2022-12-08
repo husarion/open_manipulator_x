@@ -11,6 +11,7 @@
   <license>Apache 2.0</license>
   <buildtool_depend>ament_cmake</buildtool_depend>
   <depend>hardware_interface</depend>
+  <depend>gripper_controllers</depend>
   <depend>robotis_manipulator</depend>
   <depend>dynamixel_workbench_toolbox</depend>
   <depend>pluginlib</depend>
