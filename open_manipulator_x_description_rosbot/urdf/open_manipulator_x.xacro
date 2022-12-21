@@ -280,7 +280,6 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
 
       <xacro:if value="$(arg use_sim)">
         <hardware>
-          <!-- <plugin>gazebo_ros2_control/GazeboSystem</plugin> -->
           <plugin>ign_ros2_control/IgnitionSystem</plugin>
         </hardware>
       </xacro:if>
