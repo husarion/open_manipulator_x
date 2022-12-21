@@ -291,10 +291,10 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
           <param name="usb_port">/dev/ttyUSB0</param>
           <param name="baud_rate">115200</param>
           <param name="control_period">0.1</param>
-          <param name="dxl_joints_profile_acceleration">200</param>
-          <param name="dxl_joints_profile_velocity">500</param>
-          <param name="dxl_gripper_profile_acceleration">500</param>
-          <param name="dxl_gripper_profile_velocity">1000</param>
+          <param name="manipulator_joint_profile_acceleration">200</param>
+          <param name="manipulator_joint_profile_velocity">500</param>
+          <param name="gripper_joint_profile_acceleration">500</param>
+          <param name="gripper_joint_profile_velocity">1000</param>
         </hardware>
       </xacro:unless>
 
