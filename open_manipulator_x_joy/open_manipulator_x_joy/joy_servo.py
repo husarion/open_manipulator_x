@@ -48,7 +48,7 @@ class TeleopJoy(Node):
         self.SCALE_FACTOR = 1.0
         self.MAX_VALUE = 1.0
 
-        self.JOINT_DISPLACEMENT_VALUE = 0.01
+        self.JOINT_DISPLACEMENT_VALUE = 1.0
 
     def joy_cb(self, msg):
         # 5 - dead man switch
@@ -94,27 +94,27 @@ class TeleopJoy(Node):
         joint_cmd_msg.header.stamp = self.get_clock().now().to_msg()
         joint_cmd_msg.duration = 0.1
         joint_cmd_msg.joint_names = ["joint1", "joint2", "joint3", "joint4"]
-        joint_cmd_msg.displacements = [0.0, 0.0, 0.0, 0.0]
+        joint_cmd_msg.velocities = [0.0, 0.0, 0.0, 0.0]
         
-        if msg.buttons[16]:
-            joint_cmd_msg.displacements[0] += self.JOINT_DISPLACEMENT_VALUE
-        elif msg.buttons[15]:
-            joint_cmd_msg.displacements[0] -= self.JOINT_DISPLACEMENT_VALUE
+        if msg.buttons[15]:
+            joint_cmd_msg.velocities[0] += self.JOINT_DISPLACEMENT_VALUE
+        elif msg.buttons[16]:
+            joint_cmd_msg.velocities[0] -= self.JOINT_DISPLACEMENT_VALUE
 
         if msg.buttons[14]:
-            joint_cmd_msg.displacements[1] += self.JOINT_DISPLACEMENT_VALUE
+            joint_cmd_msg.velocities[1] += self.JOINT_DISPLACEMENT_VALUE
         elif msg.buttons[13]:
-            joint_cmd_msg.displacements[1] -= self.JOINT_DISPLACEMENT_VALUE
+            joint_cmd_msg.velocities[1] -= self.JOINT_DISPLACEMENT_VALUE
 
         if msg.buttons[0]:
-            joint_cmd_msg.displacements[2] += self.JOINT_DISPLACEMENT_VALUE
+            joint_cmd_msg.velocities[2] += self.JOINT_DISPLACEMENT_VALUE
         elif msg.buttons[2]:
-            joint_cmd_msg.displacements[2] -= self.JOINT_DISPLACEMENT_VALUE
+            joint_cmd_msg.velocities[2] -= self.JOINT_DISPLACEMENT_VALUE
 
         if msg.buttons[1]:
-            joint_cmd_msg.displacements[3] += self.JOINT_DISPLACEMENT_VALUE
+            joint_cmd_msg.velocities[3] += self.JOINT_DISPLACEMENT_VALUE
         elif msg.buttons[3]:
-            joint_cmd_msg.displacements[3] -= self.JOINT_DISPLACEMENT_VALUE
+            joint_cmd_msg.velocities[3] -= self.JOINT_DISPLACEMENT_VALUE
 
         self.publisher_joint_cmds_.publish(joint_cmd_msg)
 

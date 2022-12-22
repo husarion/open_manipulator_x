@@ -10,7 +10,7 @@ scale:
   linear:  0.05  # Max linear velocity. Meters per publish_period. Unit is [m/s]. Only used for Cartesian commands.
   rotational:  0.25 # Max angular velocity. Rads per publish_period. Unit is [rad/s]. Only used for Cartesian commands.
   # Max joint angular/linear velocity. Rads or Meters per publish period. Only used for joint commands on joint_command_in_topic.
-  joint: 0.01
+  joint: 0.25
 
 ## Properties of outgoing commands
 low_latency_mode: false  # Set this to true to tie the output rate to the input rate
