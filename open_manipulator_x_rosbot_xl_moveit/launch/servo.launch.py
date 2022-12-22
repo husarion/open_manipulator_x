@@ -65,9 +65,11 @@ def generate_launch_description():
             servo_params,
             robot_description,
             robot_description_semantic,
-            kinematics_yaml,
+            # if inverse kinamtics isn't specified inverse Jacobian will be used
+            # kinematics_yaml,
         ],
         output="screen",
+        # arguments=["--ros-args", "--log-level", "debug"],
         # extra_arguments=[{'use_intra_process_comms' : True}],
     )
 
