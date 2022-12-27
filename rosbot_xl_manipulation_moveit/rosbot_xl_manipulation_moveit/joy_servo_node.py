@@ -15,6 +15,9 @@ class TeleopJoy(Node):
         self.AXIS_THRESHOLD = 0.05
         self.SCALE_FACTOR = 1.0
         self.MAX_VALUE = 1.0
+        # TODO move to parameters
+        # TODO add gripper control
+        # TODO add home position
 
         self.JOINT_DISPLACEMENT_VALUE = 1.0
 

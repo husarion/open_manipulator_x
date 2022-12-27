@@ -37,7 +37,7 @@
   <exec_depend>moveit_ros_visualization</exec_depend>
   <exec_depend>moveit_setup_assistant</exec_depend>
   <exec_depend>robot_state_publisher</exec_depend>
-  <exec_depend>rosbot_xl_description</exec_depend>
+  <exec_depend>rosbot_xl_manipulation_description</exec_depend>
   <exec_depend>rviz2</exec_depend>
   <exec_depend>rviz_common</exec_depend>
   <exec_depend>rviz_default_plugins</exec_depend>
