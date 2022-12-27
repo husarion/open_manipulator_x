@@ -1,9 +1,5 @@
 <?xml version="1.0"?>
-<!-- OpenManipulator-X -->
-<!--
-Copied and modified from open_manipulator-x example -
-https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipulator_description/urdf/open_manipulator.urdf.xacro
--->
+<!-- based on https://github.com/ROBOTIS-GIT/open_manipulator -->
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <xacro:macro name="open_manipulator_x"
@@ -19,25 +15,25 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
       <xacro:property name="tf_prefix_ext" value="${tf_prefix}_" />
     </xacro:unless>
 
+    <material name="grey">
+      <color rgba="0.05 0.05 0.05 1.0" />
+    </material>
+
+    <xacro:property name="effort_limit" value="1" />
+    <xacro:property name="velocity_limit" value="4.8" />
+    <xacro:property name="damping" value="0.1" />
+
     <joint name="${parent_link}_to_${tf_prefix_ext}link1" type="fixed">
       <origin xyz="${xyz}" rpy="${rpy}" />
       <parent link="${parent_link}" />
       <child link="${tf_prefix_ext}link1" />
     </joint>
 
-    <xacro:property
-      name="meshes_file_direction"
-      value="file://$(find open_manipulator_x_description)/meshes" />
-
-    <material name="grey">
-      <color rgba="0.05 0.05 0.05 1.0" />
-    </material>
-
     <link name="${tf_prefix_ext}link1">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="${meshes_file_direction}/link1.stl" scale="0.001 0.001 0.001" />
+          <mesh filename="file://$(find open_manipulator_x_description)/meshes/link1.stl" scale="0.001 0.001 0.001" />
         </geometry>
         <material name="grey" />
       </visual>
@@ -46,7 +42,7 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
         <collision>
           <origin xyz="0 0 0" rpy="0 0 0" />
           <geometry>
-            <mesh filename="${meshes_file_direction}/link1.stl" scale="0.001 0.001 0.001" />
+            <mesh filename="file://$(find open_manipulator_x_description)/meshes/link1.stl" scale="0.001 0.001 0.001" />
           </geometry>
         </collision>
       </xacro:if>
@@ -65,15 +61,15 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
       <child link="${tf_prefix_ext}link2" />
       <origin xyz="0.012 0.0 0.017" rpy="0 0 0" />
       <axis xyz="0 0 1" />
-      <limit velocity="4.8" effort="1" lower="${-pi*205./180.}" upper="${pi*205./180.}" />
-      <dynamics damping="0.1" />
+      <limit velocity="${velocity_limit}" effort="${effort_limit}" lower="${-pi*205./180.}" upper="${pi*205./180.}" />
+      <dynamics damping="${damping}" />
     </joint>
 
     <link name="${tf_prefix_ext}link2">
       <visual>
         <origin xyz="0 0 0.019" rpy="0 0 0" />
         <geometry>
-          <mesh filename="${meshes_file_direction}/link2.stl" scale="0.001 0.001 0.001" />
+          <mesh filename="file://$(find open_manipulator_x_description)/meshes/link2.stl" scale="0.001 0.001 0.001" />
         </geometry>
         <material name="grey" />
       </visual>
@@ -83,7 +79,7 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
           <origin xyz="0 0 0.019" rpy="0 0 0" />
           <geometry>
             <mesh
-              filename="${meshes_file_direction}/link2.stl" scale="0.001 0.001 0.001" />
+              filename="file://$(find open_manipulator_x_description)/meshes/link2.stl" scale="0.001 0.001 0.001" />
           </geometry>
         </collision>
       </xacro:if>
@@ -102,15 +98,15 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
       <child link="${tf_prefix_ext}link3" />
       <origin xyz="0.0 0.0 0.0595" rpy="0 0 0" />
       <axis xyz="0 1 0" />
-      <limit velocity="4.8" effort="1" lower="${-pi*0.57}" upper="${pi*0.5}" />
-      <dynamics damping="0.1" />
+      <limit velocity="${velocity_limit}" effort="${effort_limit}" lower="${-pi*0.57}" upper="${pi*0.5}" />
+      <dynamics damping="${damping}" />
     </joint>
 
     <link name="${tf_prefix_ext}link3">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="${meshes_file_direction}/link3.stl" scale="0.001 0.001 0.001" />
+          <mesh filename="file://$(find open_manipulator_x_description)/meshes/link3.stl" scale="0.001 0.001 0.001" />
         </geometry>
         <material name="grey" />
       </visual>
@@ -120,7 +116,7 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
           <origin xyz="0 0 0" rpy="0 0 0" />
           <geometry>
             <mesh
-              filename="${meshes_file_direction}/link3.stl" scale="0.001 0.001 0.001" />
+              filename="file://$(find open_manipulator_x_description)/meshes/link3.stl" scale="0.001 0.001 0.001" />
           </geometry>
         </collision>
       </xacro:if>
@@ -139,15 +135,15 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
       <child link="${tf_prefix_ext}link4" />
       <origin xyz="0.024 0 0.128" rpy="0 0 0" />
       <axis xyz="0 1 0" />
-      <limit velocity="4.8" effort="1" lower="${-pi*0.5}" upper="${pi*0.44}" />
-      <dynamics damping="0.1" />
+      <limit velocity="${velocity_limit}" effort="${effort_limit}" lower="${-pi*0.5}" upper="${pi*0.44}" />
+      <dynamics damping="${damping}" />
     </joint>
 
     <link name="${tf_prefix_ext}link4">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="${meshes_file_direction}/link4.stl" scale="0.001 0.001 0.001" />
+          <mesh filename="file://$(find open_manipulator_x_description)/meshes/link4.stl" scale="0.001 0.001 0.001" />
         </geometry>
         <material name="grey" />
       </visual>
@@ -157,7 +153,7 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
           <origin xyz="0 0 0" rpy="0 0 0" />
           <geometry>
             <mesh
-              filename="${meshes_file_direction}/link4.stl" scale="0.001 0.001 0.001" />
+              filename="file://$(find open_manipulator_x_description)/meshes/link4.stl" scale="0.001 0.001 0.001" />
           </geometry>
         </collision>
       </xacro:if>
@@ -176,15 +172,15 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
       <child link="${tf_prefix_ext}link5" />
       <origin xyz="0.124 0.0 0.0" rpy="0 0 0" />
       <axis xyz="0 1 0" />
-      <limit velocity="4.8" effort="1" lower="${-pi*0.55}" upper="${pi*0.65}" />
-      <dynamics damping="0.1" />
+      <limit velocity="${velocity_limit}" effort="${effort_limit}" lower="${-pi*0.55}" upper="${pi*0.65}" />
+      <dynamics damping="${damping}" />
     </joint>
 
     <link name="${tf_prefix_ext}link5">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="${meshes_file_direction}/link5.stl" scale="0.001 0.001 0.001" />
+          <mesh filename="file://$(find open_manipulator_x_description)/meshes/link5.stl" scale="0.001 0.001 0.001" />
         </geometry>
         <material name="grey" />
       </visual>
@@ -194,7 +190,7 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
           <origin xyz="0 0 0" rpy="0 0 0" />
           <geometry>
             <mesh
-              filename="${meshes_file_direction}/link5.stl" scale="0.001 0.001 0.001" />
+              filename="file://$(find open_manipulator_x_description)/meshes/link5.stl" scale="0.001 0.001 0.001" />
           </geometry>
         </collision>
       </xacro:if>
@@ -213,15 +209,15 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
       <child link="${tf_prefix_ext}gripper_left_link" />
       <origin xyz="0.0817 0.021 0.0" rpy="0 0 0" />
       <axis xyz="0 1 0" />
-      <limit velocity="4.8" effort="1" lower="-0.010" upper="0.019" />
-      <dynamics damping="0.1" />
+      <limit velocity="${velocity_limit}" effort="${effort_limit}" lower="-0.010" upper="0.019" />
+      <dynamics damping="${damping}" />
     </joint>
 
     <link name="${tf_prefix_ext}gripper_left_link">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="${meshes_file_direction}/gripper_left_palm.stl" scale="0.001 0.001 0.001" />
+          <mesh filename="file://$(find open_manipulator_x_description)/meshes/gripper_left_palm.stl" scale="0.001 0.001 0.001" />
         </geometry>
         <material name="grey" />
       </visual>
@@ -231,7 +227,7 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
           <origin xyz="0 0 0" rpy="0 0 0" />
           <geometry>
             <mesh
-              filename="${meshes_file_direction}/gripper_left_palm.stl" scale="0.001 0.001 0.001" />
+              filename="file://$(find open_manipulator_x_description)/meshes/gripper_left_palm.stl" scale="0.001 0.001 0.001" />
           </geometry>
         </collision>
       </xacro:if>
@@ -250,16 +246,16 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
       <child link="${tf_prefix_ext}gripper_right_link" />
       <origin xyz="0.0817 -0.021 0" rpy="0 0 0" />
       <axis xyz="0 -1 0" />
-      <limit velocity="4.8" effort="1" lower="-0.010" upper="0.019" />
+      <limit velocity="${velocity_limit}" effort="${effort_limit}" lower="-0.010" upper="0.019" />
       <mimic joint="${tf_prefix_ext}gripper_left_joint" multiplier="1" />
-      <dynamics damping="0.1" />
+      <dynamics damping="${damping}" />
     </joint>
 
     <link name="${tf_prefix_ext}gripper_right_link">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="${meshes_file_direction}/gripper_right_palm.stl" scale="0.001 0.001 0.001" />
+          <mesh filename="file://$(find open_manipulator_x_description)/meshes/gripper_right_palm.stl" scale="0.001 0.001 0.001" />
         </geometry>
         <material name="grey" />
       </visual>
@@ -269,7 +265,7 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
           <origin xyz="0 0 0" rpy="0 0 0" />
           <geometry>
             <mesh
-              filename="${meshes_file_direction}/gripper_right_palm.stl" scale="0.001 0.001 0.001" />
+              filename="file://$(find open_manipulator_x_description)/meshes/gripper_right_palm.stl" scale="0.001 0.001 0.001" />
           </geometry>
         </collision>
       </xacro:if>
@@ -289,17 +285,7 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
       <origin xyz="0.126 0.0 0.0" rpy="0 0 0" />
     </joint>
 
-    <link name="${tf_prefix_ext}end_effector_link">
-      <!-- <visual>
-        <origin xyz="0 0 0" rpy="0 0 0" />
-        <geometry>
-          <box
-      size="0.01 0.01 0.01" />
-        </geometry>
-        <material name="red" />
-      </visual> -->
-    </link>
-
+    <link name="${tf_prefix_ext}end_effector_link" />
 
     <ros2_control name="manipulator" type="system">
 
@@ -321,7 +307,6 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
           <param name="gripper_joint_profile_velocity">1000</param>
         </hardware>
       </xacro:unless>
-
 
       <joint name="${tf_prefix_ext}joint1">
         <command_interface name="position">
