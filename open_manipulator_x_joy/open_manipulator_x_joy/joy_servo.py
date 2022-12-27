@@ -10,6 +10,13 @@ from sensor_msgs.msg import Joy
 
 class TeleopJoy(Node):
     def __init__(self):
+        self.AXIS_THRESHOLD = 0.05
+        # self.SCALE_FACTOR = 0.25
+        self.SCALE_FACTOR = 1.0
+        self.MAX_VALUE = 1.0
+
+        self.JOINT_DISPLACEMENT_VALUE = 1.0
+
         super().__init__("joy_servo")
 
         self.publisher_joint_cmds_ = self.create_publisher(
@@ -23,33 +30,6 @@ class TeleopJoy(Node):
             Joy, "joy", self.joy_cb, qos_profile=10
         )
 
-        # TODO: start servo
-        # ros2 service call /servo_node/start_servo std_srvs/srv/Trigger {}
-        # TODO: remove drift dimensions
-        #         ros2 service call /servo_node/change_drift_dimensions moveit_msgs/srv/ChangeDriftDimensions "drift_x_translation: false
-        # drift_y_translation: false
-        # drift_z_translation: false
-        # drift_x_rotation: false
-        # drift_y_rotation: false
-        # drift_z_rotation: true
-        # transform_jog_frame_to_drift_frame:
-        #   translation:
-        #     x: 0.0
-        #     y: 0.0
-        #     z: 0.0
-        #   rotation:
-        #     x: 0.0
-        #     y: 0.0
-        #     z: 0.0
-        #     w: 1.0"
-
-        self.AXIS_THRESHOLD = 0.05
-        # self.SCALE_FACTOR = 0.25
-        self.SCALE_FACTOR = 1.0
-        self.MAX_VALUE = 1.0
-
-        self.JOINT_DISPLACEMENT_VALUE = 1.0
-
     def joy_cb(self, msg):
         # 5 - dead man switch
         if not msg.buttons[5]:
@@ -59,7 +39,7 @@ class TeleopJoy(Node):
         twist_cmd_msg.header.stamp = self.get_clock().now().to_msg()
         # twist_cmd_msg.header.frame_id = "base_link"
         # twist_cmd_msg.header.frame_id = "end_effector_link"
-        twist_cmd_msg.header.frame_id = "link1"
+        twist_cmd_msg.header.frame_id = "link2"
 
         twist_cmd_non_zero = False
         if fabs(msg.axes[1]) > self.AXIS_THRESHOLD:
@@ -95,7 +75,7 @@ class TeleopJoy(Node):
         joint_cmd_msg.duration = 0.1
         joint_cmd_msg.joint_names = ["joint1", "joint2", "joint3", "joint4"]
         joint_cmd_msg.velocities = [0.0, 0.0, 0.0, 0.0]
-        
+
         if msg.buttons[15]:
             joint_cmd_msg.velocities[0] += self.JOINT_DISPLACEMENT_VALUE
         elif msg.buttons[16]:
@@ -117,6 +97,7 @@ class TeleopJoy(Node):
             joint_cmd_msg.velocities[3] -= self.JOINT_DISPLACEMENT_VALUE
 
         self.publisher_joint_cmds_.publish(joint_cmd_msg)
+
 
 def main():
     rclpy.init()
