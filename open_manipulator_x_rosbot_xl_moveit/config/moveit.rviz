@@ -4,14 +4,14 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
-        - /MotionPlanning1
         - /MotionPlanning1/Scene Geometry1
         - /MotionPlanning1/Scene Robot1
         - /MotionPlanning1/Planning Request1
         - /MotionPlanning1/Planning Metrics1
         - /MotionPlanning1/Planned Path1
+        - /TF1
       Splitter Ratio: 0.5
-    Tree Height: 297
+    Tree Height: 538
   - Class: rviz_common/Help
     Name: Help
   - Class: rviz_common/Views
@@ -71,91 +71,6 @@ Visualization Manager:
           Expand Link Details: false
           Expand Tree: false
           Link Tree Style: Links in Alphabetic Order
-          base_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-          body_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          cover_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-          end_effector_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-          fl_wheel_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          fr_wheel_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          gripper_left_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          gripper_right_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          imu_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-          laser:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-          link1:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          link2:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          link3:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          link4:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          link5:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          rl_wheel_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          rplidar_s1_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          rr_wheel_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
         Loop Animation: false
         Robot Alpha: 0.5
         Robot Color: 150; 50; 150
@@ -202,96 +117,90 @@ Visualization Manager:
           Expand Link Details: false
           Expand Tree: false
           Link Tree Style: Links in Alphabetic Order
-          base_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-          body_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          cover_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-          end_effector_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-          fl_wheel_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          fr_wheel_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          gripper_left_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          gripper_right_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          imu_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-          laser:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-          link1:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          link2:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          link3:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          link4:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          link5:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          rl_wheel_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          rplidar_s1_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          rr_wheel_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
         Robot Alpha: 0.5
         Show Robot Collision: false
         Show Robot Visual: true
       Value: true
       Velocity_Scaling_Factor: 0.1
+    - Class: rviz_default_plugins/TF
+      Enabled: true
+      Frame Timeout: 15
+      Frames:
+        All Enabled: true
+        base_link:
+          Value: true
+        body_link:
+          Value: true
+        cover_link:
+          Value: true
+        end_effector_link:
+          Value: true
+        fl_wheel_link:
+          Value: true
+        fr_wheel_link:
+          Value: true
+        gripper_left_link:
+          Value: true
+        gripper_right_link:
+          Value: true
+        imu_link:
+          Value: true
+        laser:
+          Value: true
+        link1:
+          Value: true
+        link2:
+          Value: true
+        link3:
+          Value: true
+        link4:
+          Value: true
+        link5:
+          Value: true
+        odom:
+          Value: true
+        rl_wheel_link:
+          Value: true
+        rplidar_s1_link:
+          Value: true
+        rr_wheel_link:
+          Value: true
+      Marker Scale: 0.20000000298023224
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: true
+      Tree:
+        odom:
+          base_link:
+            body_link:
+              cover_link:
+                link1:
+                  link2:
+                    link3:
+                      link4:
+                        link5:
+                          end_effector_link:
+                            {}
+                          gripper_left_link:
+                            {}
+                          gripper_right_link:
+                            {}
+                rplidar_s1_link:
+                  laser:
+                    {}
+              fl_wheel_link:
+                {}
+              fr_wheel_link:
+                {}
+              imu_link:
+                {}
+              rl_wheel_link:
+                {}
+              rr_wheel_link:
+                {}
+      Update Interval: 0
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -310,7 +219,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 1.2675977945327759
+      Distance: 0.6522684097290039
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -325,15 +234,15 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.0249996185302734
+      Pitch: 0.554999589920044
       Target Frame: base_link
       Value: Orbit (rviz_default_plugins)
-      Yaw: 2.6701886653900146
+      Yaw: 2.0901973247528076
     Saved: ~
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 1043
+  Height: 1053
   Help:
     collapsed: false
   Hide Left Dock: false
@@ -342,9 +251,9 @@ Window Geometry:
     collapsed: false
   MotionPlanning - Trajectory Slider:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd0000000100000000000002b4000003b1fc0200000005fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000004700fffffffb000000100044006900730070006c00610079007301000000440000016a000000eb00fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e006701000001b500000240000001a100fffffffb0000000800480065006c0070000000029a0000006e0000008100fffffffb0000000a00560069006500770073000000032d000000c8000000b900ffffff000004c5000003b100000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd0000000100000000000002b4000003c7fc0200000005fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000003f00fffffffb000000100044006900730070006c006100790073010000003b00000255000000c700fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e006701000002960000016c0000016900fffffffb0000000800480065006c0070000000029a0000006e0000006e00fffffffb0000000a00560069006500770073000000032d000000c8000000a000ffffff000004c6000003c700000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Views:
     collapsed: false
   Width: 1920
   X: 0
-  Y: 1080
+  Y: 27
