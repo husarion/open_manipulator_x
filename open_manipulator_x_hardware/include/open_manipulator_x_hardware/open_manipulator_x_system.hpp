@@ -93,7 +93,7 @@ private:
   std::unique_ptr<dynamixel::GripperDynamixel> gripper_;
 
   std::vector<double> manipulator_commands_;
-  std::vector<double> gripper_commands_;
+  double gripper_command_;
 
   // Feedback from manipulator and gripper combined
   std::vector<double> joint_positions_;

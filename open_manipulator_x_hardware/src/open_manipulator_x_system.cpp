@@ -100,7 +100,7 @@ CallbackReturn OpenManipulatorXSystem::on_init(const hardware_interface::Hardwar
   manipulator_commands_[2] = 1.37;
   manipulator_commands_[3] = 0.26;
 
-  gripper_commands_.resize(2, 0.0);
+  gripper_command_ = 0.0;
 
   joint_positions_.resize(info_.joints.size(), 0.0);
   joint_velocities_.resize(info_.joints.size(), 0.0);
@@ -204,9 +204,7 @@ std::vector<CommandInterface> OpenManipulatorXSystem::export_command_interfaces(
   }
 
   command_interfaces.emplace_back(
-      CommandInterface(info_.joints[4].name, hardware_interface::HW_IF_POSITION, &gripper_commands_[0]));
-  command_interfaces.emplace_back(
-      CommandInterface(info_.joints[5].name, hardware_interface::HW_IF_POSITION, &gripper_commands_[1]));
+      CommandInterface(info_.joints[4].name, hardware_interface::HW_IF_POSITION, &gripper_command_));
 
   return command_interfaces;
 }
@@ -236,9 +234,6 @@ return_type OpenManipulatorXSystem::read(const rclcpp::Time&, const rclcpp::Dura
   // Velocity is always set to 0 in gripper dynamixel implementation
   joint_velocities_[4] = gripper_joint_value.velocity * RPM_TO_RAD_PER_SEC;
 
-  joint_positions_[5] = joint_positions_[4];
-  joint_velocities_[5] = joint_velocities_[4];
-
   return return_type::OK;
 }
 
@@ -263,7 +258,7 @@ return_type OpenManipulatorXSystem::write(const rclcpp::Time&, const rclcpp::Dur
   }
 
   robotis_manipulator::ActuatorValue gripper_cmd;
-  gripper_cmd.position = gripper_commands_[0] / RAD_TO_METER;
+  gripper_cmd.position = gripper_command_ / RAD_TO_METER;
   gripper_cmd.velocity = 0.0;
   gripper_cmd.acceleration = 0.0;
   gripper_cmd.effort = 0.0;
