@@ -7,7 +7,7 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <xacro:macro name="open_manipulator_x"
-    params="parent_link xyz rpy tf_prefix:=None use_sim collision_enabled:=True">
+    params="parent_link xyz rpy tf_prefix:=None use_sim collision_enabled:=true">
 
     <!-- collision_enabled parameter added due to collisions using visual meshes, which are very
     heavy and slow down simulation, this parameter allows to easily disable them -->
@@ -65,7 +65,7 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
       <child link="${tf_prefix_ext}link2" />
       <origin xyz="0.012 0.0 0.017" rpy="0 0 0" />
       <axis xyz="0 0 1" />
-      <limit velocity="4.8" effort="1" lower="${-pi*0.9}" upper="${pi*0.9}" />
+      <limit velocity="4.8" effort="1" lower="${-pi*205./180.}" upper="${pi*205./180.}" />
       <dynamics damping="0.1" />
     </joint>
 
@@ -139,7 +139,7 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
       <child link="${tf_prefix_ext}link4" />
       <origin xyz="0.024 0 0.128" rpy="0 0 0" />
       <axis xyz="0 1 0" />
-      <limit velocity="4.8" effort="1" lower="${-pi*0.3}" upper="${pi*0.44}" />
+      <limit velocity="4.8" effort="1" lower="${-pi*0.5}" upper="${pi*0.44}" />
       <dynamics damping="0.1" />
     </joint>
 
@@ -176,7 +176,7 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
       <child link="${tf_prefix_ext}link5" />
       <origin xyz="0.124 0.0 0.0" rpy="0 0 0" />
       <axis xyz="0 1 0" />
-      <limit velocity="4.8" effort="1" lower="${-pi*0.57}" upper="${pi*0.65}" />
+      <limit velocity="4.8" effort="1" lower="${-pi*0.55}" upper="${pi*0.65}" />
       <dynamics damping="0.1" />
     </joint>
 
