@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10.2)
-project(open_manipulator_x_rosbot_xl_moveit)
+project(rosbot_xl_manipulation_moveit)
 
 find_package(ament_cmake REQUIRED)
 

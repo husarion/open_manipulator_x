@@ -30,7 +30,7 @@ def load_yaml(package_name, file_path):
 
 def generate_launch_description():
     # Get parameters for the Servo node
-    servo_yaml = load_yaml("open_manipulator_x_rosbot_xl_moveit", "config/servo.yaml")
+    servo_yaml = load_yaml("rosbot_xl_manipulation_moveit", "config/servo.yaml")
     servo_params = {"moveit_servo": servo_yaml}
 
     # Get URDF and SRDF
@@ -44,14 +44,14 @@ def generate_launch_description():
     robot_description = {"robot_description": robot_description_config.toxml()}
 
     robot_description_semantic_config = load_file(
-        "open_manipulator_x_rosbot_xl_moveit", "config/rosbot_xl.srdf"
+        "rosbot_xl_manipulation_moveit", "config/rosbot_xl.srdf"
     )
     robot_description_semantic = {
         "robot_description_semantic": robot_description_semantic_config
     }
 
     kinematics_yaml_path = os.path.join(
-        get_package_share_directory("open_manipulator_x_rosbot_xl_moveit"),
+        get_package_share_directory("rosbot_xl_manipulation_moveit"),
         "config",
         "kinematics.yaml",
     )
@@ -85,7 +85,7 @@ def generate_launch_description():
     )
 
     start_moveit_servo_node = Node(
-        package="open_manipulator_x_rosbot_xl_moveit",
+        package="rosbot_xl_manipulation_moveit",
         executable="start_moveit_servo_node.py",
         name="start_moveit_servo_node",
     )

@@ -3,5 +3,5 @@ from moveit_configs_utils.launches import generate_moveit_rviz_launch
 
 
 def generate_launch_description():
-    moveit_config = MoveItConfigsBuilder("rosbot_xl", package_name="open_manipulator_x_rosbot_xl_moveit").to_moveit_configs()
+    moveit_config = MoveItConfigsBuilder("rosbot_xl", package_name="rosbot_xl_manipulation_moveit").to_moveit_configs()
     return generate_moveit_rviz_launch(moveit_config)

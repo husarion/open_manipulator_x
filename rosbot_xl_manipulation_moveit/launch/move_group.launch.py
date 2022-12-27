@@ -31,7 +31,7 @@ from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
 
 # def generate_launch_description():
-#     moveit_config = MoveItConfigsBuilder("rosbot_xl", package_name="open_manipulator_x_rosbot_xl_moveit").to_moveit_configs()
+#     moveit_config = MoveItConfigsBuilder("rosbot_xl", package_name="rosbot_xl_manipulation_moveit").to_moveit_configs()
 #     # return generate_move_group_launch(moveit_config)
 
 #     ld = LaunchDescription()
@@ -103,7 +103,7 @@ def generate_launch_description():
 
     # Robot description Semantic config
     robot_description_semantic_path = os.path.join(
-        get_package_share_directory("open_manipulator_x_rosbot_xl_moveit"),
+        get_package_share_directory("rosbot_xl_manipulation_moveit"),
         "config",
         "rosbot_xl.srdf",
     )
@@ -116,7 +116,7 @@ def generate_launch_description():
 
     # kinematics yaml
     kinematics_yaml_path = os.path.join(
-        get_package_share_directory("open_manipulator_x_rosbot_xl_moveit"),
+        get_package_share_directory("rosbot_xl_manipulation_moveit"),
         "config",
         "kinematics.yaml",
     )
@@ -137,7 +137,7 @@ def generate_launch_description():
         }
     }
     ompl_planning_yaml_path = os.path.join(
-        get_package_share_directory("open_manipulator_x_rosbot_xl_moveit"),
+        get_package_share_directory("rosbot_xl_manipulation_moveit"),
         "config",
         "ompl_planning.yaml",
     )
@@ -157,7 +157,7 @@ def generate_launch_description():
 
     # Moveit Controllers
     moveit_simple_controllers_yaml_path = os.path.join(
-      get_package_share_directory("open_manipulator_x_rosbot_xl_moveit"),
+      get_package_share_directory("rosbot_xl_manipulation_moveit"),
       "config",
       "moveit_controllers.yaml",
     )
