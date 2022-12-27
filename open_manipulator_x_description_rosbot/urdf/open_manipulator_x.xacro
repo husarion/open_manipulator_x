@@ -6,7 +6,11 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
 -->
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:macro name="open_manipulator_x" params="parent_link xyz rpy tf_prefix:=None use_sim">
+  <xacro:macro name="open_manipulator_x"
+    params="parent_link xyz rpy tf_prefix:=None use_sim collision_enabled:=True">
+
+    <!-- collision_enabled parameter added due to collisions using visual meshes, which are very
+    heavy and slow down simulation, this parameter allows to easily disable them -->
 
     <xacro:if value="${tf_prefix == 'None'}">
       <xacro:property name="tf_prefix_ext" value="" />
@@ -38,12 +42,14 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
         <material name="grey" />
       </visual>
 
-      <collision>
-        <origin xyz="0 0 0" rpy="0 0 0" />
-        <geometry>
-          <mesh filename="${meshes_file_direction}/link1.stl" scale="0.001 0.001 0.001" />
-        </geometry>
-      </collision>
+      <xacro:if value="${collision_enabled}">
+        <collision>
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <geometry>
+            <mesh filename="${meshes_file_direction}/link1.stl" scale="0.001 0.001 0.001" />
+          </geometry>
+        </collision>
+      </xacro:if>
 
       <inertial>
         <origin xyz="3.0876154e-04 0.0000000e+00 -1.2176461e-04" />
@@ -72,12 +78,15 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
         <material name="grey" />
       </visual>
 
-      <collision>
-        <origin xyz="0 0 0.019" rpy="0 0 0" />
-        <geometry>
-          <mesh filename="${meshes_file_direction}/link2.stl" scale="0.001 0.001 0.001" />
-        </geometry>
-      </collision>
+      <xacro:if value="${collision_enabled}">
+        <collision>
+          <origin xyz="0 0 0.019" rpy="0 0 0" />
+          <geometry>
+            <mesh
+              filename="${meshes_file_direction}/link2.stl" scale="0.001 0.001 0.001" />
+          </geometry>
+        </collision>
+      </xacro:if>
 
       <inertial>
         <origin xyz="-3.0184870e-04 5.4043684e-04 ${0.018 + 2.9433464e-02}" />
@@ -106,12 +115,15 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
         <material name="grey" />
       </visual>
 
-      <collision>
-        <origin xyz="0 0 0" rpy="0 0 0" />
-        <geometry>
-          <mesh filename="${meshes_file_direction}/link3.stl" scale="0.001 0.001 0.001" />
-        </geometry>
-      </collision>
+      <xacro:if value="${collision_enabled}">
+        <collision>
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <geometry>
+            <mesh
+              filename="${meshes_file_direction}/link3.stl" scale="0.001 0.001 0.001" />
+          </geometry>
+        </collision>
+      </xacro:if>
 
       <inertial>
         <origin xyz="1.0308393e-02 3.7743363e-04 1.0170197e-01" />
@@ -140,12 +152,15 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
         <material name="grey" />
       </visual>
 
-      <collision>
-        <origin xyz="0 0 0" rpy="0 0 0" />
-        <geometry>
-          <mesh filename="${meshes_file_direction}/link4.stl" scale="0.001 0.001 0.001" />
-        </geometry>
-      </collision>
+      <xacro:if value="${collision_enabled}">
+        <collision>
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <geometry>
+            <mesh
+              filename="${meshes_file_direction}/link4.stl" scale="0.001 0.001 0.001" />
+          </geometry>
+        </collision>
+      </xacro:if>
 
       <inertial>
         <origin xyz="9.0909590e-02 3.8929816e-04 2.2413279e-04" />
@@ -174,12 +189,15 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
         <material name="grey" />
       </visual>
 
-      <collision>
-        <origin xyz="0 0 0" rpy="0 0 0" />
-        <geometry>
-          <mesh filename="${meshes_file_direction}/link5.stl" scale="0.001 0.001 0.001" />
-        </geometry>
-      </collision>
+      <xacro:if value="${collision_enabled}">
+        <collision>
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <geometry>
+            <mesh
+              filename="${meshes_file_direction}/link5.stl" scale="0.001 0.001 0.001" />
+          </geometry>
+        </collision>
+      </xacro:if>
 
       <inertial>
         <origin xyz="4.4206755e-02 3.6839985e-07 8.9142216e-03" />
@@ -208,12 +226,15 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
         <material name="grey" />
       </visual>
 
-      <collision>
-        <origin xyz="0 0 0" rpy="0 0 0" />
-        <geometry>
-          <mesh filename="${meshes_file_direction}/gripper_left_palm.stl" scale="0.001 0.001 0.001" />
-        </geometry>
-      </collision>
+      <xacro:if value="${collision_enabled}">
+        <collision>
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <geometry>
+            <mesh
+              filename="${meshes_file_direction}/gripper_left_palm.stl" scale="0.001 0.001 0.001" />
+          </geometry>
+        </collision>
+      </xacro:if>
 
       <inertial>
         <origin xyz="0 0 0" />
@@ -243,12 +264,15 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
         <material name="grey" />
       </visual>
 
-      <collision>
-        <origin xyz="0 0 0" rpy="0 0 0" />
-        <geometry>
-          <mesh filename="${meshes_file_direction}/gripper_right_palm.stl" scale="0.001 0.001 0.001" />
-        </geometry>
-      </collision>
+      <xacro:if value="${collision_enabled}">
+        <collision>
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <geometry>
+            <mesh
+              filename="${meshes_file_direction}/gripper_right_palm.stl" scale="0.001 0.001 0.001" />
+          </geometry>
+        </collision>
+      </xacro:if>
 
       <inertial>
         <origin xyz="0 0 0" />
@@ -269,7 +293,8 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
       <!-- <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <box size="0.01 0.01 0.01" />
+          <box
+      size="0.01 0.01 0.01" />
         </geometry>
         <material name="red" />
       </visual> -->
@@ -345,8 +370,8 @@ https://github.com/ROBOTIS-GIT/open_manipulator/blob/kinetic-devel/open_manipula
           <param name="min">-0.010</param>
           <param name="max">0.019</param>
         </command_interface>
-        <state_interface name="position"/>
-        <state_interface name="velocity"/>
+        <state_interface name="position" />
+        <state_interface name="velocity" />
       </joint>
 
     </ros2_control>
