@@ -12,6 +12,7 @@ install(FILES .setup_assistant DESTINATION share/${PROJECT_NAME})
 
 install(PROGRAMS
   ${PROJECT_NAME}/start_moveit_servo_node.py
+  ${PROJECT_NAME}/joy_servo_node.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

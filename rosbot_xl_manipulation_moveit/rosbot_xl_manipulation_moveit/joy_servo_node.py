@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from math import fabs
 
 import rclpy
@@ -11,13 +13,12 @@ from sensor_msgs.msg import Joy
 class TeleopJoy(Node):
     def __init__(self):
         self.AXIS_THRESHOLD = 0.05
-        # self.SCALE_FACTOR = 0.25
         self.SCALE_FACTOR = 1.0
         self.MAX_VALUE = 1.0
 
         self.JOINT_DISPLACEMENT_VALUE = 1.0
 
-        super().__init__("joy_servo")
+        super().__init__("joy_servo_node")
 
         self.publisher_joint_cmds_ = self.create_publisher(
             JointJog, "servo_node/delta_joint_cmds", 10
@@ -37,8 +38,6 @@ class TeleopJoy(Node):
 
         twist_cmd_msg = TwistStamped()
         twist_cmd_msg.header.stamp = self.get_clock().now().to_msg()
-        # twist_cmd_msg.header.frame_id = "base_link"
-        # twist_cmd_msg.header.frame_id = "end_effector_link"
         twist_cmd_msg.header.frame_id = "link2"
 
         twist_cmd_non_zero = False

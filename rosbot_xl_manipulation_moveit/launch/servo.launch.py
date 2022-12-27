@@ -74,9 +74,9 @@ def generate_launch_description():
     )
 
     joy_servo_node = Node(
-        package="open_manipulator_x_joy",
-        executable="joy_servo",
-        output="screen",
+        package="rosbot_xl_manipulation_moveit",
+        executable="joy_servo_node.py",
+        name="joy_servo_node",
     )
     joy_node = Node(
         package="joy",
