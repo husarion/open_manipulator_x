@@ -7,10 +7,10 @@ use_gazebo: true # Whether the robot is started in a Gazebo simulation environme
 command_in_type: "unitless" # "unitless"> in the range [-1:1], as if from joystick. "speed_units"> cmds are in m/s and rad/s
 scale:
   # Scale parameters are only used if command_in_type=="unitless"
-  linear:  0.05  # Max linear velocity. Meters per publish_period. Unit is [m/s]. Only used for Cartesian commands.
-  rotational:  0.25 # Max angular velocity. Rads per publish_period. Unit is [rad/s]. Only used for Cartesian commands.
+  linear:  0.2  # Max linear velocity. Meters per publish_period. Unit is [m/s]. Only used for Cartesian commands.
+  rotational:  1.5 # Max angular velocity. Rads per publish_period. Unit is [rad/s]. Only used for Cartesian commands.
   # Max joint angular/linear velocity. Rads or Meters per publish period. Only used for joint commands on joint_command_in_topic.
-  joint: 0.25
+  joint: 1.0
 
 ## Properties of outgoing commands
 low_latency_mode: false  # Set this to true to tie the output rate to the input rate
@@ -35,7 +35,7 @@ planning_frame: link1  # The MoveIt planning frame. Often 'panda_link0' or 'worl
 
 ## Other frames
 ee_frame_name: end_effector_link  # The name of the end effector link, used to return the EE pose
-robot_link_command_frame: link1  # commands must be given in the frame of a robot link. Usually either the base or end effector
+robot_link_command_frame: link2  # commands must be given in the frame of a robot link. Usually either the base or end effector
 
 ## Stopping behaviour
 incoming_command_timeout:  1.0  # Stop servoing if X seconds elapse without a new command
@@ -63,8 +63,8 @@ collision_check_rate: 10.0 # [Hz] Collision-checking can easily bog down a CPU i
 # "stop_distance" stops if a collision is nearer than the worst-case stopping distance and the distance is decreasing. Requires joint acceleration limits
 collision_check_type: stop_distance
 # Parameters for "threshold_distance"-type collision checking
-self_collision_proximity_threshold: 0.01 # Start decelerating when a collision is this far [m]
-scene_collision_proximity_threshold: 0.03 # Start decelerating when a collision is this far [m]
+self_collision_proximity_threshold: 0.04 # Start decelerating when a collision is this far [m]
+scene_collision_proximity_threshold: 0.05 # Start decelerating when a collision is this far [m]
 # Parameters for "stop_distance"-type collision checking
 collision_distance_safety_factor: 1000.0 # Must be >= 1. A large safety factor is recommended to account for latency
 min_allowable_collision_distance: 0.01 # Stop if a collision is closer than this [m]
