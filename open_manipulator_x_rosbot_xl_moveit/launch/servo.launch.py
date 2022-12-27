@@ -84,12 +84,19 @@ def generate_launch_description():
         name="joy_node",
     )
 
+    start_moveit_servo_node = Node(
+        package="open_manipulator_x_rosbot_xl_moveit",
+        executable="start_moveit_servo_node.py",
+        name="start_moveit_servo_node",
+    )
+
     return LaunchDescription(
         [
             SetParameter(name="use_sim_time", value=True),
             servo_node,
             joy_servo_node,
             joy_node,
+            start_moveit_servo_node,
         ]
     )
 
