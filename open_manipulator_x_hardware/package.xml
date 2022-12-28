@@ -3,19 +3,30 @@
 <package format="3">
   <name>open_manipulator_x_hardware</name>
   <version>1.0.0</version>
-  <description>
-    ROS 2 package for open_manipulator_x_hardware
-  </description>
+
+  <description>ROS 2 package for open_manipulator_x_hardware</description>
+  <license>Apache License 2.0</license>
+  
   <author email="thlim@robotis.com">Darby Lim</author>
-  <maintainer email="willson@robotis.com">Will Son</maintainer>
-  <license>Apache 2.0</license>
+  <author email="maciej.stepien@husarion.com">Maciej Stępień</author>
+  <maintainer email="contact@husarion.com">Husarion</maintainer>
+  
+  <url type="website">https://husarion.com/</url>
+  <url type="repository">https://github.com/husarion/open_manipulator_x</url>
+  <url type="bugtracker">https://github.com/husarion/open_manipulator_x/issues</url>
+
   <buildtool_depend>ament_cmake</buildtool_depend>
+
   <depend>hardware_interface</depend>
   <depend>gripper_controllers</depend>
   <depend>robotis_manipulator</depend>
   <depend>dynamixel_workbench_toolbox</depend>
   <depend>pluginlib</depend>
   <depend>rclcpp</depend>
+
+  <exec_depend>position_controllers</exec_depend>
+  <exec_depend>joint_trajectory_controller</exec_depend>
+  
   <export>
     <build_type>ament_cmake</build_type>
   </export>
