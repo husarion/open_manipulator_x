@@ -1,4 +1,5 @@
 // Copyright 2022 ROBOTIS CO., LTD.
+// Copyright 2022 Husarion
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,6 +14,7 @@
 // limitations under the License.
 //
 // Author: Darby Lim
+// Author: Maciej Stępień
 
 #include "open_manipulator_x_hardware/open_manipulator_x_system.hpp"
 
