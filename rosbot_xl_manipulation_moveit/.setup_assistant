@@ -1,9 +1,9 @@
 moveit_setup_assistant_config:
   urdf:
-    package: rosbot_xl_manipulation_description
-    relative_path: urdf/rosbot_xl_manipulation.urdf.xacro
+    package: rosbot_xl_description
+    relative_path: urdf/rosbot_xl.urdf.xacro
   srdf:
-    relative_path: config/rosbot_xl_manipulation.srdf
+    relative_path: config/rosbot_xl.srdf
   package_settings:
     author_name: Maciej Stępień
     author_email: maciej.stepien@husarion.com

@@ -36,15 +36,15 @@ def generate_launch_description():
     # Get URDF and SRDF
     robot_description_config = xacro.process_file(
         os.path.join(
-            get_package_share_directory("rosbot_xl_manipulation_description"),
+            get_package_share_directory("rosbot_xl_description"),
             "urdf",
-            "rosbot_xl_manipulation.urdf.xacro",
+            "rosbot_xl.urdf.xacro",
         )
     )
     robot_description = {"robot_description": robot_description_config.toxml()}
 
     robot_description_semantic_config = load_file(
-        "rosbot_xl_manipulation_moveit", "config/rosbot_xl_manipulation.srdf"
+        "rosbot_xl_manipulation_moveit", "config/rosbot_xl.srdf"
     )
     robot_description_semantic = {
         "robot_description_semantic": robot_description_semantic_config
