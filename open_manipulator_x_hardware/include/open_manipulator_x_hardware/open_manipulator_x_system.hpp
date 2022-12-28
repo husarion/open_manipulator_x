@@ -1,4 +1,5 @@
 // Copyright 2022 ROBOTIS CO., LTD.
+// Copyright 2022 Husarion
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,6 +14,7 @@
 // limitations under the License.
 //
 // Author: Darby Lim
+// Author: Maciej Stępień
 
 #ifndef OPEN_MANIPULATOR_X_HARDWARE__OPEN_MANIPULATOR_X_SYSTEM_HPP_
 #define OPEN_MANIPULATOR_X_HARDWARE__OPEN_MANIPULATOR_X_SYSTEM_HPP_
