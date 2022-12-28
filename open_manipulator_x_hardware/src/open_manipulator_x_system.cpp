@@ -1,4 +1,5 @@
 // Copyright 2022 ROBOTIS CO., LTD.
+// Copyright 2022 Husarion
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,6 +14,7 @@
 // limitations under the License.
 //
 // Author: Darby Lim
+// Author: Maciej Stępień
 
 #include "open_manipulator_x_hardware/open_manipulator_x_system.hpp"
 
@@ -40,73 +42,70 @@ CallbackReturn OpenManipulatorXSystem::on_init(const hardware_interface::Hardwar
   baud_rate_ = info_.hardware_parameters["baud_rate"];
   control_period_ = stod(info_.hardware_parameters["control_period"]);
 
-  joints_acceleration_[0] = stoi(info_.hardware_parameters["dxl_joints_profile_acceleration"]);
-  joints_acceleration_[1] = stoi(info_.hardware_parameters["dxl_joints_profile_acceleration"]);
-  joints_acceleration_[2] = stoi(info_.hardware_parameters["dxl_joints_profile_acceleration"]);
-  joints_acceleration_[3] = stoi(info_.hardware_parameters["dxl_joints_profile_acceleration"]);
-
-  joints_velocity_[0] = stoi(info_.hardware_parameters["dxl_joints_profile_velocity"]);
-  joints_velocity_[1] = stoi(info_.hardware_parameters["dxl_joints_profile_velocity"]);
-  joints_velocity_[2] = stoi(info_.hardware_parameters["dxl_joints_profile_velocity"]);
-  joints_velocity_[3] = stoi(info_.hardware_parameters["dxl_joints_profile_velocity"]);
-
-  gripper_acceleration_ = stoi(info_.hardware_parameters["dxl_gripper_profile_acceleration"]);
-  gripper_velocity_ = stoi(info_.hardware_parameters["dxl_gripper_profile_velocity"]);
-
-  actuator_ = std::make_unique<dynamixel::JointDynamixelProfileControl>(control_period_);
-
-  // Set communication arguments
   std::string dxl_comm_arg[2] = { usb_port_, baud_rate_ };
   void* p_dxl_comm_arg = &dxl_comm_arg;
 
-  actuator_->init(joint_dxl_id_, p_dxl_comm_arg);
+  // MANIPULATOR
+  manipulator_ = std::make_unique<dynamixel::JointDynamixelProfileControl>(control_period_);
 
-  // Set joint actuator control mode
-  std::string joint_dxl_mode_arg = "position_mode";
-  void* p_joint_dxl_mode_arg = &joint_dxl_mode_arg;
-  actuator_->setMode(joint_dxl_id_, p_joint_dxl_mode_arg);
+  // Set manipulator communication arguments
+  manipulator_->init(manipulator_joints_dxl_ids_, p_dxl_comm_arg);
 
-  // Set joint actuator parameter
-  std::string joint_dxl_opt_arg[2];
-  void* p_joint_dxl_opt_arg = &joint_dxl_opt_arg;
-  joint_dxl_opt_arg[0] = "Profile_Acceleration";
-  joint_dxl_opt_arg[1] = info_.hardware_parameters["dxl_joints_profile_acceleration"];
-  actuator_->setMode(joint_dxl_id_, p_joint_dxl_opt_arg);
+  // Set manipulator joints control mode
+  std::string manipulator_dxl_joint_mode_arg = "position_mode";
+  void* p_manipulator_dxl_joint_mode_arg = &manipulator_dxl_joint_mode_arg;
+  manipulator_->setMode(manipulator_joints_dxl_ids_, p_manipulator_dxl_joint_mode_arg);
 
-  joint_dxl_opt_arg[0] = "Profile_Velocity";
-  joint_dxl_opt_arg[1] = info_.hardware_parameters["dxl_joints_profile_velocity"];
-  actuator_->setMode(joint_dxl_id_, p_joint_dxl_opt_arg);
+  // Set manipulator joints acceleration
+  std::string manipulator_dxl_joint_acc_arg[2];
+  void* p_manipulator_dxl_joint_acc_arg = &manipulator_dxl_joint_acc_arg;
+  manipulator_dxl_joint_acc_arg[0] = "Profile_Acceleration";
+  manipulator_dxl_joint_acc_arg[1] = info_.hardware_parameters["manipulator_joint_profile_acceleration"];
+  manipulator_->setMode(manipulator_joints_dxl_ids_, p_manipulator_dxl_joint_acc_arg);
 
-  tool_ = std::make_unique<dynamixel::GripperDynamixel>();
+  // Set manipulator joints velocity
+  std::string manipulator_dxl_joint_vel_arg[2];
+  void* p_manipulator_dxl_joint_vel_arg = &manipulator_dxl_joint_vel_arg;
+  manipulator_dxl_joint_vel_arg[0] = "Profile_Velocity";
+  manipulator_dxl_joint_vel_arg[1] = info_.hardware_parameters["manipulator_joint_profile_velocity"];
+  manipulator_->setMode(manipulator_joints_dxl_ids_, p_manipulator_dxl_joint_vel_arg);
 
-  tool_->init(gripper_dxl_id_, p_dxl_comm_arg);
+  // GRIPPER
+  gripper_ = std::make_unique<dynamixel::GripperDynamixel>();
+
+  // Set gripper communication arguments
+  gripper_->init(gripper_joint_dxl_id_, p_dxl_comm_arg);
 
   // Set gripper actuator control mode
-  std::string gripper_dxl_mode_arg = "current_based_position_mode";
-  void* p_gripper_dxl_mode_arg = &gripper_dxl_mode_arg;
-  tool_->setMode(p_gripper_dxl_mode_arg);
+  std::string gripper_dxl_joint_mode_arg = "current_based_position_mode";
+  void* p_gripper_dxl_joint_mode_arg = &gripper_dxl_joint_mode_arg;
+  gripper_->setMode(p_gripper_dxl_joint_mode_arg);
 
-  // Set gripper actuator parameter
-  std::string gripper_dxl_opt_arg[2];
-  void* p_gripper_dxl_opt_arg = &gripper_dxl_opt_arg;
-  gripper_dxl_opt_arg[0] = "Profile_Acceleration";
-  gripper_dxl_opt_arg[1] = "20";
-  tool_->setMode(p_gripper_dxl_opt_arg);
+  // Set gripper joint acceleration
+  std::string gripper_dxl_joint_acc_arg[2];
+  void* p_gripper_dxl_joint_acc_arg = &gripper_dxl_joint_acc_arg;
+  gripper_dxl_joint_acc_arg[0] = "Profile_Acceleration";
+  gripper_dxl_joint_acc_arg[1] = info_.hardware_parameters["gripper_joint_profile_acceleration"];
+  gripper_->setMode(p_gripper_dxl_joint_acc_arg);
 
-  gripper_dxl_opt_arg[0] = "Profile_Velocity";
-  gripper_dxl_opt_arg[1] = "200";
-  tool_->setMode(p_gripper_dxl_opt_arg);
+  // Set gripper joint velocity
+  std::string gripper_dxl_joint_vel_arg[2];
+  void* p_gripper_dxl_joint_vel_arg = &gripper_dxl_joint_vel_arg;
+  gripper_dxl_joint_vel_arg[0] = "Profile_Velocity";
+  gripper_dxl_joint_vel_arg[1] = info_.hardware_parameters["gripper_joint_profile_velocity"];
+  gripper_->setMode(p_gripper_dxl_joint_vel_arg);
 
-  dxl_joint_commands_.resize(4, 0.0);
-  dxl_joint_commands_[0] = 0.0;
-  dxl_joint_commands_[1] = -1.57;
-  dxl_joint_commands_[2] = 1.37;
-  dxl_joint_commands_[3] = 0.26;
+  // COMMANDS AND FEEDBACK INITIALIZATION
+  manipulator_commands_.resize(4, 0.0);
+  manipulator_commands_[0] = 0.0;
+  manipulator_commands_[1] = -1.57;
+  manipulator_commands_[2] = 1.37;
+  manipulator_commands_[3] = 0.26;
 
-  dxl_gripper_commands_.resize(2, 0.0);
+  gripper_commands_.resize(2, 0.0);
 
-  dxl_positions_.resize(info_.joints.size(), 0.0);
-  dxl_velocities_.resize(info_.joints.size(), 0.0);
+  joint_positions_.resize(info_.joints.size(), 0.0);
+  joint_velocities_.resize(info_.joints.size(), 0.0);
 
   RCLCPP_INFO(logger, "Initialized");
 
@@ -130,26 +129,27 @@ CallbackReturn OpenManipulatorXSystem::on_activate(const rclcpp_lifecycle::State
   RCLCPP_INFO(logger, "Activating");
 
   RCLCPP_INFO(logger, "Joints torque ON");
-  actuator_->enable();
-  tool_->enable();
+  manipulator_->enable();
+  gripper_->enable();
 
+  // Wait for current position of the arm and set it as command (it is done to avoid moving arm after start)
   bool received_state = false;
   while (!received_state)
   {
-    std::vector<robotis_manipulator::ActuatorValue> result_actuator =
-        actuator_->receiveJointActuatorValue(joint_dxl_id_);
-    if (result_actuator.size() == 0)
+    std::vector<robotis_manipulator::ActuatorValue> manipulator_joints_values =
+        manipulator_->receiveJointActuatorValue(manipulator_joints_dxl_ids_);
+    if (manipulator_joints_values.size() != manipulator_commands_.size())
     {
       RCLCPP_ERROR(logger, "Can't read joint states");
+      rclcpp::sleep_for(std::chrono::milliseconds(100));
       continue;
     }
 
-    int i = 0;
-    for (const auto& result_joint : result_actuator)
+    for (uint8_t i = 0; i < manipulator_joints_values.size(); i++)
     {
-      dxl_joint_commands_[i] = result_joint.position;
-      ++i;
+      manipulator_commands_[i] = manipulator_joints_values[i].position;
     }
+
     received_state = true;
   }
 
@@ -161,6 +161,11 @@ CallbackReturn OpenManipulatorXSystem::on_activate(const rclcpp_lifecycle::State
 CallbackReturn OpenManipulatorXSystem::on_deactivate(const rclcpp_lifecycle::State&)
 {
   RCLCPP_INFO(logger, "Deactivating");
+
+  RCLCPP_INFO(logger, "Joints torque OFF");
+  manipulator_->disable();
+  gripper_->disable();
+
   return CallbackReturn::SUCCESS;
 }
 
@@ -182,9 +187,9 @@ std::vector<StateInterface> OpenManipulatorXSystem::export_state_interfaces()
   for (uint8_t i = 0; i < info_.joints.size(); i++)
   {
     state_interfaces.emplace_back(
-        StateInterface(info_.joints[i].name, hardware_interface::HW_IF_POSITION, &dxl_positions_[i]));
+        StateInterface(info_.joints[i].name, hardware_interface::HW_IF_POSITION, &joint_positions_[i]));
     state_interfaces.emplace_back(
-        StateInterface(info_.joints[i].name, hardware_interface::HW_IF_VELOCITY, &dxl_velocities_[i]));
+        StateInterface(info_.joints[i].name, hardware_interface::HW_IF_VELOCITY, &joint_velocities_[i]));
   }
 
   return state_interfaces;
@@ -197,13 +202,13 @@ std::vector<CommandInterface> OpenManipulatorXSystem::export_command_interfaces(
   for (uint8_t i = 0; i < 4; i++)
   {
     command_interfaces.emplace_back(
-        CommandInterface(info_.joints[i].name, hardware_interface::HW_IF_POSITION, &dxl_joint_commands_[i]));
+        CommandInterface(info_.joints[i].name, hardware_interface::HW_IF_POSITION, &manipulator_commands_[i]));
   }
 
   command_interfaces.emplace_back(
-      CommandInterface(info_.joints[4].name, hardware_interface::HW_IF_POSITION, &dxl_gripper_commands_[0]));
+      CommandInterface(info_.joints[4].name, hardware_interface::HW_IF_POSITION, &gripper_commands_[0]));
   command_interfaces.emplace_back(
-      CommandInterface(info_.joints[5].name, hardware_interface::HW_IF_POSITION, &dxl_gripper_commands_[1]));
+      CommandInterface(info_.joints[5].name, hardware_interface::HW_IF_POSITION, &gripper_commands_[1]));
 
   return command_interfaces;
 }
@@ -213,31 +218,28 @@ return_type OpenManipulatorXSystem::read(const rclcpp::Time&, const rclcpp::Dura
   RCLCPP_INFO_ONCE(logger, "Start to read manipulator states");
 
   // Receive current angles from all actuators
-  std::vector<robotis_manipulator::ActuatorValue> result_actuator = actuator_->receiveJointActuatorValue(joint_dxl_id_);
-  if (result_actuator.size() == 0)
+  std::vector<robotis_manipulator::ActuatorValue> manipulator_joints_values =
+      manipulator_->receiveJointActuatorValue(manipulator_joints_dxl_ids_);
+  if (manipulator_joints_values.size() == 0)
   {
-    RCLCPP_ERROR(logger, "Can't read joint states");
+    RCLCPP_ERROR(logger, "Can't read manipulator joint states");
     return return_type::OK;
   }
 
-  int i = 0;
-  for (const auto& result_joint : result_actuator)
+  for (uint8_t i = 0; i < manipulator_joints_values.size(); i++)
   {
-    dxl_positions_[i] = result_joint.position;
-    dxl_velocities_[i] = result_joint.velocity;
-    ++i;
+    joint_positions_[i] = manipulator_joints_values[i].position;
+    joint_velocities_[i] = manipulator_joints_values[i].velocity;
   }
 
-  robotis_manipulator::ActuatorValue result_tool = tool_->receiveToolActuatorValue();
+  robotis_manipulator::ActuatorValue gripper_joint_value = gripper_->receiveToolActuatorValue();
 
-  dxl_positions_[4] = result_tool.position * RAD_TO_METER;
+  joint_positions_[4] = gripper_joint_value.position * RAD_TO_METER;
   // Velocity is always set to 0 in gripper dynamixel implementation
-  dxl_velocities_[4] = result_tool.velocity * RPM_TO_RAD_PER_SEC;
+  joint_velocities_[4] = gripper_joint_value.velocity * RPM_TO_RAD_PER_SEC;
 
-
-  dxl_positions_[5] = result_tool.position * RAD_TO_METER;
-  // Velocity is always set to 0 in gripper dynamixel implementation
-  dxl_velocities_[5] = result_tool.velocity * RPM_TO_RAD_PER_SEC;
+  joint_positions_[5] = joint_positions_[4];
+  joint_velocities_[5] = joint_velocities_[4];
 
   return return_type::OK;
 }
@@ -246,30 +248,30 @@ return_type OpenManipulatorXSystem::write(const rclcpp::Time&, const rclcpp::Dur
 {
   RCLCPP_INFO_ONCE(logger, "Start to write manipulator commands");
 
-  std::vector<robotis_manipulator::ActuatorValue> actuator_commands;
-  for (const auto& c : dxl_joint_commands_)
+  std::vector<robotis_manipulator::ActuatorValue> manipulator_commands;
+  for (const auto& command : manipulator_commands_)
   {
     robotis_manipulator::ActuatorValue joint_cmd;
-    joint_cmd.position = c;
+    joint_cmd.position = command;
     joint_cmd.velocity = 0.0;
     joint_cmd.acceleration = 0.0;
     joint_cmd.effort = 0.0;
-    actuator_commands.push_back(joint_cmd);
+    manipulator_commands.push_back(joint_cmd);
   }
 
-  if (actuator_->sendJointActuatorValue(joint_dxl_id_, actuator_commands) == false)
+  if (manipulator_->sendJointActuatorValue(manipulator_joints_dxl_ids_, manipulator_commands) == false)
   {
-    RCLCPP_ERROR(logger, "Can't control joints");
+    RCLCPP_ERROR(logger, "Can't control manipulator joints");
   }
 
-  robotis_manipulator::ActuatorValue tool_cmd;
-  tool_cmd.position = dxl_gripper_commands_[0]/RAD_TO_METER;
-  tool_cmd.velocity = 0.0;
-  tool_cmd.acceleration = 0.0;
-  tool_cmd.effort = 0.0;
-  if (tool_->sendToolActuatorValue(tool_cmd) == false)
+  robotis_manipulator::ActuatorValue gripper_cmd;
+  gripper_cmd.position = gripper_commands_[0] / RAD_TO_METER;
+  gripper_cmd.velocity = 0.0;
+  gripper_cmd.acceleration = 0.0;
+  gripper_cmd.effort = 0.0;
+  if (gripper_->sendToolActuatorValue(gripper_cmd) == false)
   {
-    RCLCPP_ERROR(logger, "Can't control gripper");
+    RCLCPP_ERROR(logger, "Can't control gripper joint");
   }
 
   return return_type::OK;

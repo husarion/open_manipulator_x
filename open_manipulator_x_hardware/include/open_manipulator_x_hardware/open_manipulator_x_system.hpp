@@ -1,4 +1,5 @@
 // Copyright 2022 ROBOTIS CO., LTD.
+// Copyright 2022 Husarion
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,6 +14,7 @@
 // limitations under the License.
 //
 // Author: Darby Lim
+// Author: Maciej Stępień
 
 #ifndef OPEN_MANIPULATOR_X_HARDWARE__OPEN_MANIPULATOR_X_SYSTEM_HPP_
 #define OPEN_MANIPULATOR_X_HARDWARE__OPEN_MANIPULATOR_X_SYSTEM_HPP_
@@ -86,23 +88,18 @@ private:
   std::string baud_rate_;
   double control_period_;
 
-  std::vector<uint8_t> joint_dxl_id_ = {11, 12, 13, 14};
-  uint8_t gripper_dxl_id_ = 15;
+  std::vector<uint8_t> manipulator_joints_dxl_ids_ = {11, 12, 13, 14};
+  uint8_t gripper_joint_dxl_id_ = 15;
 
-  std::array<int32_t, 4> joints_acceleration_;
-  std::array<int32_t, 4> joints_velocity_;
+  std::unique_ptr<dynamixel::JointDynamixelProfileControl> manipulator_;
+  std::unique_ptr<dynamixel::GripperDynamixel> gripper_;
 
-  int32_t gripper_acceleration_;
-  int32_t gripper_velocity_;
+  std::vector<double> manipulator_commands_;
+  std::vector<double> gripper_commands_;
 
-  std::unique_ptr<dynamixel::JointDynamixelProfileControl> actuator_;
-  std::unique_ptr<dynamixel::GripperDynamixel> tool_;
-
-  std::vector<double> dxl_joint_commands_;
-  std::vector<double> dxl_gripper_commands_;
-
-  std::vector<double> dxl_positions_;
-  std::vector<double> dxl_velocities_;
+  // Feedback from manipulator and gripper combined
+  std::vector<double> joint_positions_;
+  std::vector<double> joint_velocities_;
 };
 }  // namespace open_manipulator_x_hardware
 
