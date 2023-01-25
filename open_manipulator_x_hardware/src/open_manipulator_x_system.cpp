@@ -127,10 +127,11 @@ CallbackReturn OpenManipulatorXSystem::on_cleanup(const rclcpp_lifecycle::State&
 CallbackReturn OpenManipulatorXSystem::on_activate(const rclcpp_lifecycle::State&)
 {
   RCLCPP_INFO(logger, "Activating");
+  std::unique_lock<std::mutex> lock(hardware_access_mutex_);
 
-  RCLCPP_INFO(logger, "Joints torque ON");
   manipulator_->enable();
   gripper_->enable();
+  RCLCPP_INFO(logger, "Joints torque ON");
 
   // Wait for current position of the arm and set it as command (it is done to avoid moving arm after start)
   bool received_manipulator_state = false;
@@ -166,9 +167,11 @@ CallbackReturn OpenManipulatorXSystem::on_deactivate(const rclcpp_lifecycle::Sta
 {
   RCLCPP_INFO(logger, "Deactivating");
 
-  RCLCPP_INFO(logger, "Joints torque OFF");
+  std::unique_lock<std::mutex> lock(hardware_access_mutex_);
+
   manipulator_->disable();
   gripper_->disable();
+  RCLCPP_INFO(logger, "Joints torque OFF");
 
   return CallbackReturn::SUCCESS;
 }
@@ -219,6 +222,13 @@ return_type OpenManipulatorXSystem::read(const rclcpp::Time&, const rclcpp::Dura
 {
   RCLCPP_INFO_ONCE(logger, "Start to read manipulator states");
 
+  std::unique_lock<std::mutex> lock(hardware_access_mutex_, std::try_to_lock);
+  if (!lock.owns_lock())
+  {
+    RCLCPP_ERROR(logger, "Can't read manipulator joint states, hardware currently in use");
+    return return_type::OK;
+  }
+
   // Receive current angles from all actuators
   std::vector<robotis_manipulator::ActuatorValue> manipulator_joints_values =
       manipulator_->receiveJointActuatorValue(manipulator_joints_dxl_ids_);
@@ -246,6 +256,13 @@ return_type OpenManipulatorXSystem::read(const rclcpp::Time&, const rclcpp::Dura
 return_type OpenManipulatorXSystem::write(const rclcpp::Time&, const rclcpp::Duration&)
 {
   RCLCPP_INFO_ONCE(logger, "Start to write manipulator commands");
+
+  std::unique_lock<std::mutex> lock(hardware_access_mutex_, std::try_to_lock);
+  if (!lock.owns_lock())
+  {
+    RCLCPP_ERROR(logger, "Can't control manipulator joints, hardware currently in use");
+    return return_type::OK;
+  }
 
   std::vector<robotis_manipulator::ActuatorValue> manipulator_commands;
   for (const auto& command : manipulator_commands_)

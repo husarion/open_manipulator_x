@@ -22,6 +22,7 @@
 #include "open_manipulator_x_hardware/visibility_control.h"
 
 #include <array>
+#include <mutex>
 #include <string>
 #include <vector>
 
@@ -91,6 +92,10 @@ private:
   std::vector<uint8_t> manipulator_joints_dxl_ids_ = {11, 12, 13, 14};
   uint8_t gripper_joint_dxl_id_ = 15;
 
+  // Mutex necessary for locking hardware access - when lifecycle status changes and for example
+  // deactivate is called, it can happen that read/write method will try to access manipulator
+  // along with disabling/enabling torque
+  std::mutex hardware_access_mutex_;
   std::unique_ptr<dynamixel::JointDynamixelProfileControl> manipulator_;
   std::unique_ptr<dynamixel::GripperDynamixel> gripper_;
 
