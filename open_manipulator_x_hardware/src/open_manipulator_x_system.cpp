@@ -133,8 +133,8 @@ CallbackReturn OpenManipulatorXSystem::on_activate(const rclcpp_lifecycle::State
   gripper_->enable();
 
   // Wait for current position of the arm and set it as command (it is done to avoid moving arm after start)
-  bool received_state = false;
-  while (!received_state)
+  bool received_manipulator_state = false;
+  while (!received_manipulator_state)
   {
     std::vector<robotis_manipulator::ActuatorValue> manipulator_joints_values =
         manipulator_->receiveJointActuatorValue(manipulator_joints_dxl_ids_);
@@ -150,8 +150,12 @@ CallbackReturn OpenManipulatorXSystem::on_activate(const rclcpp_lifecycle::State
       manipulator_commands_[i] = manipulator_joints_values[i].position;
     }
 
-    received_state = true;
+    received_manipulator_state = true;
   }
+
+  // There isn't any error returned, we can just try to read current position
+  robotis_manipulator::ActuatorValue gripper_joint_value = gripper_->receiveToolActuatorValue();
+  gripper_command_ = gripper_joint_value.position * RAD_TO_METER;
 
   RCLCPP_INFO(logger, "System activated");
 
