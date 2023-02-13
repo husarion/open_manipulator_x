@@ -61,7 +61,8 @@
       <child link="${tf_prefix_ext}link2" />
       <origin xyz="0.012 0.0 0.017" rpy="0 0 0" />
       <axis xyz="0 0 1" />
-      <limit velocity="${velocity_limit}" effort="${effort_limit}" lower="${-pi*205./180.}" upper="${pi*205./180.}" />
+      <!-- Joint1 motion is limited only by length of the cable -->
+      <limit velocity="${velocity_limit}" effort="${effort_limit}" lower="${-pi*135./180.}" upper="${pi*340./180.}" />
       <dynamics damping="${damping}" />
     </joint>
 
