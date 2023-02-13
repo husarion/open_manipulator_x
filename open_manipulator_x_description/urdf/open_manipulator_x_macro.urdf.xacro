@@ -3,7 +3,7 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <xacro:macro name="open_manipulator_x"
-    params="parent_link xyz rpy tf_prefix:=None use_sim collision_enabled:=true usb_port:=/dev/ttyUSB0 baud_rate:=115200">
+  params="parent_link xyz rpy tf_prefix:=None use_sim collision_enabled:=true usb_port:=/dev/ttyUSB0 baud_rate:=115200 joint1_limit_min:=-2.356 joint1_limit_max:=5.934">
 
     <!-- collision_enabled parameter added due to collisions using visual meshes, which are very
     heavy and slow down simulation, this parameter allows to easily disable them -->
@@ -62,7 +62,7 @@
       <origin xyz="0.012 0.0 0.017" rpy="0 0 0" />
       <axis xyz="0 0 1" />
       <!-- Joint1 motion is limited only by length of the cable -->
-      <limit velocity="${velocity_limit}" effort="${effort_limit}" lower="${-pi*135./180.}" upper="${pi*340./180.}" />
+      <limit velocity="${velocity_limit}" effort="${effort_limit}" lower="${joint1_limit_min}" upper="${joint1_limit_max}" />
       <dynamics damping="${damping}" />
     </joint>
 
