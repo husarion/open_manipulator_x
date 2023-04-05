@@ -129,10 +129,6 @@ CallbackReturn OpenManipulatorXSystem::on_activate(const rclcpp_lifecycle::State
   RCLCPP_INFO(logger, "Activating");
   std::unique_lock<std::mutex> lock(hardware_access_mutex_);
 
-  manipulator_->enable();
-  gripper_->enable();
-  RCLCPP_INFO(logger, "Joints torque ON");
-
   // Wait for current position of the arm and set it as command (it is done to avoid moving arm after start)
   bool received_manipulator_state = false;
   while (!received_manipulator_state)
@@ -157,6 +153,10 @@ CallbackReturn OpenManipulatorXSystem::on_activate(const rclcpp_lifecycle::State
   // There isn't any error returned, we can just try to read current position
   robotis_manipulator::ActuatorValue gripper_joint_value = gripper_->receiveToolActuatorValue();
   gripper_command_ = gripper_joint_value.position * RAD_TO_METER;
+
+  manipulator_->enable();
+  gripper_->enable();
+  RCLCPP_INFO(logger, "Joints torque ON");
 
   RCLCPP_INFO(logger, "System activated");
 
