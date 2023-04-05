@@ -9,7 +9,12 @@
             usb_port:=/dev/ttyUSB0
             baud_rate:=115200
             joint1_limit_min:=-2.356
-            joint1_limit_max:=5.934">
+            joint1_limit_max:=5.934
+            control_period:=0.1
+            manipulator_joint_profile_acceleration:=200
+            manipulator_joint_profile_velocity:=500
+            gripper_joint_profile_acceleration:=500
+            gripper_joint_profile_velocity:=1000">
 
     <!-- collision_enabled parameter added due to collisions using visual meshes, which are very
     heavy and slow down simulation, this parameter allows to easily disable them -->
@@ -327,18 +332,18 @@
           <plugin>open_manipulator_x_hardware/OpenManipulatorXSystem</plugin>
           <param name="usb_port">${usb_port}</param>
           <param name="baud_rate">${baud_rate}</param>
-          <param name="control_period">0.1</param>
-          <param name="manipulator_joint_profile_acceleration">200</param>
-          <param name="manipulator_joint_profile_velocity">500</param>
-          <param name="gripper_joint_profile_acceleration">500</param>
-          <param name="gripper_joint_profile_velocity">1000</param>
+          <param name="control_period">${control_period}</param>
+          <param name="manipulator_joint_profile_acceleration">${manipulator_joint_profile_acceleration}</param>
+          <param name="manipulator_joint_profile_velocity">${manipulator_joint_profile_velocity}</param>
+          <param name="gripper_joint_profile_acceleration">${gripper_joint_profile_acceleration}</param>
+          <param name="gripper_joint_profile_velocity">${gripper_joint_profile_velocity}</param>
         </hardware>
       </xacro:unless>
 
       <joint name="${tf_prefix_ext}joint1">
         <command_interface name="position">
-          <param name="min">${-pi*0.9}</param>
-          <param name="max">${pi*0.9}</param>
+          <param name="min">${joint1_limit_min}</param>
+          <param name="max">${joint1_limit_max}</param>
         </command_interface>
         <state_interface name="position" />
         <state_interface name="velocity" />
