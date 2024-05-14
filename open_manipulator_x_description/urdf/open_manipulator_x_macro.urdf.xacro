@@ -44,7 +44,7 @@
       <visual>
         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
         <geometry>
-          <mesh filename="file://$(find open_manipulator_x_description)/meshes/link1.stl"
+          <mesh filename="package://open_manipulator_x_description/meshes/link1.stl"
             scale="0.001 0.001 0.001" />
         </geometry>
         <material name="grey" />
@@ -54,7 +54,7 @@
         <collision>
           <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
           <geometry>
-            <mesh filename="file://$(find open_manipulator_x_description)/meshes/link1.stl"
+            <mesh filename="package://open_manipulator_x_description/meshes/link1.stl"
               scale="0.001 0.001 0.001" />
           </geometry>
         </collision>
@@ -84,7 +84,7 @@
       <visual>
         <origin xyz="0.0 0.0 0.019" rpy="0.0 0.0 0.0" />
         <geometry>
-          <mesh filename="file://$(find open_manipulator_x_description)/meshes/link2.stl"
+          <mesh filename="package://open_manipulator_x_description/meshes/link2.stl"
             scale="0.001 0.001 0.001" />
         </geometry>
         <material name="grey" />
@@ -95,7 +95,7 @@
           <origin xyz="0.0 0.0 0.019" rpy="0.0 0.0 0.0" />
           <geometry>
             <mesh
-              filename="file://$(find open_manipulator_x_description)/meshes/link2.stl"
+              filename="package://open_manipulator_x_description/meshes/link2.stl"
               scale="0.001 0.001 0.001" />
           </geometry>
         </collision>
@@ -124,7 +124,7 @@
       <visual>
         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
         <geometry>
-          <mesh filename="file://$(find open_manipulator_x_description)/meshes/link3.stl"
+          <mesh filename="package://open_manipulator_x_description/meshes/link3.stl"
             scale="0.001 0.001 0.001" />
         </geometry>
         <material name="grey" />
@@ -135,7 +135,7 @@
           <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
           <geometry>
             <mesh
-              filename="file://$(find open_manipulator_x_description)/meshes/link3.stl"
+              filename="package://open_manipulator_x_description/meshes/link3.stl"
               scale="0.001 0.001 0.001" />
           </geometry>
         </collision>
@@ -164,7 +164,7 @@
       <visual>
         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
         <geometry>
-          <mesh filename="file://$(find open_manipulator_x_description)/meshes/link4.stl"
+          <mesh filename="package://open_manipulator_x_description/meshes/link4.stl"
             scale="0.001 0.001 0.001" />
         </geometry>
         <material name="grey" />
@@ -175,7 +175,7 @@
           <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
           <geometry>
             <mesh
-              filename="file://$(find open_manipulator_x_description)/meshes/link4.stl"
+              filename="package://open_manipulator_x_description/meshes/link4.stl"
               scale="0.001 0.001 0.001" />
           </geometry>
         </collision>
@@ -204,7 +204,7 @@
       <visual>
         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
         <geometry>
-          <mesh filename="file://$(find open_manipulator_x_description)/meshes/link5.stl"
+          <mesh filename="package://open_manipulator_x_description/meshes/link5.stl"
             scale="0.001 0.001 0.001" />
         </geometry>
         <material name="grey" />
@@ -215,7 +215,7 @@
           <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
           <geometry>
             <mesh
-              filename="file://$(find open_manipulator_x_description)/meshes/link5.stl"
+              filename="package://open_manipulator_x_description/meshes/link5.stl"
               scale="0.001 0.001 0.001" />
           </geometry>
         </collision>
@@ -244,7 +244,7 @@
         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
         <geometry>
           <mesh
-            filename="file://$(find open_manipulator_x_description)/meshes/gripper_left_palm.stl"
+            filename="package://open_manipulator_x_description/meshes/gripper_left_palm.stl"
             scale="0.001 0.001 0.001" />
         </geometry>
         <material name="grey" />
@@ -255,7 +255,7 @@
           <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
           <geometry>
             <mesh
-              filename="file://$(find open_manipulator_x_description)/meshes/gripper_left_palm.stl"
+              filename="package://open_manipulator_x_description/meshes/gripper_left_palm.stl"
               scale="0.001 0.001 0.001" />
           </geometry>
         </collision>
@@ -285,7 +285,7 @@
         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
         <geometry>
           <mesh
-            filename="file://$(find open_manipulator_x_description)/meshes/gripper_right_palm.stl"
+            filename="package://open_manipulator_x_description/meshes/gripper_right_palm.stl"
             scale="0.001 0.001 0.001" />
         </geometry>
         <material name="grey" />
@@ -296,7 +296,7 @@
           <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
           <geometry>
             <mesh
-              filename="file://$(find open_manipulator_x_description)/meshes/gripper_right_palm.stl"
+              filename="package://open_manipulator_x_description/meshes/gripper_right_palm.stl"
               scale="0.001 0.001 0.001" />
           </geometry>
         </collision>
