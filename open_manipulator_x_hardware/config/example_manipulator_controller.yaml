@@ -1,6 +1,5 @@
 controller_manager:
   ros__parameters:
-    use_sim_time: false
     update_rate: 25 # Hz
 
     joint_state_broadcaster:
@@ -17,7 +16,6 @@ manipulator_controller:
       - joint2
       - joint3
       - joint4
-    interface_name: position
 
     command_interfaces:
       - position
