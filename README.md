@@ -18,7 +18,6 @@ In this repo, you can find the integration of OpenManipulatorX with `ros2_contro
 
 Parameters description:
  * `parent_link` link to which manipulator will be attached (with transform specified by `xyz` and `rpy` parameters)
- * `tf_prefix` - optional parameter that can be used to add some prefix to all links of the manipulator (can be omitted, as in the example)
  * `use_sim` - whether simulation ros2_control plugin should be included instead of real hardware one (currently only `Gazebo` is supported).
  * `collision_enabled` - due to lack of dedicated collision meshes of open_manipulator_x, visual ones are also used for collisions. This can result in a drop in simulation performance, you can opt to disable collisions in this case.
  * `usb_port` in case of using hardware, name of USB port where manipulator is connected (e.g. `/dev/ttyUSB0`).
