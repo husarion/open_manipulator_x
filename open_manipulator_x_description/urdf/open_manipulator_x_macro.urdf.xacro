@@ -3,8 +3,11 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <xacro:macro name="open_manipulator_x"
-    params="parent_link xyz rpy
-            use_sim collision_enabled:=true
+    params="parent_link
+            xyz
+            rpy
+            use_sim
+            collision_enabled:=true
             usb_port:=/dev/ttyUSB0
             baud_rate:=115200
             joint1_limit_min:=-2.356
@@ -313,13 +316,13 @@
 
     <ros2_control name="manipulator" type="system">
 
-      <xacro:if value="$(arg use_sim)">
+      <xacro:if value="${use_sim}">
         <hardware>
           <plugin>gz_ros2_control/GazeboSimSystem</plugin>
         </hardware>
       </xacro:if>
 
-      <xacro:unless value="$(arg use_sim)">
+      <xacro:unless value="${use_sim}">
         <hardware>
           <plugin>open_manipulator_x_hardware/OpenManipulatorXSystem</plugin>
           <param name="usb_port">${usb_port}</param>
