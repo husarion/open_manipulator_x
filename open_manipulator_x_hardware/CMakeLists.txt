@@ -58,11 +58,6 @@ install(TARGETS ${PROJECT_NAME}
   RUNTIME DESTINATION bin
 )
 
-install(DIRECTORY
-  config
-  DESTINATION share/${PROJECT_NAME}
-)
-
 # Macro for ament package
 ament_export_include_directories(include)
 ament_export_libraries(${PROJECT_NAME})

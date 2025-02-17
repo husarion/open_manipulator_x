@@ -4,9 +4,9 @@
 
   <xacro:macro name="open_manipulator_x"
     params="parent_link
-            xyz
-            rpy
-            use_sim
+            xyz:='0.0 0.0 0.0'
+            rpy:='0.0 0.0 0.0'
+            use_sim:=false
             collision_enabled:=true
             usb_port:=/dev/ttyUSB0
             baud_rate:=115200
