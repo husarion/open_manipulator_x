@@ -25,22 +25,21 @@
             <param name="baud_rate">1000000</param>
             <param name="error_timeout_ms">500</param>
             <param name="dynamixel_model_folder">/param/dxl_model</param>
-            <param name="number_of_joints">6</param>
+            <param name="number_of_joints">5</param>
             <param name="number_of_transmissions">5</param>
             <param name="transmission_to_joint_matrix">
               1, 0, 0, 0, 0,
               0, 1, 0, 0, 0,
               0, 0, 1, 0, 0,
               0, 0, 0, 1, 0,
-              0, 0, 0, 0, 1,
-              0, 0, 0, 0, 0
+              0, 0, 0, 0, 1
             </param>
             <param name="joint_to_transmission_matrix">
-              1, 0, 0, 0, 0, 0,
-              0, 1, 0, 0, 0, 0,
-              0, 0, 1, 0, 0, 0,
-              0, 0, 0, 1, 0, 0,
-              0, 0, 0, 0, 1, 0
+              1, 0, 0, 0, 0,
+              0, 1, 0, 0, 0,
+              0, 0, 1, 0, 0,
+              0, 0, 0, 1, 0,
+              0, 0, 0, 0, 1
             </param>
             <param name="ros_update_freq">200</param>
             <param name="dynamixel_state_pub_msg_name">dynamixel_hardware_interface/dxl_state</param>
@@ -97,13 +96,6 @@
         <state_interface name="effort"/>
       </joint>
 
-      <joint name="${prefix}gripper_right_joint">
-        <command_interface name="position"/>
-        <state_interface name="position"/>
-        <state_interface name="velocity"/>
-        <state_interface name="effort"/>
-      </joint>
-
       <gpio name="dxl1">
         <param name="type">dxl</param>
         <param name="ID">11</param>
@@ -116,6 +108,8 @@
         <param name="Position P Gain">800</param>
         <param name="Position I Gain">100</param>
         <param name="Position D Gain">100</param>
+        <param name="Profile Velocity">200</param>
+        <param name="Profile Acceleration">50</param>
         <param name="Drive Mode">0</param>
       </gpio>
 
@@ -131,6 +125,8 @@
         <param name="Position P Gain">800</param>
         <param name="Position I Gain">100</param>
         <param name="Position D Gain">100</param>
+        <param name="Profile Velocity">200</param>
+        <param name="Profile Acceleration">50</param>
         <param name="Drive Mode">0</param>
       </gpio>
 
@@ -146,6 +142,8 @@
         <param name="Position P Gain">800</param>
         <param name="Position I Gain">100</param>
         <param name="Position D Gain">100</param>
+        <param name="Profile Velocity">200</param>
+        <param name="Profile Acceleration">50</param>
         <param name="Drive Mode">0</param>
       </gpio>
 
@@ -161,6 +159,8 @@
         <param name="Position P Gain">800</param>
         <param name="Position I Gain">100</param>
         <param name="Position D Gain">100</param>
+        <param name="Profile Velocity">200</param>
+        <param name="Profile Acceleration">50</param>
         <param name="Drive Mode">0</param>
       </gpio>
 
