@@ -21,17 +21,21 @@
 
     <link name="${prefix}link1">
       <visual>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <origin xyz="0 0 0.03" rpy="0 0 0"/> 
         <geometry>
-          <mesh filename="${meshes_dir}/link1.stl" scale="0.001 0.001 0.001"/>
+          <!-- We use custom cylinder -->
+          <cylinder radius="0.035" length="0.065" />
+          <!-- <mesh filename="${meshes_dir}/link1.stl" scale="0.001 0.001 0.001"/> -->
         </geometry>
         <material name="grey"/>
       </visual>
 
       <collision>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <origin xyz="0 0 0.03" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="${meshes_dir}/link1.stl" scale="0.001 0.001 0.001"/>
+          <!-- We use custom cylinder -->
+          <cylinder radius="0.035" length="0.065" />
+          <!-- <mesh filename="${meshes_dir}/link1.stl" scale="0.001 0.001 0.001"/> -->
         </geometry>
       </collision>
 
@@ -47,7 +51,8 @@
     <joint name="${prefix}joint1" type="revolute">
       <parent link="${prefix}link1"/>
       <child link="${prefix}link2"/>
-      <origin xyz="0.012 0.0 0.017" rpy="0 0 0"/>
+      <!-- Fix origin on custom cylinder -->
+      <origin xyz="0.0 0.0 0.045" rpy="0 0 0"/> 
       <axis xyz="0 0 1"/>
       <limit velocity="4.8" effort="1" lower="${-pi}" upper="${pi}" />
       <dynamics damping="0.1"/>
@@ -55,7 +60,7 @@
 
     <link name="${prefix}link2">
       <visual>
-        <origin xyz="0 0 0.019" rpy="0 0 0"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
           <mesh filename="${meshes_dir}/link2.stl" scale="0.001 0.001 0.001"/>
         </geometry>
@@ -63,7 +68,7 @@
       </visual>
 
       <collision>
-        <origin xyz="0 0 0.019" rpy="0 0 0"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
           <mesh filename="${meshes_dir}/link2.stl" scale="0.001 0.001 0.001"/>
         </geometry>
