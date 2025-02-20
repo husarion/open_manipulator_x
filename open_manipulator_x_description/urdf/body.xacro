@@ -2,14 +2,18 @@
 
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:macro name="open_manipulator_x" params="prefix='' parent_link=''">
+  <xacro:macro name="open_manipulator_x"
+            params="parent_link=''
+                    xyz:='0.0 0.0 0.0'
+                    rpy:='0.0 0.0 0.0'
+                    namespace:=''
+                    prefix:=''">
 
-    <xacro:property
-      name="meshes_file_direction"
-      value="package://open_manipulator_x_description/meshes"/>
+    <xacro:property name="meshes_dir" value="package://open_manipulator_x_description/meshes"/>
 
     <xacro:if value="${parent_link != ''}">
       <joint name="${prefix}${parent_link}" type="fixed">
+        <origin xyz="${xyz}" rpy="${rpy}" />
         <parent link="${parent_link}"/>
         <child link="${prefix}link1"/>
       </joint>
@@ -19,7 +23,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="${meshes_file_direction}/link1.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="${meshes_dir}/link1.stl" scale="0.001 0.001 0.001"/>
         </geometry>
         <material name="grey"/>
       </visual>
@@ -27,7 +31,7 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="${meshes_file_direction}/link1.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="${meshes_dir}/link1.stl" scale="0.001 0.001 0.001"/>
         </geometry>
       </collision>
 
@@ -53,7 +57,7 @@
       <visual>
         <origin xyz="0 0 0.019" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="${meshes_file_direction}/link2.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="${meshes_dir}/link2.stl" scale="0.001 0.001 0.001"/>
         </geometry>
         <material name="grey"/>
       </visual>
@@ -61,7 +65,7 @@
       <collision>
         <origin xyz="0 0 0.019" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="${meshes_file_direction}/link2.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="${meshes_dir}/link2.stl" scale="0.001 0.001 0.001"/>
         </geometry>
       </collision>
 
@@ -87,7 +91,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="${meshes_file_direction}/link3.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="${meshes_dir}/link3.stl" scale="0.001 0.001 0.001"/>
         </geometry>
         <material name="grey"/>
       </visual>
@@ -95,7 +99,7 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="${meshes_file_direction}/link3.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="${meshes_dir}/link3.stl" scale="0.001 0.001 0.001"/>
         </geometry>
       </collision>
 
@@ -121,7 +125,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="${meshes_file_direction}/link4.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="${meshes_dir}/link4.stl" scale="0.001 0.001 0.001"/>
         </geometry>
         <material name="grey"/>
       </visual>
@@ -129,7 +133,7 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="${meshes_file_direction}/link4.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="${meshes_dir}/link4.stl" scale="0.001 0.001 0.001"/>
         </geometry>
       </collision>
 
@@ -155,7 +159,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="${meshes_file_direction}/link5.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="${meshes_dir}/link5.stl" scale="0.001 0.001 0.001"/>
         </geometry>
         <material name="grey"/>
       </visual>
@@ -163,7 +167,7 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="${meshes_file_direction}/link5.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="${meshes_dir}/link5.stl" scale="0.001 0.001 0.001"/>
         </geometry>
       </collision>
 
@@ -189,7 +193,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="${meshes_file_direction}/gripper_left_palm.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="${meshes_dir}/gripper_left_palm.stl" scale="0.001 0.001 0.001"/>
         </geometry>
         <material name="grey"/>
       </visual>
@@ -197,7 +201,7 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="${meshes_file_direction}/gripper_left_palm.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="${meshes_dir}/gripper_left_palm.stl" scale="0.001 0.001 0.001"/>
         </geometry>
       </collision>
 
@@ -224,7 +228,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="${meshes_file_direction}/gripper_right_palm.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="${meshes_dir}/gripper_right_palm.stl" scale="0.001 0.001 0.001"/>
         </geometry>
         <material name="grey"/>
       </visual>
@@ -232,7 +236,7 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="${meshes_file_direction}/gripper_right_palm.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="${meshes_dir}/gripper_right_palm.stl" scale="0.001 0.001 0.001"/>
         </geometry>
       </collision>
 

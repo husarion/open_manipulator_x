@@ -7,21 +7,11 @@
   <xacro:arg name="fake_sensor_commands" default="false" />
   <xacro:arg name="port_name" default="/dev/ttyUSB0" />
 
-  <!-- Import Rviz colors -->
-  <xacro:include filename="$(find open_manipulator_x_description)/urdf/materials.xacro" />
+  <xacro:include filename="$(find open_manipulator_x_description)/urdf/open_manipulator_x_macro.xacro" />
 
-  <!-- Import all Gazebo-customization elements, including Gazebo colors -->
-  <xacro:include filename="$(find open_manipulator_x_description)/urdf/open_manipulator_x.gazebo.xacro" />
-
-  <!-- Import URDF -->
-  <xacro:include filename="$(find open_manipulator_x_description)/urdf/open_manipulator_x.urdf.xacro" />
-
-  <xacro:include filename="$(find open_manipulator_x_description)/urdf/open_manipulator_x_system.ros2_control.xacro" />
-
-  <xacro:open_manipulator_x prefix="$(arg prefix)" />
-  <xacro:open_manipulator_x_gazebo prefix="$(arg prefix)" />
-  <xacro:open_manipulator_x_system
-    name="OpenManipulatorXSystem" prefix="$(arg prefix)" use_sim="$(arg use_sim)"
+  <xacro:open_manipulator_x
+    device_namespace="$(arg prefix)"
+    use_sim="$(arg use_sim)"
     use_fake_hardware="$(arg use_fake_hardware)"
     fake_sensor_commands="$(arg fake_sensor_commands)"
     port_name="$(arg port_name)"/>
