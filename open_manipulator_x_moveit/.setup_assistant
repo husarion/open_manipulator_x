@@ -1,0 +1,10 @@
+moveit_setup_assistant_config:
+  urdf:
+    package: rosbot_description
+    relative_path: urdf/rosbot_xl_with_manipulator.urdf
+  srdf:
+    relative_path: config/rosbot_xl.srdf
+  package_settings:
+    author_name: rafal.gorecki@husarion.com
+    author_email: support@husarion.com
+    generated_timestamp: 1740142254
