@@ -30,15 +30,13 @@
       rpy="${rpy}" />
 
     <!-- ROS2 CONTROL PLUGINS -->
-    <xacro:unless value="${use_sim}">
-      <xacro:ros2_control.open_manipulator_x_system
-        name="OpenManipulatorXSystem"
-        prefix="${prefix}"
-        use_sim="${use_sim}"
-        use_fake_hardware="${use_fake_hardware}"
-        fake_sensor_commands="${fake_sensor_commands}"
-        port_name="${port_name}" />
-    </xacro:unless>
+    <xacro:ros2_control.open_manipulator_x_system
+      name="OpenManipulatorXSystem"
+      prefix="${prefix}"
+      use_sim="${use_sim}"
+      use_fake_hardware="${use_fake_hardware}"
+      fake_sensor_commands="${fake_sensor_commands}"
+      port_name="${port_name}" />
 
     <!-- GAZEBO PLUGINS -->
     <xacro:if value="${use_sim}">

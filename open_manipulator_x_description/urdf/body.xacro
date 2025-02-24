@@ -12,7 +12,7 @@
     <xacro:property name="meshes_dir" value="package://open_manipulator_x_description/meshes"/>
 
     <xacro:if value="${parent_link != ''}">
-      <joint name="${prefix}${parent_link}" type="fixed">
+      <joint name="${prefix}${parent_link}_joint" type="fixed">
         <origin xyz="${xyz}" rpy="${rpy}" />
         <parent link="${parent_link}"/>
         <child link="${prefix}link1"/>
@@ -267,7 +267,7 @@
           <box size="0.01 0.01 0.01" />
         </geometry>
         <material name="red"/>
-       </visual>
+      </visual>
     </link>
 
   </xacro:macro>
