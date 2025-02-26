@@ -1,0 +1,68 @@
+/**:
+  ros__parameters:
+    joint_names: ["joint1", "joint2", "joint3", "joint4"]
+    end_effector_name: "end_effector_link"
+
+    axis_deadzone: 0.05
+
+    dead_man_switch:
+      control_type: "single_button"
+      button_id: 5
+
+    home_manipulator:
+      control_type: "single_button"
+      button_id: 9
+    manipulator_move_group_velocity_scaling_factor: 1.0
+    manipulator_move_group_acceleration_scaling_factor: 1.0
+
+    # max_velocity set to quite low values (for both cartesian and joints control)
+    # so that collistion checker will have enough time to stop manipulator
+
+    # Cartesian control
+    cartesian_control_reference_frame: "link2"
+    cartesian_control_names: ["linear_x", "linear_y", "linear_z", "angular_y"]
+    cartesian_control:
+      linear_x:
+        control_type: "axis"
+        axis_id: 1
+        max_velocity: 0.1 # m/s
+      linear_y:
+        control_type: "axis"
+        axis_id: 0
+        max_velocity: 0.2 # m/s
+      linear_z:
+        control_type: "axis"
+        axis_id: 3
+        max_velocity: 0.1 # m/s
+      angular_y:
+        control_type: "axis"
+        axis_id: 2
+        max_velocity: 0.8 # rad/s
+    
+    # Joints control
+    joints_control:
+      joint1:
+        control_type: "axis"
+        axis_id: 4
+        max_velocity: 0.4 # rad/s
+      joint2:
+        control_type: "axis"
+        axis_id: 5
+        inverted: true
+        max_velocity: 0.4 # rad/s
+      joint3:
+        control_type: "double_button"
+        positive_button_id: 0
+        negative_button_id: 2
+        max_velocity: 0.4 # rad/s
+      joint4:
+        control_type: "double_button"
+        positive_button_id: 1
+        negative_button_id: 3
+        max_velocity: 0.4 # rad/s
+
+    gripper_control:
+      # Toggles between opened and closed positions
+      toggle:
+        control_type: "single_button"
+        button_id: 7

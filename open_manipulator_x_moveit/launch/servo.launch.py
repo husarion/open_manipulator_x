@@ -1,101 +1,146 @@
-#!/usr/bin/env python3
-#
-# Copyright 2024 ROBOTIS CO., LTD.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-# Author: Wonho Yoon, Sungho Woo
-
 import os
 import yaml
+
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
-from launch.substitutions import LaunchConfiguration
-from launch_ros.actions import Node
+from launch.conditions import IfCondition
+from launch.substitutions import (
+    Command,
+    FindExecutable,
+    LaunchConfiguration,
+    PathJoinSubstitution,
+    PythonExpression,
+)
+from launch_param_builder import ParameterBuilder
+
+from launch_ros.actions import Node, SetParameter
+from launch_ros.substitutions import FindPackageShare
+
+from moveit_configs_utils import MoveItConfigsBuilder
+
 from ament_index_python.packages import get_package_share_directory
-import xacro
+
+
+def load_yaml(package_name, file_path):
+    package_path = get_package_share_directory(package_name)
+    absolute_file_path = os.path.join(package_path, file_path)
+
+    try:
+        with open(absolute_file_path, "r") as file:
+            return yaml.safe_load(file)
+    except (
+        EnvironmentError
+    ):  # parent of IOError, OSError *and* WindowsError where available
+        return None
 
 
 def generate_launch_description():
-
-    ld = LaunchDescription()
-
-    use_sim = LaunchConfiguration('use_sim')
-    declare_use_sim = DeclareLaunchArgument(
-        'use_sim',
-        default_value='true',
-        description='Start robot in Gazebo simulation.')
-    ld.add_action(declare_use_sim)
-
-    # Robot description
-    robot_description_config = xacro.process_file(
-        os.path.join(
-            get_package_share_directory("open_manipulator_x_description"),
-            "urdf",
-            "open_manipulator_x_robot.urdf.xacro",
-        )
+    launch_joy_node = LaunchConfiguration("launch_joy_node")
+    declare_launch_joy_node_arg = DeclareLaunchArgument(
+        "launch_joy_node",
+        default_value="True",
     )
-    robot_description = {"robot_description": robot_description_config.toxml()}
 
-    # Robot description Semantic config
-    robot_description_semantic_path = os.path.join(
-        get_package_share_directory("open_manipulator_x_moveit_config"),
-        "config",
-        "open_manipulator_x.srdf",
+    joy_servo_config = LaunchConfiguration("joy_servo_params_file")
+    declare_servo_joy_arg = DeclareLaunchArgument(
+        "joy_servo_params_file",
+        default_value=PathJoinSubstitution(
+            [
+                FindPackageShare("open_manipulator_x_joy"),
+                "config",
+                "joy_servo.yaml",
+            ]
+        ),
+        description="ROS2 parameters file to use with joy_servo node",
     )
-    try:
-        with open(robot_description_semantic_path, "r") as file:
-            robot_description_semantic_config = file.read()
-    except EnvironmentError:  # parent of IOError, OSError *and* WindowsError where available
-        return None
 
-    robot_description_semantic = {
-        "robot_description_semantic": robot_description_semantic_config
-    }
-
-        # kinematics yaml
-    kinematics_yaml_path = os.path.join(
-        get_package_share_directory("open_manipulator_x_moveit_config"),
-        "config",
-        "kinematics.yaml",
+    use_sim = LaunchConfiguration("use_sim")
+    declare_use_sim_arg = DeclareLaunchArgument(
+        "use_sim",
+        default_value="False",
+        description="Whether simulation is used",
     )
-    with open(kinematics_yaml_path, "r") as file:
-        kinematics_yaml = yaml.safe_load(file)
+
+    moveit_config = (
+        MoveItConfigsBuilder("robot_xl", package_name="open_manipulator_x_moveit")
+        .robot_description(file_path="config/rosbot_xl.urdf.xacro")
+        .joint_limits(file_path="config/joint_limits.yaml")
+    ).to_moveit_configs()
+
 
     # Get parameters for the Servo node
-    servo_yaml_path = os.path.join(
-        get_package_share_directory("open_manipulator_x_moveit_config"),
-        "config",
-        "moveit_servo.yaml",
-    )
-    try:
-        with open(servo_yaml_path, "r") as file:
-            servo_params = {"moveit_servo": yaml.safe_load(file)}
-    except EnvironmentError:  # parent of IOError, OSError *and* WindowsError where available
-        return None
+    servo_params = {
+        "moveit_servo": ParameterBuilder("open_manipulator_x_moveit")
+        .yaml("config/moveit_servo.yaml")
+        .to_dict()
+    }
 
-    # Launch as much as possible in components
     servo_node = Node(
         package="moveit_servo",
-        executable="servo_node_main",
+        executable="servo_node",
         parameters=[
-            {'use_gazebo':use_sim},
             servo_params,
-            robot_description,
-            robot_description_semantic,
-            kinematics_yaml,
-        ]
+            # acceleration_filter_update_period,
+            # planning_group_name,
+            moveit_config.robot_description,
+            moveit_config.robot_description_semantic,
+            moveit_config.robot_description_kinematics,
+            moveit_config.joint_limits,
+        ],
+        output="screen",
     )
-    ld.add_action(servo_node)
 
-    return ld
+    joy_servo_node = Node(
+        package="open_manipulator_x_joy",
+        executable="joy_servo_node",
+        name="joy_servo_node",
+        parameters=[joy_servo_config],
+    )
+
+    joy_node = Node(
+        package="joy",
+        executable="joy_node",
+        name="joy_node",
+        condition=IfCondition(launch_joy_node),
+    )
+
+    actions = [
+        declare_launch_joy_node_arg,
+        declare_servo_joy_arg,
+        declare_use_sim_arg,
+        SetParameter(name="use_sim_time", value=use_sim),
+        servo_node,
+        # joy_servo_node,
+        joy_node,
+    ]
+
+    return LaunchDescription(actions)
+
+    # Get parameters for the Servo node
+    # servo_params = {
+    #     "moveit_servo": ParameterBuilder("open_manipulator_x_moveit")
+    #     .yaml("config/moveit_servo.yaml")
+    #     .to_dict()
+    # }
+
+    # # This sets the update rate and planning group name for the acceleration limiting filter.
+    # acceleration_filter_update_period = {"update_period": 0.01}
+    # planning_group_name = {"planning_group_name": "manipulator"}
+
+    # # Launch a standalone Servo node.
+    # # As opposed to a node component, this may be necessary (for example) if Servo is running on a different PC
+    # servo_node = launch_ros.actions.Node(
+    #     package="moveit_servo",
+    #     executable="servo_node",
+    #     name="servo_node",
+    #     parameters=[
+    #         servo_params,
+    #         acceleration_filter_update_period,
+    #         planning_group_name,
+    #         moveit_config.robot_description,
+    #         moveit_config.robot_description_semantic,
+    #         moveit_config.robot_description_kinematics,
+    #         moveit_config.joint_limits,
+    #     ],
+    #     output="screen",
+    # )
