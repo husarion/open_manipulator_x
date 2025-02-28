@@ -38,11 +38,11 @@ rclcpp_components_register_node(joy_servo
   EXECUTABLE joy_servo_node
 )
 
-add_executable(demo_twist src/demo_twist.cpp)
-ament_target_dependencies(demo_twist ${PACKAGE_INCLUDE_DEPENDS})
+add_executable(joy2servo src/joy2servo.cpp)
+ament_target_dependencies(joy2servo ${PACKAGE_INCLUDE_DEPENDS})
 
 install(DIRECTORY config DESTINATION share/${PROJECT_NAME})
 install(DIRECTORY include DESTINATION include)
-install(TARGETS demo_twist joy_servo DESTINATION lib/${PROJECT_NAME})
+install(TARGETS joy2servo joy_servo DESTINATION lib/${PROJECT_NAME})
 
 ament_package()

@@ -1,0 +1,207 @@
+#include <chrono>
+#include <control_msgs/msg/joint_jog.hpp>
+#include <geometry_msgs/msg/twist_stamped.hpp>
+#include <moveit_msgs/srv/servo_command_type.hpp>
+#include <rclcpp/rclcpp.hpp>
+#include <open_manipulator_x_joy/joy_control.hpp>
+#include <sensor_msgs/msg/joy.hpp>
+#include <signal.h>
+#include <stdio.h>
+#include <termios.h>
+#include <unistd.h>
+
+
+namespace open_manipulator_x_joy
+{
+
+enum CommandType
+{
+  NONE = -1,
+  JOINT_JOG = moveit_msgs::srv::ServoCommandType::Request::JOINT_JOG,
+  TWIST = moveit_msgs::srv::ServoCommandType::Request::TWIST,
+  POSE = moveit_msgs::srv::ServoCommandType::Request::POSE,
+};
+
+enum Axis
+{
+  LEFT_STICK_HORIZONTAL = 0,
+  LEFT_STICK_VERTICAL = 1,
+  LEFT_TRIGGER = 2,
+  RIGHT_STICK_HORIZONTAL = 3,
+  RIGHT_STICK_VERTICAL = 4,
+  RIGHT_TRIGGER = 5,
+  D_PAD_HORIZONTAL = 6,
+  D_PAD_VERTICAL = 7
+};
+
+enum Button
+{
+  A = 0,
+  B = 1,
+  X = 2,
+  Y = 3,
+  LEFT_BUMPER = 4,
+  RIGHT_BUMPER = 5,
+  CHANGE_VIEW = 6,
+  MENU = 7,
+  HOME = 8,
+  LEFT_STICK_CLICK = 9,
+  RIGHT_STICK_CLICK = 10
+};
+
+const std::string TWIST_TOPIC = "/servo_node/delta_twist_cmds";
+const std::string JOINT_TOPIC = "/servo_node/delta_joint_cmds";
+const size_t ROS_QUEUE_SIZE = 10;
+const std::string EE_FRAME_ID = "end_effector_link";
+const float DEAD_MAN_SWITH_TRESHOLD = -0.3;
+const std::vector<std::string> JOINT_NAMES = { "joint1", "joint2", "joint3", "joint4" };
+
+// Converts key-presses to Twist or Jog commands for Servo, in lieu of a controller
+class Joy2Servo : public rclcpp::Node
+{
+public:
+  Joy2Servo();
+
+private:
+  void ChangeCommandType(const CommandType cmd_type);
+  void ChangeCommandTypeCallback(const rclcpp::Client<moveit_msgs::srv::ServoCommandType>::SharedFuture future);
+  void ConvertAndPublishJoint(const sensor_msgs::msg::Joy::SharedPtr msg);
+  void ConvertAndPublishTwist(const sensor_msgs::msg::Joy::SharedPtr msg);
+  bool IsDeadManSwitch(const sensor_msgs::msg::Joy::SharedPtr msg);
+  bool IsTwistCmdSelected(const sensor_msgs::msg::Joy::SharedPtr msg);
+  void JoyCb(const sensor_msgs::msg::Joy::SharedPtr msg);
+  void UpdateReqCommand(const sensor_msgs::msg::Joy::SharedPtr msg);
+
+  rclcpp::Publisher<geometry_msgs::msg::TwistStamped>::SharedPtr twist_pub_;
+  rclcpp::Publisher<control_msgs::msg::JointJog>::SharedPtr joint_pub_;
+  rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr joy_sub_;
+  rclcpp::Client<moveit_msgs::srv::ServoCommandType>::SharedPtr switch_cmd_type_srv_;
+
+  CommandType req_cmd_type_ = CommandType::JOINT_JOG; // Set default state to Joint Jog
+  CommandType cmd_type_ = CommandType::NONE;
+  double joint_vel_cmd_; // TODO: Add scaler
+};
+
+Joy2Servo::Joy2Servo() : Node("joy2servo")
+{
+  twist_pub_ = this->create_publisher<geometry_msgs::msg::TwistStamped>(TWIST_TOPIC, ROS_QUEUE_SIZE);
+  joint_pub_ = this->create_publisher<control_msgs::msg::JointJog>(JOINT_TOPIC, ROS_QUEUE_SIZE);
+
+  joy_sub_ = this->create_subscription<sensor_msgs::msg::Joy>(
+      "joy", 10, std::bind(&Joy2Servo::JoyCb, this, std::placeholders::_1));
+
+  switch_cmd_type_srv_ = this->create_client<moveit_msgs::srv::ServoCommandType>("servo_node/switch_command_type");
+}
+
+void Joy2Servo::ChangeCommandType(CommandType cmd_type)
+{
+  auto request_ = std::make_shared<moveit_msgs::srv::ServoCommandType::Request>();
+  request_->command_type = cmd_type;
+
+  if (switch_cmd_type_srv_->wait_for_service(std::chrono::seconds(1)))
+  {
+    auto future = switch_cmd_type_srv_->async_send_request(request_, std::bind(&Joy2Servo::ChangeCommandTypeCallback, this, std::placeholders::_1));
+  }
+  else
+  {
+    RCLCPP_WARN_STREAM(this->get_logger(), "Service " << switch_cmd_type_srv_->get_service_name() << " not available after waiting");
+  }
+}
+
+void Joy2Servo::ChangeCommandTypeCallback(const rclcpp::Client<moveit_msgs::srv::ServoCommandType>::SharedFuture future)
+{
+  static const std::unordered_map<CommandType, std::string> cmd_type_map = {
+    {CommandType::NONE, "Uninitialized"},
+    {CommandType::JOINT_JOG, "JointJog"},
+    {CommandType::TWIST, "Twist"},
+    {CommandType::POSE, "Pose"}
+  };
+
+  std::string req_cmd_type_str = cmd_type_map.find(req_cmd_type_)->second;
+
+  if (future.get()->success)
+  {
+    cmd_type_ = req_cmd_type_;
+    RCLCPP_INFO_STREAM(this->get_logger(), "Switched to input type: " << req_cmd_type_str);
+  }
+  else
+  {
+    RCLCPP_WARN_STREAM(this->get_logger(), "Failed to switch input to: " << req_cmd_type_str);
+  }
+}
+
+void Joy2Servo::ConvertAndPublishJoint(const sensor_msgs::msg::Joy::SharedPtr msg)
+{
+  auto joint_msg = std::make_unique<control_msgs::msg::JointJog>();
+
+  joint_msg->joint_names = JOINT_NAMES;
+  joint_msg->velocities = {
+    msg->axes[Axis::LEFT_STICK_HORIZONTAL],
+    -msg->axes[Axis::LEFT_STICK_VERTICAL], // Invert axis to match joystick up with joint up movement
+    msg->axes[Axis::RIGHT_STICK_HORIZONTAL],
+    -msg->axes[Axis::RIGHT_STICK_VERTICAL] // Invert axis to match joystick up with joint up movement
+  };
+
+  joint_msg->header.stamp = this->now();
+  joint_msg->header.frame_id = EE_FRAME_ID;
+  joint_pub_->publish(std::move(joint_msg));
+}
+
+void Joy2Servo::ConvertAndPublishTwist(const sensor_msgs::msg::Joy::SharedPtr msg)
+{
+  auto twist_msg = std::make_unique<geometry_msgs::msg::TwistStamped>();
+  twist_msg->twist.linear.x = msg->axes[Axis::RIGHT_STICK_VERTICAL];
+  twist_msg->twist.linear.z = msg->axes[Axis::LEFT_STICK_VERTICAL];
+  twist_msg->twist.angular.y = msg->axes[Axis::LEFT_STICK_HORIZONTAL];
+
+
+  twist_msg->header.stamp = this->now();
+  twist_msg->header.frame_id = EE_FRAME_ID;
+  twist_pub_->publish(std::move(twist_msg));
+}
+
+bool Joy2Servo::IsDeadManSwitch(const sensor_msgs::msg::Joy::SharedPtr msg)
+{
+  return msg->axes[Axis::RIGHT_TRIGGER] <= DEAD_MAN_SWITH_TRESHOLD;
+}
+
+void Joy2Servo::JoyCb(const sensor_msgs::msg::Joy::SharedPtr msg)
+{
+  UpdateReqCommand(msg);
+  if (req_cmd_type_ != cmd_type_)
+  {
+    ChangeCommandType(req_cmd_type_);
+  }
+
+  if (IsDeadManSwitch(msg))
+  {
+    if (cmd_type_ == CommandType::JOINT_JOG)
+    {
+      ConvertAndPublishJoint(msg);
+    }
+    else if (cmd_type_ == CommandType::TWIST)
+    {
+      ConvertAndPublishTwist(msg);
+    }
+  }
+}
+
+void Joy2Servo::UpdateReqCommand(const sensor_msgs::msg::Joy::SharedPtr msg)
+{
+  if (msg->buttons[Button::X] ^ msg->buttons[Button::Y])
+  {
+    // req_cmd_type_ = msg->buttons[Button::X] ? CommandType::JOINT_JOG : CommandType::TWIST; FIXME: singularity error
+    req_cmd_type_ = CommandType::JOINT_JOG;
+  }
+}
+
+}  // namespace
+
+int main(int argc, char** argv)
+{
+  rclcpp::init(argc, argv);
+  auto node = std::make_shared<open_manipulator_x_joy::Joy2Servo>();
+  rclcpp::spin(node);
+  rclcpp::shutdown();
+  return 0;
+}

@@ -90,17 +90,15 @@ def generate_launch_description():
         output="screen",
     )
 
-    joy_servo_node = Node(
+    joy2servo = Node(
         package="open_manipulator_x_joy",
-        executable="joy_servo_node",
-        name="joy_servo_node",
+        executable="joy2servo",
         parameters=[joy_servo_config],
     )
 
     joy_node = Node(
         package="joy",
         executable="joy_node",
-        name="joy_node",
         condition=IfCondition(launch_joy_node),
     )
 
@@ -110,7 +108,7 @@ def generate_launch_description():
         declare_use_sim_arg,
         SetParameter(name="use_sim_time", value=use_sim),
         servo_node,
-        # joy_servo_node,
+        joy2servo,
         joy_node,
     ]
 
