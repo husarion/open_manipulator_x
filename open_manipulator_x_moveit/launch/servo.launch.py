@@ -113,32 +113,3 @@ def generate_launch_description():
     ]
 
     return LaunchDescription(actions)
-
-    # Get parameters for the Servo node
-    # servo_params = {
-    #     "moveit_servo": ParameterBuilder("open_manipulator_x_moveit")
-    #     .yaml("config/moveit_servo.yaml")
-    #     .to_dict()
-    # }
-
-    # # This sets the update rate and planning group name for the acceleration limiting filter.
-    # acceleration_filter_update_period = {"update_period": 0.01}
-    # planning_group_name = {"planning_group_name": "manipulator"}
-
-    # # Launch a standalone Servo node.
-    # # As opposed to a node component, this may be necessary (for example) if Servo is running on a different PC
-    # servo_node = launch_ros.actions.Node(
-    #     package="moveit_servo",
-    #     executable="servo_node",
-    #     name="servo_node",
-    #     parameters=[
-    #         servo_params,
-    #         acceleration_filter_update_period,
-    #         planning_group_name,
-    #         moveit_config.robot_description,
-    #         moveit_config.robot_description_semantic,
-    #         moveit_config.robot_description_kinematics,
-    #         moveit_config.joint_limits,
-    #     ],
-    #     output="screen",
-    # )
