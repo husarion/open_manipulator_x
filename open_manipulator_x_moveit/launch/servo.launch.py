@@ -4,15 +4,8 @@ import yaml
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.conditions import IfCondition
-from launch.substitutions import (
-    Command,
-    FindExecutable,
-    LaunchConfiguration,
-    PathJoinSubstitution,
-    PythonExpression,
-)
+from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_param_builder import ParameterBuilder
-
 from launch_ros.actions import Node, SetParameter
 from launch_ros.substitutions import FindPackageShare
 
@@ -35,12 +28,6 @@ def load_yaml(package_name, file_path):
 
 
 def generate_launch_description():
-    launch_joy_node = LaunchConfiguration("launch_joy_node")
-    declare_launch_joy_node_arg = DeclareLaunchArgument(
-        "launch_joy_node",
-        default_value="True",
-    )
-
     joy_servo_config = LaunchConfiguration("joy_servo_params_file")
     declare_servo_joy_arg = DeclareLaunchArgument(
         "joy_servo_params_file",
@@ -96,20 +83,12 @@ def generate_launch_description():
         parameters=[joy_servo_config],
     )
 
-    joy_node = Node(
-        package="joy",
-        executable="joy_node",
-        condition=IfCondition(launch_joy_node),
-    )
-
     actions = [
-        declare_launch_joy_node_arg,
         declare_servo_joy_arg,
         declare_use_sim_arg,
         SetParameter(name="use_sim_time", value=use_sim),
         servo_node,
         joy2servo,
-        joy_node,
     ]
 
     return LaunchDescription(actions)
