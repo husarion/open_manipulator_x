@@ -32,7 +32,7 @@ For an exact usage example of the manipulator please check out [rosbot_xl_manipu
 
 ## Usage
 
-Before activating torque, the current position of the manipulator is read, then it is set as a goal position - the manipulator stays in the position that it was activated. 
+Before activating torque, the current position of the manipulator is read, then it is set as a goal position - the manipulator stays in the position that it was activated.
 
 ### Turning off torque
 

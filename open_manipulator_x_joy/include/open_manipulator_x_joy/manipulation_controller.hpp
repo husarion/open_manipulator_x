@@ -1,31 +1,43 @@
-#ifndef OPEN_MANIPULATOR_X_JOY_MANIPULATION_CONTROLLER_H_
-#define OPEN_MANIPULATOR_X_JOY_MANIPULATION_CONTROLLER_H_
+// Copyright (c) 2024 Husarion Sp. z o.o.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
-#include <vector>
+#ifndef OPEN_MANIPULATOR_X_JOY__MANIPULATION_CONTROLLER_HPP_
+#define OPEN_MANIPULATOR_X_JOY__MANIPULATION_CONTROLLER_HPP_
+
 #include <map>
+#include <vector>
 
 #include <rclcpp/rclcpp.hpp>
 
 #include <control_msgs/msg/joint_jog.hpp>
-#include <sensor_msgs/msg/joy.hpp>
 #include <geometry_msgs/msg/twist_stamped.hpp>
+#include <sensor_msgs/msg/joy.hpp>
 
 #include <moveit/move_group_interface/move_group_interface.hpp>
 #include <moveit/planning_scene_interface/planning_scene_interface.hpp>
 
 #include <open_manipulator_x_joy/joy_control.hpp>
 
-namespace open_manipulator_x_joy
-{
+namespace open_manipulator_x_joy {
 
-class ManipulationController
-{
+class ManipulationController {
 public:
   virtual ~ManipulationController() = default;
 
   /**
    * @brief Checks if button/axis was activated, if so send a command
-   * 
+   *
    * @returns true if button/axis was activated
    */
   virtual bool Process(const sensor_msgs::msg::Joy::SharedPtr msg) = 0;
@@ -33,69 +45,70 @@ public:
 
 protected:
   bool CheckIfPressed(
-    const sensor_msgs::msg::Joy::SharedPtr msg,
-    const std::map<std::string, std::unique_ptr<JoyControl>> & controls);
+      const sensor_msgs::msg::Joy::SharedPtr msg,
+      const std::map<std::string, std::unique_ptr<JoyControl>> &controls);
 
   std::vector<double> CalculateCommand(
-    const sensor_msgs::msg::Joy::SharedPtr msg, const std::vector<std::string> & cmd_names,
-    const std::map<std::string, std::unique_ptr<JoyControl>> & controls);
+      const sensor_msgs::msg::Joy::SharedPtr msg,
+      const std::vector<std::string> &cmd_names,
+      const std::map<std::string, std::unique_ptr<JoyControl>> &controls);
 };
 
-class JointController : public ManipulationController
-{
+class JointController : public ManipulationController {
 public:
-  JointController(const rclcpp::Node::SharedPtr & node);
+  JointController(const rclcpp::Node::SharedPtr &node);
   bool Process(const sensor_msgs::msg::Joy::SharedPtr msg) override;
   void Stop() override;
 
 private:
-  void ParseParameters(const rclcpp::Node::SharedPtr & node);
+  void ParseParameters(const rclcpp::Node::SharedPtr &node);
 
-  void SendJointCommand(
-    const std::vector<double> & cmds, const builtin_interfaces::msg::Time & timestamp);
+  void SendJointCommand(const std::vector<double> &cmds,
+                        const builtin_interfaces::msg::Time &timestamp);
 
   rclcpp::Publisher<control_msgs::msg::JointJog>::SharedPtr joint_cmds_pub_;
 
   rclcpp::node_interfaces::NodeClockInterface::SharedPtr clock_itf_;
 
-  std::map<std::string, std::unique_ptr<JoyControl>> manipulator_joint_controls_;
+  std::map<std::string, std::unique_ptr<JoyControl>>
+      manipulator_joint_controls_;
 
   std::vector<std::string> joint_names_;
 };
 
-class CartesianController : public ManipulationController
-{
+class CartesianController : public ManipulationController {
 public:
-  CartesianController(const rclcpp::Node::SharedPtr & node);
+  CartesianController(const rclcpp::Node::SharedPtr &node);
   bool Process(const sensor_msgs::msg::Joy::SharedPtr msg) override;
   void Stop() override;
 
 private:
-  void ParseParameters(const rclcpp::Node::SharedPtr & node);
+  void ParseParameters(const rclcpp::Node::SharedPtr &node);
 
-  void SendCartesianCommand(
-    const std::vector<double> & cmds, const builtin_interfaces::msg::Time & timestamp);
+  void SendCartesianCommand(const std::vector<double> &cmds,
+                            const builtin_interfaces::msg::Time &timestamp);
 
-  rclcpp::Publisher<geometry_msgs::msg::TwistStamped>::SharedPtr twist_cmds_pub_;
+  rclcpp::Publisher<geometry_msgs::msg::TwistStamped>::SharedPtr
+      twist_cmds_pub_;
 
   rclcpp::node_interfaces::NodeClockInterface::SharedPtr clock_itf_;
 
-  std::map<std::string, std::unique_ptr<JoyControl>> manipulator_cartesian_controls_;
+  std::map<std::string, std::unique_ptr<JoyControl>>
+      manipulator_cartesian_controls_;
 
   std::vector<std::string> cartesian_control_names_;
   std::vector<std::string> cartesian_cmd_names_;
   std::string cartesian_control_reference_frame_;
 };
 
-class ManipulatorMoveGroupController : public ManipulationController
-{
+class ManipulatorMoveGroupController : public ManipulationController {
 public:
-  ManipulatorMoveGroupController(const rclcpp::Node::SharedPtr & node);
+  ManipulatorMoveGroupController(const rclcpp::Node::SharedPtr &node);
   bool Process(const sensor_msgs::msg::Joy::SharedPtr msg) override;
   void Stop() override {}
 
 private:
-  void ParseParameters(const rclcpp::Node::SharedPtr & node);
+  void ParseParameters(const rclcpp::Node::SharedPtr &node);
 
   void MoveToHome();
 
@@ -108,15 +121,14 @@ private:
   bool action_already_executed_ = false;
 };
 
-class GripperMoveGroupController : public ManipulationController
-{
+class GripperMoveGroupController : public ManipulationController {
 public:
-  GripperMoveGroupController(const rclcpp::Node::SharedPtr & node);
+  GripperMoveGroupController(const rclcpp::Node::SharedPtr &node);
   bool Process(const sensor_msgs::msg::Joy::SharedPtr msg) override;
   void Stop() override {}
 
 private:
-  void ParseParameters(const rclcpp::Node::SharedPtr & node);
+  void ParseParameters(const rclcpp::Node::SharedPtr &node);
 
   void CloseGripper();
   void OpenGripper();
@@ -125,10 +137,7 @@ private:
 
   std::unique_ptr<JoyControl> toggle_gripper_position_;
 
-  enum GripperPosition {
-    OPENED,
-    CLOSED
-  };
+  enum GripperPosition { OPENED, CLOSED };
   GripperPosition gripper_position_ = GripperPosition::CLOSED;
 
   // action of this controller should be triggered only once per button press
@@ -136,6 +145,6 @@ private:
   bool action_already_executed_ = false;
 };
 
-}  // namespace open_manipulator_x_joy
+} // namespace open_manipulator_x_joy
 
-#endif
+#endif // OPEN_MANIPULATOR_X_JOY__MANIPULATION_CONTROLLER_HPP_

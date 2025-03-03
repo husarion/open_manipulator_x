@@ -12,7 +12,7 @@
                     fake_sensor_commands:=False
                     use_sim:=False
                     port_name:='/dev/ttyUSB0'">
-    
+
     <!-- PROPERTIES -->
     <xacro:property name="prefix" value="${device_namespace + '_' if device_namespace != '' else ''}" />
 

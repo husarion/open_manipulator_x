@@ -10,7 +10,7 @@ repositories:
   robotis_manipulator:
     type: git
     url: https://github.com/rafal-gorecki/robotis_manipulator
-    version: patch-1 # Bug releated with this PR
+    version: patch-1 # Bug related with this PR
   open_manipulator_dependencies:
     type: git
     url: https://github.com/ROBOTIS-GIT/open_manipulator_dependencies.git

@@ -3,9 +3,7 @@
 <package format="3">
   <name>open_manipulator_x_description</name>
   <version>3.0.0</version>
-  <description>
-    open_manipulator_x_description ROS 2 package.
-  </description>
+  <description>open_manipulator_x_description ROS 2 package.</description>
   <maintainer email="pyo@robotis.com">Pyo</maintainer>
   <license>Apache 2.0</license>
   <url type="website">http://wiki.ros.org/open_manipulator</url>

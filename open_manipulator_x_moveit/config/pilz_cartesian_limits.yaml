@@ -1,3 +1,4 @@
+---
 # Limits for the Pilz planner
 cartesian_limits:
   max_trans_vel: 1.0

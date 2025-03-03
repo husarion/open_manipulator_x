@@ -30,7 +30,7 @@ Changelog for package open_manipulator_x_description
 2.0.0 (2019-02-08)
 ------------------
 * updated the CHANGELOG and version to release binary packages
-* added new packages (open_manipulator_control_gui, *_controller, *_libs, *_teleop)
+* added new packages (open_manipulator_control_gui, *_controller_*, *_libs_*, *_teleop_*)
 * deleted unused packages (open_manipulator_dynamixel_ctrl, open_manipulator_position_ctrl)
 * - open_manipulator_control_gui -
 * updated function name, UI

@@ -1,12 +1,26 @@
-import os
-import yaml
-import xacro
+# Copyright 2024 Husarion sp. z o.o.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
+import os
+
+import xacro
+import yaml
+from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
-from ament_index_python.packages import get_package_share_directory
 
 
 def generate_launch_description():
@@ -29,9 +43,7 @@ def generate_launch_description():
     with open(robot_description_semantic_path, "r") as file:
         robot_description_semantic_config = file.read()
 
-    robot_description_semantic = {
-        "robot_description_semantic": robot_description_semantic_config
-    }
+    robot_description_semantic = {"robot_description_semantic": robot_description_semantic_config}
 
     # kinematics yaml
     kinematics_yaml_path = os.path.join(
@@ -56,7 +68,9 @@ def generate_launch_description():
     # Planning Functionality
     ompl_planning_pipeline_config = {
         "move_group": {
-            "planning_plugins": ["ompl_interface/OMPLPlanner",],
+            "planning_plugins": [
+                "ompl_interface/OMPLPlanner",
+            ],
             "request_adapters": [
                 "default_planning_request_adapters/ResolveConstraintFrames",
                 "default_planning_request_adapters/ValidateWorkspaceBounds",
@@ -90,17 +104,16 @@ def generate_launch_description():
 
     # Moveit Controllers
     moveit_simple_controllers_yaml_path = os.path.join(
-      get_package_share_directory("open_manipulator_x_moveit"),
-      "config",
-      "moveit_controllers.yaml",
+        get_package_share_directory("open_manipulator_x_moveit"),
+        "config",
+        "moveit_controllers.yaml",
     )
     with open(moveit_simple_controllers_yaml_path, "r") as file:
         moveit_simple_controllers_yaml = yaml.safe_load(file)
 
     moveit_controllers = {
         "moveit_simple_controller_manager": moveit_simple_controllers_yaml,
-        "moveit_controller_manager":
-            "moveit_simple_controller_manager/MoveItSimpleControllerManager",
+        "moveit_controller_manager": "moveit_simple_controller_manager/MoveItSimpleControllerManager",
     }
 
     # Planning Scene Monitor Parameters
@@ -110,15 +123,14 @@ def generate_launch_description():
         "publish_state_updates": True,
         "publish_transforms_updates": True,
         "publish_robot_description": True,
-        "publish_robot_description_semantic": True
+        "publish_robot_description_semantic": True,
     }
 
     ld = LaunchDescription()
-    use_sim = LaunchConfiguration('use_sim')
+    use_sim = LaunchConfiguration("use_sim")
     declare_use_sim = DeclareLaunchArgument(
-        'use_sim',
-        default_value='true',
-        description='Start robot in Gazebo simulation.')
+        "use_sim", default_value="true", description="Start robot in Gazebo simulation."
+    )
     ld.add_action(declare_use_sim)
 
     move_group_node = Node(
@@ -134,7 +146,7 @@ def generate_launch_description():
             trajectory_execution,
             moveit_controllers,
             planning_scene_monitor_parameters,
-            {'use_sim_time': use_sim},
+            {"use_sim_time": use_sim},
         ],
     )
 
