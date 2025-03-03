@@ -1,8 +1,10 @@
 #include <chrono>
 #include <control_msgs/msg/joint_jog.hpp>
+#include <control_msgs/action/parallel_gripper_command.hpp>
 #include <geometry_msgs/msg/twist_stamped.hpp>
 #include <moveit_msgs/srv/servo_command_type.hpp>
 #include <rclcpp/rclcpp.hpp>
+#include <rclcpp_action/rclcpp_action.hpp>
 #include <open_manipulator_x_joy/joy_control.hpp>
 #include <sensor_msgs/msg/joy.hpp>
 #include <signal.h>
@@ -51,24 +53,32 @@ enum Button
 
 const std::string TWIST_TOPIC = "/servo_node/delta_twist_cmds";
 const std::string JOINT_TOPIC = "/servo_node/delta_joint_cmds";
+const std::string GRIPPER_ACTION = "/gripper_controller/gripper_cmd";
+
 const size_t ROS_QUEUE_SIZE = 10;
 const std::string EE_FRAME_ID = "end_effector_link";
-const float DEAD_MAN_SWITH_TRESHOLD = -0.3;
+const double DEAD_MAN_SWITH_TRESHOLD = -0.3;
+const double GRIPPER_CLOSE = 0.0;
+const double GRIPPER_OPEN = 0.019;
+const std::vector<double> GRIPPER_MAX_EFFORT = { 1.0 };
+const std::vector<std::string> GRIPPER_JOINT_NAME = { "gripper_left_joint" };
 const std::vector<std::string> JOINT_NAMES = { "joint1", "joint2", "joint3", "joint4" };
 
 // Converts key-presses to Twist or Jog commands for Servo, in lieu of a controller
 class Joy2Servo : public rclcpp::Node
 {
 public:
+  using ParallelGripperCommand = control_msgs::action::ParallelGripperCommand;
+
   Joy2Servo();
 
 private:
   void ChangeCommandType(const CommandType cmd_type);
   void ChangeCommandTypeCallback(const rclcpp::Client<moveit_msgs::srv::ServoCommandType>::SharedFuture future);
+  void ControlGripper(const sensor_msgs::msg::Joy::SharedPtr msg);
   void ConvertAndPublishJoint(const sensor_msgs::msg::Joy::SharedPtr msg);
   void ConvertAndPublishTwist(const sensor_msgs::msg::Joy::SharedPtr msg);
   bool IsDeadManSwitch(const sensor_msgs::msg::Joy::SharedPtr msg);
-  bool IsTwistCmdSelected(const sensor_msgs::msg::Joy::SharedPtr msg);
   void JoyCb(const sensor_msgs::msg::Joy::SharedPtr msg);
   void UpdateReqCommand(const sensor_msgs::msg::Joy::SharedPtr msg);
 
@@ -76,7 +86,8 @@ private:
   rclcpp::Publisher<control_msgs::msg::JointJog>::SharedPtr joint_pub_;
   rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr joy_sub_;
   rclcpp::Client<moveit_msgs::srv::ServoCommandType>::SharedPtr switch_cmd_type_srv_;
-
+  rclcpp_action::Client<ParallelGripperCommand>::SharedPtr gripper_action_client_;
+  
   CommandType req_cmd_type_ = CommandType::JOINT_JOG; // Set default state to Joint Jog
   CommandType cmd_type_ = CommandType::NONE;
   double joint_vel_cmd_; // TODO: Add scaler
@@ -91,6 +102,8 @@ Joy2Servo::Joy2Servo() : Node("joy2servo")
       "joy", 10, std::bind(&Joy2Servo::JoyCb, this, std::placeholders::_1));
 
   switch_cmd_type_srv_ = this->create_client<moveit_msgs::srv::ServoCommandType>("servo_node/switch_command_type");
+
+  gripper_action_client_ = rclcpp_action::create_client<ParallelGripperCommand>(this, GRIPPER_ACTION);
 }
 
 void Joy2Servo::ChangeCommandType(CommandType cmd_type)
@@ -127,6 +140,38 @@ void Joy2Servo::ChangeCommandTypeCallback(const rclcpp::Client<moveit_msgs::srv:
   else
   {
     RCLCPP_WARN_STREAM(this->get_logger(), "Failed to switch input to: " << req_cmd_type_str);
+  }
+}
+
+void Joy2Servo::ControlGripper(const sensor_msgs::msg::Joy::SharedPtr msg)
+{
+
+  if (!gripper_action_client_->wait_for_action_server(std::chrono::seconds(1))) {
+    RCLCPP_ERROR(this->get_logger(), "ParallelGripperCommand server not available!");
+    return;
+  }
+
+  std::vector<double> position;
+  if(msg->buttons[Button::A])
+  {
+    position.push_back(GRIPPER_OPEN);
+  }
+  else if(msg->buttons[Button::B])
+  {
+    position.push_back(GRIPPER_CLOSE);
+  }
+
+  if(!position.empty())
+  {
+    auto goal_msg = ParallelGripperCommand::Goal();
+    goal_msg.command.header.stamp = this->now();
+    goal_msg.command.header.frame_id = EE_FRAME_ID;
+
+    goal_msg.command.name = GRIPPER_JOINT_NAME;
+    goal_msg.command.position = position;
+    goal_msg.command.effort = GRIPPER_MAX_EFFORT;
+
+    gripper_action_client_->async_send_goal(goal_msg);
   }
 }
 
@@ -183,6 +228,7 @@ void Joy2Servo::JoyCb(const sensor_msgs::msg::Joy::SharedPtr msg)
     {
       ConvertAndPublishTwist(msg);
     }
+    ControlGripper(msg);
   }
 }
 
