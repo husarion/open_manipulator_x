@@ -60,7 +60,7 @@ const std::string EE_FRAME_ID = "end_effector_link";
 const double DEAD_MAN_SWITH_TRESHOLD = -0.3;
 const double GRIPPER_CLOSE = 0.0;
 const double GRIPPER_OPEN = 0.019;
-const std::vector<double> GRIPPER_MAX_EFFORT = { 1.0 };
+const std::vector<double> GRIPPER_MAX_EFFORT = { 10.0 };
 const std::vector<std::string> GRIPPER_JOINT_NAME = { "gripper_left_joint" };
 const std::vector<std::string> JOINT_NAMES = { "joint1", "joint2", "joint3", "joint4" };
 
@@ -242,6 +242,49 @@ void Joy2Servo::UpdateReqCommand(const sensor_msgs::msg::Joy::SharedPtr msg)
 }
 
 }  // namespace
+
+#include <rclcpp_lifecycle/lifecycle_node.hpp>
+#include <moveit/moveit_cpp/moveit_cpp.h>
+#include <moveit/planning_scene_monitor/planning_scene_monitor.h>
+
+class MoveItLifecycleNode : public rclcpp_lifecycle::LifecycleNode
+{
+public:
+    MoveItLifecycleNode(const rclcpp::NodeOptions &options)
+        : LifecycleNode("moveit_lifecycle_node", options) {}
+
+    rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn on_activate(
+        const rclcpp_lifecycle::State &state) override
+    {
+        RCLCPP_INFO(get_logger(), "Activating MoveIt node...");
+
+        // Initialize MoveItCpp
+        auto moveit_cpp = std::make_shared<moveit_cpp::MoveItCpp>(shared_from_this());
+        moveit_cpp->getPlanningSceneMonitor()->startSceneMonitor();
+
+        // Define the planning group
+        std::string planning_group = "arm";  // Change based on your robot
+        auto move_group = moveit_cpp->getPlanningComponent(planning_group);
+
+        // Set initial pose
+        move_group->setGoal("ready"); // Ensure 'ready' is a valid named target
+
+        // Plan and execute
+        auto plan_solution = move_group->plan();
+        if (plan_solution)
+        {
+            move_group->execute(*plan_solution);
+            RCLCPP_INFO(get_logger(), "Moved to initial pose.");
+        }
+        else
+        {
+            RCLCPP_WARN(get_logger(), "Failed to plan to initial pose.");
+        }
+
+        return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
+    }
+};
+
 
 int main(int argc, char** argv)
 {
