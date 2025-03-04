@@ -61,9 +61,9 @@ enum Button {
   RIGHT_STICK_CLICK = 10
 };
 
-const std::string TWIST_TOPIC = "/servo_node/delta_twist_cmds";
-const std::string JOINT_TOPIC = "/servo_node/delta_joint_cmds";
-const std::string GRIPPER_ACTION = "/gripper_controller/gripper_cmd";
+const std::string TWIST_TOPIC = "servo_node/delta_twist_cmds";
+const std::string JOINT_TOPIC = "servo_node/delta_joint_cmds";
+const std::string GRIPPER_ACTION = "gripper_controller/gripper_cmd";
 
 const size_t ROS_QUEUE_SIZE = 10;
 const std::string EE_FRAME_ID = "end_effector_link";
