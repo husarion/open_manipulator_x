@@ -70,8 +70,10 @@ const std::string EE_FRAME_ID = "end_effector_link";
 const double DEAD_MAN_SWITH_TRESHOLD = -0.3;
 const double GRIPPER_CLOSE = -0.004;
 const double GRIPPER_OPEN = 0.019;
+const double MAX_CMD_SENDING_PERIOD = 0.02;
+const double MAX_CMD_TYPE_REQ_PERIOD = 0.5;
 // const std::vector<double> GRIPPER_MAX_EFFORT = { 10.0 };
-double GRIPPER_MAX_EFFORT = 10.0;
+const double GRIPPER_MAX_EFFORT = 10.0;
 const std::vector<std::string> GRIPPER_JOINT_NAME = {"gripper_left_joint"};
 const std::vector<std::string> JOINT_NAMES = {"joint1", "joint2", "joint3",
                                               "joint4"};
@@ -245,12 +247,17 @@ bool Joy2Servo::IsDeadManSwitch(const sensor_msgs::msg::Joy::SharedPtr msg) {
 }
 
 void Joy2Servo::JoyCb(const sensor_msgs::msg::Joy::SharedPtr msg) {
+  static auto last_send_time = this->now();
+  auto current_time = this->now();
+  auto time_diff = current_time - last_send_time;
   UpdateReqCommand(msg);
-  if (req_cmd_type_ != cmd_type_) {
+  if (req_cmd_type_ != cmd_type_ &&
+      time_diff.seconds() > MAX_CMD_TYPE_REQ_PERIOD) {
     ChangeCommandType(req_cmd_type_);
+    last_send_time = current_time;
   }
 
-  if (IsDeadManSwitch(msg)) {
+  if (IsDeadManSwitch(msg) && time_diff.seconds() > MAX_CMD_SENDING_PERIOD) {
     if (cmd_type_ == CommandType::JOINT_JOG) {
       ConvertAndPublishJoint(msg);
     } else if (cmd_type_ == CommandType::TWIST) {
@@ -263,7 +270,8 @@ void Joy2Servo::JoyCb(const sensor_msgs::msg::Joy::SharedPtr msg) {
 void Joy2Servo::UpdateReqCommand(const sensor_msgs::msg::Joy::SharedPtr msg) {
   if (msg->buttons[Button::X] ^ msg->buttons[Button::Y]) {
     // req_cmd_type_ = msg->buttons[Button::X] ? CommandType::JOINT_JOG :
-    // CommandType::TWIST; FIXME: singularity error
+    // CommandType::TWIST;
+    // FIXME: singularity error
     req_cmd_type_ = CommandType::JOINT_JOG;
   }
 }
