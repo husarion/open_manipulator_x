@@ -18,7 +18,6 @@
 // #include <control_msgs/action/parallel_gripper_command.hpp>
 #include <geometry_msgs/msg/twist_stamped.hpp>
 #include <moveit_msgs/srv/servo_command_type.hpp>
-#include <open_manipulator_x_joy/joy_control.hpp>
 #include <rclcpp/rclcpp.hpp>
 #include <rclcpp_action/rclcpp_action.hpp>
 #include <sensor_msgs/msg/joy.hpp>
