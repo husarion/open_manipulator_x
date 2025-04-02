@@ -260,15 +260,7 @@
       <origin xyz="0.126 0.0 0.0" rpy="0 0 0"/>
     </joint>
 
-    <link name="${prefix}end_effector_link">
-      <visual>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-        <geometry>
-          <box size="0.01 0.01 0.01" />
-        </geometry>
-        <material name="red"/>
-      </visual>
-    </link>
+    <link name="${prefix}end_effector_link"/>
 
   </xacro:macro>
 
