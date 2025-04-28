@@ -237,7 +237,7 @@ void ManipulatorMoveGroupController::ParseParameters(
 }
 
 void ManipulatorMoveGroupController::MoveToHome() {
-  move_group_manipulator_->setNamedTarget("Home");
+  move_group_manipulator_->setNamedTarget("ready");
   move_group_manipulator_->move();
 }
 

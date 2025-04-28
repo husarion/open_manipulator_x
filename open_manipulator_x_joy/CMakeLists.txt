@@ -6,18 +6,17 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 set(PACKAGE_INCLUDE_DEPENDS
-    ament_cmake
-    control_msgs
-    geometry_msgs
-    rclcpp
-    rclcpp_action
-    rclcpp_components
-    sensor_msgs
-    moveit_core
-    moveit_msgs
-    moveit_ros_planning
-    moveit_ros_planning_interface
-    moveit_servo)
+  ament_cmake
+  control_msgs
+  geometry_msgs
+  rclcpp
+  rclcpp_components
+  sensor_msgs
+  moveit_core
+  moveit_msgs
+  moveit_ros_planning
+  moveit_ros_planning_interface
+  moveit_servo)
 
 foreach(Dependency IN ITEMS ${PACKAGE_INCLUDE_DEPENDS})
   find_package(${Dependency} REQUIRED)
@@ -31,12 +30,8 @@ ament_target_dependencies(joy_servo ${PACKAGE_INCLUDE_DEPENDS})
 rclcpp_components_register_node(
   joy_servo PLUGIN "open_manipulator_x_joy::JoyServoNode" EXECUTABLE
   joy_servo_node)
-
-add_executable(joy2servo src/joy2servo.cpp)
-ament_target_dependencies(joy2servo ${PACKAGE_INCLUDE_DEPENDS})
-
 install(DIRECTORY config DESTINATION share/${PROJECT_NAME})
 install(DIRECTORY include DESTINATION include)
-install(TARGETS joy2servo joy_servo DESTINATION lib/${PROJECT_NAME})
+install(TARGETS joy_servo LIBRARY DESTINATION lib)
 
 ament_package()

@@ -14,6 +14,10 @@
 
 #include <open_manipulator_x_joy/joy_servo_node.hpp>
 
+#include <std_srvs/srv/trigger.hpp>
+
+#include <moveit_msgs/srv/change_drift_dimensions.hpp>
+
 namespace open_manipulator_x_joy {
 
 JoyServoNode::JoyServoNode(const rclcpp::NodeOptions &options)
@@ -25,26 +29,57 @@ JoyServoNode::JoyServoNode(const rclcpp::NodeOptions &options)
   joy_sub_ = this->create_subscription<sensor_msgs::msg::Joy>(
       "joy", 10, std::bind(&JoyServoNode::JoyCb, this, std::placeholders::_1));
 
+  StartServo();
   ChangeCartesianDriftDimensions();
 }
 
-void JoyServoNode::ChangeCartesianDriftDimensions() {
-  cmd_type_srv_ = this->create_client<moveit_msgs::srv::ServoCommandType>(
-      "servo_node/switch_command_type");
-
-  while (!rclcpp::ok() &&
-         !cmd_type_srv_->wait_for_service(std::chrono::seconds(1))) {
+void JoyServoNode::StartServo() {
+  rclcpp::Client<std_srvs::srv::Trigger>::SharedPtr servo_start_client =
+      this->create_client<std_srvs::srv::Trigger>("/servo_node/start_servo");
+  while (!servo_start_client->wait_for_service(std::chrono::seconds(1))) {
     RCLCPP_INFO_STREAM(this->get_logger(),
-                       cmd_type_srv_->get_service_name()
+                       servo_start_client->get_service_name()
+                           << " service not available, waiting again...");
+  }
+  servo_start_client->async_send_request(
+      std::make_shared<std_srvs::srv::Trigger::Request>());
+}
+
+void JoyServoNode::ChangeCartesianDriftDimensions() {
+  rclcpp::Client<moveit_msgs::srv::ChangeDriftDimensions>::SharedPtr
+      change_drift_dimensions_client =
+          this->create_client<moveit_msgs::srv::ChangeDriftDimensions>(
+              "/servo_node/change_drift_dimensions");
+  while (!change_drift_dimensions_client->wait_for_service(
+      std::chrono::seconds(1))) {
+    RCLCPP_INFO_STREAM(this->get_logger(),
+                       change_drift_dimensions_client->get_service_name()
                            << " service not available, waiting again...");
   }
 
-  std::shared_ptr<moveit_msgs::srv::ServoCommandType::Request> req =
-      std::make_shared<moveit_msgs::srv::ServoCommandType::Request>();
+  this->declare_parameter("cartesian_drift_dimensions",
+                          rclcpp::PARAMETER_BOOL_ARRAY);
+  std::vector<bool> cartesian_drift_dimensions =
+      this->get_parameter("cartesian_drift_dimensions").as_bool_array();
+  moveit_msgs::srv::ChangeDriftDimensions::Request::SharedPtr req =
+      std::make_shared<moveit_msgs::srv::ChangeDriftDimensions::Request>();
 
-  req->command_type = moveit_msgs::srv::ServoCommandType::Request::TWIST;
+  if (cartesian_drift_dimensions.size() != 6) {
+    RCLCPP_ERROR_STREAM(
+        this->get_logger(),
+        "Invalid cartesian drift dimensions size (it should have 6 values)");
+    throw std::runtime_error(
+        "Invalid cartesian drift dimensions size (it should have 6 values)");
+  }
 
-  cmd_type_srv_->async_send_request(req);
+  req->drift_x_translation = cartesian_drift_dimensions[0];
+  req->drift_y_translation = cartesian_drift_dimensions[1];
+  req->drift_z_translation = cartesian_drift_dimensions[2];
+  req->drift_x_rotation = cartesian_drift_dimensions[3];
+  req->drift_y_rotation = cartesian_drift_dimensions[4];
+  req->drift_z_rotation = cartesian_drift_dimensions[5];
+
+  change_drift_dimensions_client->async_send_request(req);
 }
 
 void JoyServoNode::JoyCb(const sensor_msgs::msg::Joy::SharedPtr msg) {

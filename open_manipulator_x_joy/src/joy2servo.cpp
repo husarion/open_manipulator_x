@@ -17,7 +17,7 @@
 #include <control_msgs/msg/joint_jog.hpp>
 // #include <control_msgs/action/parallel_gripper_command.hpp>
 #include <geometry_msgs/msg/twist_stamped.hpp>
-#include <moveit_msgs/srv/servo_command_type.hpp>
+#include <moveit_msgs/srv/servo_command_type.h>
 #include <rclcpp/rclcpp.hpp>
 #include <rclcpp_action/rclcpp_action.hpp>
 #include <sensor_msgs/msg/joy.hpp>

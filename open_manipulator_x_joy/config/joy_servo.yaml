@@ -22,6 +22,7 @@
     # Cartesian control
     cartesian_control_reference_frame: link2
     cartesian_control_names: [linear_x, linear_y, linear_z, angular_y]
+    cartesian_drift_dimensions: [false, false, false, false, false, true] # translation x, y, z; rotation x, y, z
     cartesian_control:
       linear_x:
         control_type: axis

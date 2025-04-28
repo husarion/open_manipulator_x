@@ -72,7 +72,7 @@ def generate_launch_description():
 
     servo_node = Node(
         package="moveit_servo",
-        executable="servo_node",
+        executable="servo_node_main",
         parameters=[
             servo_params,
             # acceleration_filter_update_period,
@@ -85,9 +85,9 @@ def generate_launch_description():
         output="screen",
     )
 
-    joy2servo = Node(
+    joy_servo_node = Node(
         package="open_manipulator_x_joy",
-        executable="joy2servo",
+        executable="joy_servo_node",
         parameters=[joy_servo_config],
     )
 
@@ -96,7 +96,7 @@ def generate_launch_description():
         declare_use_sim_arg,
         SetParameter(name="use_sim_time", value=use_sim),
         servo_node,
-        joy2servo,
+        joy_servo_node,
     ]
 
     return LaunchDescription(actions)

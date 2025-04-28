@@ -40,7 +40,6 @@
         <joint name="gripper_left_joint" value="-0.006"/>
     </group_state>
     <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
-    <!-- <end_effector name="manipulator_end" parent_link="end_effector_link" group="manipulator"/> -->
     <end_effector name="hand" parent_link="gripper_left_link" group="gripper"/>
     <!--VIRTUAL JOINT: Purpose: this element defines a virtual joint between a robot link and an external frame of reference (considered fixed with respect to the robot)-->
     <virtual_joint name="world_joint" type="fixed" parent_frame="world" child_link="base_link"/>
