@@ -21,7 +21,7 @@
 namespace open_manipulator_x_joy {
 
 JoyServoNode::JoyServoNode(const rclcpp::NodeOptions &options)
-    : Node("joy_servo_node", options) {
+    : Node("joy_servo", options) {
   dead_man_switch_ =
       JoyControlFactory(this->get_node_parameters_interface(),
                         this->get_node_logging_interface(), "dead_man_switch");
@@ -36,7 +36,8 @@ JoyServoNode::JoyServoNode(const rclcpp::NodeOptions &options)
 void JoyServoNode::StartServo() {
   rclcpp::Client<std_srvs::srv::Trigger>::SharedPtr servo_start_client =
       this->create_client<std_srvs::srv::Trigger>("/servo_node/start_servo");
-  while (!servo_start_client->wait_for_service(std::chrono::seconds(1))) {
+  while (rclcpp::ok() &&
+         !servo_start_client->wait_for_service(std::chrono::seconds(1))) {
     RCLCPP_INFO_STREAM(this->get_logger(),
                        servo_start_client->get_service_name()
                            << " service not available, waiting again...");
@@ -50,8 +51,8 @@ void JoyServoNode::ChangeCartesianDriftDimensions() {
       change_drift_dimensions_client =
           this->create_client<moveit_msgs::srv::ChangeDriftDimensions>(
               "/servo_node/change_drift_dimensions");
-  while (!change_drift_dimensions_client->wait_for_service(
-      std::chrono::seconds(1))) {
+  while (rclcpp::ok() && !change_drift_dimensions_client->wait_for_service(
+                             std::chrono::seconds(1))) {
     RCLCPP_INFO_STREAM(this->get_logger(),
                        change_drift_dimensions_client->get_service_name()
                            << " service not available, waiting again...");
@@ -145,6 +146,9 @@ void JoyServoNode::InitializeControllers() {
 
 } // namespace open_manipulator_x_joy
 
-// Register the component with class_loader
-#include <rclcpp_components/register_node_macro.hpp>
-RCLCPP_COMPONENTS_REGISTER_NODE(open_manipulator_x_joy::JoyServoNode)
+int main(int argc, char **argv) {
+  rclcpp::init(argc, argv);
+  rclcpp::spin(std::make_shared<open_manipulator_x_joy::JoyServoNode>());
+  rclcpp::shutdown();
+  return 0;
+}

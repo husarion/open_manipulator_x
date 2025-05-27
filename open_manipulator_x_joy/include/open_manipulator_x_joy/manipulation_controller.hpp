@@ -137,8 +137,8 @@ private:
 
   std::unique_ptr<JoyControl> toggle_gripper_position_;
 
-  enum GripperPosition { OPENED, CLOSED };
-  GripperPosition gripper_position_ = GripperPosition::CLOSED;
+  enum GripperPosition { OPEN, CLOSE };
+  GripperPosition gripper_position_ = GripperPosition::CLOSE;
 
   // action of this controller should be triggered only once per button press
   //  and require releasing button before executing again

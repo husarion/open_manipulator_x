@@ -40,12 +40,12 @@ int main(int argc, char **argv) {
 
   moveit::planning_interface::MoveGroupInterface manipulator_group(
       move_group_node, "manipulator");
-  manipulator_group.setNamedTarget("ready");
+  manipulator_group.setNamedTarget("Ready");
   manipulator_group.move();
 
   moveit::planning_interface::MoveGroupInterface gripper_group(move_group_node,
                                                                "gripper");
-  gripper_group.setNamedTarget("open");
+  gripper_group.setNamedTarget("Open");
   gripper_group.move();
 
   rclcpp::shutdown();
