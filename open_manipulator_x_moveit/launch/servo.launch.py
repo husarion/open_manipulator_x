@@ -98,9 +98,9 @@ def generate_launch_description():
             " ",
             PathJoinSubstitution(
                 [
-                    FindPackageShare("rosbot_xl_manipulation_description"),
+                    FindPackageShare("rosbot_description"),
                     "urdf",
-                    "rosbot_xl_manipulation.urdf.xacro",
+                    "rosbot_xl.urdf.xacro",
                 ]
             ),
             " manipulator_collision_enabled:=True",
