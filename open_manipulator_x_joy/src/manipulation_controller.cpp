@@ -237,7 +237,7 @@ void ManipulatorMoveGroupController::ParseParameters(
 }
 
 void ManipulatorMoveGroupController::MoveToHome() {
-  move_group_manipulator_->setNamedTarget("ready");
+  move_group_manipulator_->setNamedTarget("Home");
   move_group_manipulator_->move();
 }
 
@@ -254,9 +254,9 @@ bool GripperMoveGroupController::Process(
   if (toggle_gripper_position_->IsPressed(msg)) {
     if (!action_already_executed_) {
       action_already_executed_ = true;
-      if (gripper_position_ == GripperPosition::CLOSED) {
+      if (gripper_position_ == GripperPosition::CLOSE) {
         OpenGripper();
-      } else if (gripper_position_ == GripperPosition::OPENED) {
+      } else if (gripper_position_ == GripperPosition::OPEN) {
         CloseGripper();
       }
     }
@@ -274,15 +274,15 @@ void GripperMoveGroupController::ParseParameters(
 }
 
 void GripperMoveGroupController::CloseGripper() {
-  move_group_gripper_->setNamedTarget("Closed");
+  move_group_gripper_->setNamedTarget("Close");
   move_group_gripper_->move();
-  gripper_position_ = GripperPosition::CLOSED;
+  gripper_position_ = GripperPosition::CLOSE;
 }
 
 void GripperMoveGroupController::OpenGripper() {
-  move_group_gripper_->setNamedTarget("Opened");
+  move_group_gripper_->setNamedTarget("Open");
   move_group_gripper_->move();
-  gripper_position_ = GripperPosition::OPENED;
+  gripper_position_ = GripperPosition::OPEN;
 }
 
 } // namespace open_manipulator_x_joy

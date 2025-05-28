@@ -40,12 +40,14 @@ int main(int argc, char **argv) {
 
   moveit::planning_interface::MoveGroupInterface gripper_group(move_group_node,
                                                                "gripper");
-  gripper_group.setNamedTarget("close");
+  gripper_group.setNamedTarget("Close");
   gripper_group.move();
 
   moveit::planning_interface::MoveGroupInterface manipulator_group(
       move_group_node, "manipulator");
-  manipulator_group.setNamedTarget("dock");
+  manipulator_group.setMaxVelocityScalingFactor(1.0);
+  manipulator_group.setMaxAccelerationScalingFactor(0.2);
+  manipulator_group.setNamedTarget("Dock");
   manipulator_group.move();
 
   rclcpp::shutdown();

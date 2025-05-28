@@ -1,5 +1,5 @@
 ---
-/**:
+/**/joy_servo:
   ros__parameters:
     joint_names: [joint1, joint2, joint3, joint4]
     end_effector_name: end_effector_link
@@ -12,7 +12,7 @@
 
     home_manipulator:
       control_type: single_button
-      button_id: 9
+      button_id: 7
     manipulator_move_group_velocity_scaling_factor: 1.0
     manipulator_move_group_acceleration_scaling_factor: 1.0
 
@@ -34,37 +34,37 @@
         max_velocity: 0.2 # m/s
       linear_z:
         control_type: axis
-        axis_id: 3
+        axis_id: 4
         max_velocity: 0.1 # m/s
       angular_y:
         control_type: axis
-        axis_id: 2
+        axis_id: 3
         max_velocity: 0.8 # rad/s
 
     # Joints control
     joints_control:
       joint1:
         control_type: axis
-        axis_id: 4
+        axis_id: 6
         max_velocity: 0.4 # rad/s
       joint2:
         control_type: axis
-        axis_id: 5
+        axis_id: 7
         inverted: true
         max_velocity: 0.4 # rad/s
       joint3:
         control_type: double_button
-        positive_button_id: 0
-        negative_button_id: 2
+        positive_button_id: 2
+        negative_button_id: 1
         max_velocity: 0.4 # rad/s
       joint4:
         control_type: double_button
-        positive_button_id: 1
+        positive_button_id: 0
         negative_button_id: 3
         max_velocity: 0.4 # rad/s
 
     gripper_control:
-      # Toggles between opened and closed positions
+      # Toggles between open and close positions
       toggle:
         control_type: single_button
-        button_id: 7
+        button_id: 4
