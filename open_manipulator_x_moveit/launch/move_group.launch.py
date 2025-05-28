@@ -29,6 +29,10 @@ def generate_launch_description():
         "rosbot_xl", package_name="open_manipulator_x_moveit"
     ).to_moveit_configs()
 
+    components_config = PathJoinSubstitution(
+        [FindPackageShare("rosbot_description"), "config", "rosbot_xl", "manipulation.yaml"]
+    )
+
     # Overwrite description to include potential changes - moveit config builder will construct urdf
     # with default values
     robot_description_content = Command(
@@ -42,6 +46,9 @@ def generate_launch_description():
                     "rosbot_xl.urdf.xacro",
                 ]
             ),
+            " components_config:=",
+            components_config,
+            " configuration:='manipulation'",
         ]
     )
     moveit_config.robot_description = {"robot_description": robot_description_content}

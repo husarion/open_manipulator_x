@@ -47,7 +47,7 @@ def generate_launch_description():
         "joy_servo_params_file",
         default_value=PathJoinSubstitution(
             [
-                FindPackageShare("open_manipulator_x_moveit"),
+                FindPackageShare("open_manipulator_x_joy"),
                 "config",
                 "joy_servo.yaml",
             ]
@@ -90,6 +90,10 @@ def generate_launch_description():
         "moveit_servo.publish_joint_accelerations": False,
     }
 
+    components_config = PathJoinSubstitution(
+        [FindPackageShare("rosbot_description"), "config", "rosbot_xl", "manipulation.yaml"]
+    )
+
     # Manually load description to include potential changes - moveit config builder will construct urdf
     # with default values
     robot_description_content = Command(
@@ -103,11 +107,13 @@ def generate_launch_description():
                     "rosbot_xl.urdf.xacro",
                 ]
             ),
-            " manipulator_collision_enabled:=True",
             " mecanum:=",
             mecanum,
             " use_sim:=",
             use_sim,
+            " components_config:=",
+            components_config,
+            " configuration:='manipulation'",
         ]
     )
     robot_description = {"robot_description": robot_description_content}
@@ -121,7 +127,7 @@ def generate_launch_description():
             moveit_config.robot_description_semantic,
             moveit_config.joint_limits,
             # if inverse kinamtics isn't specified inverse Jacobian will be used
-            # moveit_config.robot_description_kinematics
+            moveit_config.robot_description_kinematics,
         ],
         output="screen",
     )

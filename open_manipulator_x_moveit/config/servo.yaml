@@ -57,6 +57,6 @@ command_out_topic: /manipulator_controller/joint_trajectory # Publish outgoing c
 
 ## Collision checking for the entire robot body
 check_collisions: true # Check collisions?
-collision_check_rate: 15.0 # [Hz] Collision-checking can easily bog down a CPU if done too often.
+collision_check_rate: 10.0 # [Hz] Collision-checking can easily bog down a CPU if done too often.
 self_collision_proximity_threshold: 0.04 # Start decelerating when a self-collision is this far [m]
 scene_collision_proximity_threshold: 0.06 # Start decelerating when a scene collision is this far [m]
