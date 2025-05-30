@@ -58,7 +58,7 @@ def generate_launch_description():
     mecanum = LaunchConfiguration("mecanum")
     declare_mecanum_arg = DeclareLaunchArgument(
         "mecanum",
-        default_value="False",
+        default_value="True",
         description="Whether to use mecanum drive controller (otherwise diff drive controller is used)",
     )
 
