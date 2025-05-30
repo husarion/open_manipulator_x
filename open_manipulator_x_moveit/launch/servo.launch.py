@@ -74,7 +74,7 @@ def generate_launch_description():
     ).to_moveit_configs()
 
     # Get parameters for the Servo node
-    servo_yaml = load_yaml("open_manipulator_x_moveit", "config/servo.yaml")
+    servo_yaml = load_yaml("open_manipulator_x_joy", "config/servo.yaml")
     servo_params = {
         "moveit_servo": servo_yaml,
         "moveit_servo.use_gazebo": use_sim,

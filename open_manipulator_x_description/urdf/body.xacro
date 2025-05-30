@@ -12,7 +12,7 @@
     <xacro:property name="meshes_dir" value="package://open_manipulator_x_description/meshes"/>
 
     <xacro:if value="${parent_link != ''}">
-      <joint name="${prefix}${parent_link}_joint" type="fixed">
+      <joint name="${prefix}${parent_link}_to_link1" type="fixed">
         <origin xyz="${xyz}" rpy="${rpy}" />
         <parent link="${parent_link}"/>
         <child link="${prefix}link1"/>

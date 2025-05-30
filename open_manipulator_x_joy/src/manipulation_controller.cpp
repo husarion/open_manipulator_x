@@ -194,7 +194,7 @@ void CartesianController::SendCartesianCommand(
 
 ManipulatorMoveGroupController::ManipulatorMoveGroupController(
     const rclcpp::Node::SharedPtr &node) {
-  move_group_manipulator_ =
+  manipulator_group_ =
       std::make_unique<moveit::planning_interface::MoveGroupInterface>(
           node, "manipulator");
   ParseParameters(node);
@@ -211,21 +211,21 @@ ManipulatorMoveGroupController::ManipulatorMoveGroupController(
           .as_double();
   // By default move group sets scaling factors to 0.1, which results in slow
   // movement
-  move_group_manipulator_->setMaxVelocityScalingFactor(velocity_scaling_factor);
-  move_group_manipulator_->setMaxAccelerationScalingFactor(
+  manipulator_group_->setMaxVelocityScalingFactor(velocity_scaling_factor);
+  manipulator_group_->setMaxAccelerationScalingFactor(
       acceleration_scaling_factor);
 }
 
 bool ManipulatorMoveGroupController::Process(
     const sensor_msgs::msg::Joy::SharedPtr msg) {
   if (home_manipulator_->IsPressed(msg)) {
-    if (!action_already_executed_) {
-      action_already_executed_ = true;
+    if (!is_action_executing_) {
+      is_action_executing_ = true;
       MoveToHome();
     }
     return true;
   }
-  action_already_executed_ = false;
+  is_action_executing_ = false;
   return false;
 }
 
@@ -237,8 +237,8 @@ void ManipulatorMoveGroupController::ParseParameters(
 }
 
 void ManipulatorMoveGroupController::MoveToHome() {
-  move_group_manipulator_->setNamedTarget("Home");
-  move_group_manipulator_->move();
+  manipulator_group_->setNamedTarget("Home");
+  manipulator_group_->move();
 }
 
 GripperMoveGroupController::GripperMoveGroupController(
@@ -251,26 +251,31 @@ GripperMoveGroupController::GripperMoveGroupController(
 
 bool GripperMoveGroupController::Process(
     const sensor_msgs::msg::Joy::SharedPtr msg) {
-  if (toggle_gripper_position_->IsPressed(msg)) {
-    if (!action_already_executed_) {
-      action_already_executed_ = true;
-      if (gripper_position_ == GripperPosition::CLOSE) {
-        OpenGripper();
-      } else if (gripper_position_ == GripperPosition::OPEN) {
-        CloseGripper();
-      }
+  if (open_gripper_cmd_->IsPressed(msg)) {
+    if (!is_action_executing_) {
+      is_action_executing_ = true;
+      OpenGripper();
+    }
+    return true;
+  } else if (close_gripper_cmd_->IsPressed(msg)) {
+    if (!is_action_executing_) {
+      is_action_executing_ = true;
+      CloseGripper();
     }
     return true;
   }
-  action_already_executed_ = false;
+  is_action_executing_ = false;
   return false;
 }
 
 void GripperMoveGroupController::ParseParameters(
     const rclcpp::Node::SharedPtr &node) {
-  toggle_gripper_position_ = JoyControlFactory(
+  open_gripper_cmd_ = JoyControlFactory(
       node->get_node_parameters_interface(), node->get_node_logging_interface(),
-      "gripper_control.toggle");
+      "gripper_control.open");
+  close_gripper_cmd_ = JoyControlFactory(
+      node->get_node_parameters_interface(), node->get_node_logging_interface(),
+      "gripper_control.close");
 }
 
 void GripperMoveGroupController::CloseGripper() {

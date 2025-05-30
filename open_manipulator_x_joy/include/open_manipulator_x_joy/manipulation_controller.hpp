@@ -112,13 +112,13 @@ private:
 
   void MoveToHome();
 
-  moveit::planning_interface::MoveGroupInterfacePtr move_group_manipulator_;
+  moveit::planning_interface::MoveGroupInterfacePtr manipulator_group_;
 
   std::unique_ptr<JoyControl> home_manipulator_;
 
   // action of this controller should be triggered only once per button press
   //  and require releasing button before executing again
-  bool action_already_executed_ = false;
+  bool is_action_executing_ = false;
 };
 
 class GripperMoveGroupController : public ManipulationController {
@@ -135,14 +135,15 @@ private:
 
   moveit::planning_interface::MoveGroupInterfacePtr move_group_gripper_;
 
-  std::unique_ptr<JoyControl> toggle_gripper_position_;
+  std::unique_ptr<JoyControl> open_gripper_cmd_;
+  std::unique_ptr<JoyControl> close_gripper_cmd_;
 
   enum GripperPosition { OPEN, CLOSE };
-  GripperPosition gripper_position_ = GripperPosition::CLOSE;
+  GripperPosition gripper_position_ = GripperPosition::OPEN;
 
   // action of this controller should be triggered only once per button press
   //  and require releasing button before executing again
-  bool action_already_executed_ = false;
+  bool is_action_executing_ = false;
 };
 
 } // namespace open_manipulator_x_joy

@@ -7,8 +7,10 @@
     axis_deadzone: 0.05
 
     dead_man_switch:
-      control_type: single_button
-      button_id: 5
+      control_type: axis
+      axis_id: 5
+      inverted: true
+      pressing_threshold: -0.5 # 50% of the axis range
 
     home_manipulator:
       control_type: single_button
@@ -65,6 +67,10 @@
 
     gripper_control:
       # Toggles between open and close positions
-      toggle:
+      open:
         control_type: single_button
-        button_id: 4
+        button_id: 0
+
+      close:
+        control_type: single_button
+        button_id: 1

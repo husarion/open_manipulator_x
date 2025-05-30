@@ -6,7 +6,7 @@ moveit_setup_assistant_config:
     package: open_manipulator_x_moveit
     relative_path: config/rosbot_xl_manipulation.srdf
   package_settings:
-    author_name: rafal.gorecki@husarion.com
+    author_name: Rafal Gorecki
     author_email: support@husarion.com
     generated_timestamp: 1670263952
   control_xacro:
@@ -18,9 +18,3 @@ moveit_setup_assistant_config:
   modified_urdf:
     xacros:
       - control_xacro
-  control_xacro:
-    command:
-      - position
-    state:
-      - position
-      - velocity
