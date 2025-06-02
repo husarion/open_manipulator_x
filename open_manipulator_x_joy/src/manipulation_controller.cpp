@@ -251,43 +251,57 @@ GripperMoveGroupController::GripperMoveGroupController(
 
 bool GripperMoveGroupController::Process(
     const sensor_msgs::msg::Joy::SharedPtr msg) {
-  if (open_gripper_cmd_->IsPressed(msg)) {
-    if (!is_action_executing_) {
-      is_action_executing_ = true;
-      OpenGripper();
-    }
-    return true;
-  } else if (close_gripper_cmd_->IsPressed(msg)) {
-    if (!is_action_executing_) {
-      is_action_executing_ = true;
-      CloseGripper();
-    }
+
+  constexpr double AXIS_MIN = -1.0;
+  constexpr double AXIS_MAX = 1.0;
+  constexpr double POSITION_EPSILON = 0.001;
+
+  double axis_value = gripper_cmd_->GetControlValue(msg);
+  bool is_gripper_active = gripper_trigger_->IsPressed(msg);
+
+  double target_position = gripper_min_position_ +
+                           ((axis_value - AXIS_MIN) / (AXIS_MAX - AXIS_MIN)) *
+                               (gripper_max_position_ - gripper_min_position_);
+
+  if (is_gripper_active &&
+      std::abs(target_position - gripper_position_) > POSITION_EPSILON) {
+    MoveGripper(target_position);
     return true;
   }
-  is_action_executing_ = false;
+
   return false;
 }
 
 void GripperMoveGroupController::ParseParameters(
     const rclcpp::Node::SharedPtr &node) {
-  open_gripper_cmd_ = JoyControlFactory(
-      node->get_node_parameters_interface(), node->get_node_logging_interface(),
-      "gripper_control.open");
-  close_gripper_cmd_ = JoyControlFactory(
-      node->get_node_parameters_interface(), node->get_node_logging_interface(),
-      "gripper_control.close");
+  gripper_cmd_ = JoyControlFactory(node->get_node_parameters_interface(),
+                                   node->get_node_logging_interface(),
+                                   "gripper_control.control");
+  gripper_trigger_ = JoyControlFactory(node->get_node_parameters_interface(),
+                                       node->get_node_logging_interface(),
+                                       "gripper_control.trigger");
+  node->declare_parameter<double>("gripper_min_position", -0.005);
+  node->declare_parameter<double>("gripper_max_position", 0.019);
+  node->declare_parameter<std::string>("joint_name", "gripper_left_joint");
+  try {
+    gripper_min_position_ =
+        node->get_parameter("gripper_min_position").as_double();
+    gripper_max_position_ =
+        node->get_parameter("gripper_max_position").as_double();
+    joint_name_gripper_ = node->get_parameter("joint_name").as_string();
+  } catch (const rclcpp::exceptions::ParameterUninitializedException &e) {
+    RCLCPP_ERROR_STREAM(node->get_logger(),
+                        "Required parameter not defined: " << e.what());
+    throw e;
+  }
 }
 
-void GripperMoveGroupController::CloseGripper() {
-  move_group_gripper_->setNamedTarget("Close");
+void GripperMoveGroupController::MoveGripper(double target_position) {
+  std::map<std::string, double> joint_positions;
+  joint_positions["gripper_left_joint"] = target_position;
+  move_group_gripper_->setJointValueTarget(joint_positions);
   move_group_gripper_->move();
-  gripper_position_ = GripperPosition::CLOSE;
-}
-
-void GripperMoveGroupController::OpenGripper() {
-  move_group_gripper_->setNamedTarget("Open");
-  move_group_gripper_->move();
-  gripper_position_ = GripperPosition::OPEN;
+  gripper_position_ = target_position;
 }
 
 } // namespace open_manipulator_x_joy

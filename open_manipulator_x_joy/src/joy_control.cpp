@@ -28,8 +28,7 @@ AxisControl::AxisControl(int axis_id, double axis_deadzone, double scaling,
 bool AxisControl::IsPressed(const sensor_msgs::msg::Joy::SharedPtr msg) const {
   if (pressing_threshold_ != 0.0) {
     return (msg->axes[axis_id_] > pressing_threshold_) != inverted_;
-  }
-  else {
+  } else {
     return std::fabs(msg->axes[axis_id_]) > axis_deadzone_;
   }
 }
@@ -115,13 +114,14 @@ std::unique_ptr<JoyControl> JoyControlFactory(
     param_itf->declare_parameter(param_namespace + ".axis_id",
                                  rclcpp::PARAMETER_INTEGER);
     param_itf->declare_parameter(param_namespace + ".pressing_threshold",
-                   rclcpp::ParameterValue(0.0));
+                                 rclcpp::ParameterValue(0.0));
     param_itf->declare_parameter(param_namespace + ".inverted",
                                  rclcpp::ParameterValue(false));
     int axis_id =
         param_itf->get_parameter(param_namespace + ".axis_id").as_int();
     double pressing_threshold =
-        param_itf->get_parameter(param_namespace + ".pressing_threshold").as_double();
+        param_itf->get_parameter(param_namespace + ".pressing_threshold")
+            .as_double();
     bool inverted =
         param_itf->get_parameter(param_namespace + ".inverted").as_bool();
     controller = std::make_unique<AxisControl>(axis_id, axis_deadzone, scaling,

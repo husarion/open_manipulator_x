@@ -66,11 +66,14 @@
         max_velocity: 0.4 # rad/s
 
     gripper_control:
-      # Toggles between open and close positions
-      open:
+      # Gripper position control
+      control:
+        control_type: axis
+        axis_id: 2
+      # Gripper trigger movement
+      trigger:
         control_type: single_button
-        button_id: 0
-
-      close:
-        control_type: single_button
-        button_id: 1
+        button_id: 5
+      max_position: 0.019
+      min_position: -0.005
+      joint_name: gripper_left_joint

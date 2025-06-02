@@ -129,21 +129,17 @@ public:
 
 private:
   void ParseParameters(const rclcpp::Node::SharedPtr &node);
+  void MoveGripper(double target_position);
 
-  void CloseGripper();
-  void OpenGripper();
+  std::unique_ptr<JoyControl> gripper_cmd_;
+  std::unique_ptr<JoyControl> gripper_trigger_;
 
   moveit::planning_interface::MoveGroupInterfacePtr move_group_gripper_;
 
-  std::unique_ptr<JoyControl> open_gripper_cmd_;
-  std::unique_ptr<JoyControl> close_gripper_cmd_;
-
-  enum GripperPosition { OPEN, CLOSE };
-  GripperPosition gripper_position_ = GripperPosition::OPEN;
-
-  // action of this controller should be triggered only once per button press
-  //  and require releasing button before executing again
-  bool is_action_executing_ = false;
+  std::string joint_name_gripper_ = "gripper_finger_joint";
+  double gripper_position_ = 0.0;
+  double gripper_min_position_ = -0.005;
+  double gripper_max_position_ = 0.019;
 };
 
 } // namespace open_manipulator_x_joy
