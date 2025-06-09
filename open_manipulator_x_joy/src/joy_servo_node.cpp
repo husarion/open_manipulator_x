@@ -31,7 +31,6 @@ JoyServoNode::JoyServoNode(const rclcpp::NodeOptions &options)
 
   StartServo();
   ChangeCartesianDriftDimensions();
-  StartServo();
 }
 
 void JoyServoNode::StartServo() {
@@ -98,6 +97,7 @@ void JoyServoNode::JoyCb(const sensor_msgs::msg::Joy::SharedPtr msg) {
     // MotionPlanning rviz plugin won't work
     if (!dead_man_switch_stop_sent_) {
       dead_man_switch_stop_sent_ = true;
+      StartServo(); // Make sure servo is running
       StopControllers(manipulator_controllers_);
       StopControllers(gripper_controllers_);
     }

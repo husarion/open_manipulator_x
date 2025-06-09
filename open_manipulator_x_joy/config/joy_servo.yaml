@@ -15,8 +15,8 @@
     home_manipulator:
       control_type: single_button
       button_id: 7
-    manipulator_move_group_velocity_scaling_factor: 1.0
-    manipulator_move_group_acceleration_scaling_factor: 1.0
+    manipulator_move_group_velocity_scaling_factor: 0.3
+    manipulator_move_group_acceleration_scaling_factor: 0.3
 
     # max_velocity set to quite low values (for both cartesian and joints control)
     # so that collision checker will have enough time to stop manipulator
@@ -48,22 +48,22 @@
       joint1:
         control_type: axis
         axis_id: 6
-        max_velocity: 0.4 # rad/s
+        max_velocity: 0.8 # rad/s
       joint2:
         control_type: axis
         axis_id: 7
         inverted: true
-        max_velocity: 0.4 # rad/s
+        max_velocity: 0.8 # rad/s
       joint3:
         control_type: double_button
         positive_button_id: 2
         negative_button_id: 1
-        max_velocity: 0.4 # rad/s
+        max_velocity: 0.8 # rad/s
       joint4:
         control_type: double_button
         positive_button_id: 0
         negative_button_id: 3
-        max_velocity: 0.4 # rad/s
+        max_velocity: 0.8 # rad/s
 
     gripper_control:
       # Gripper position control

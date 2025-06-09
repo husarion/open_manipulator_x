@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
 
   moveit::planning_interface::MoveGroupInterface manipulator_group(
       move_group_node, "manipulator");
-  manipulator_group.setMaxVelocityScalingFactor(0.5);
+  manipulator_group.setMaxVelocityScalingFactor(0.4);
   manipulator_group.setMaxAccelerationScalingFactor(0.2);
   manipulator_group.setNamedTarget("Home");
   manipulator_group.move();
