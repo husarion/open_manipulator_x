@@ -55,7 +55,7 @@
       <!-- Fix origin on custom cylinder -->
       <origin xyz="0.0 0.0 0.017" rpy="0 0 0"/>
       <axis xyz="0 0 1"/>
-      <limit velocity="4.8" effort="1" lower="${-pi}" upper="${pi}" />
+      <limit velocity="4.8" effort="1" lower="${-5/4*pi}" upper="${3/4*pi}" />
       <dynamics damping="0.1"/>
     </joint>
 
@@ -89,7 +89,7 @@
       <child link="${prefix}link3"/>
       <origin xyz="0.0 0.0 0.0595" rpy="0 0 0"/>
       <axis xyz="0 1 0"/>
-      <limit velocity="4.8" effort="1" lower="${-1.5}" upper="${1.5}" />
+      <limit velocity="4.8" effort="1" lower="${-pi}" upper="${pi}" />
       <dynamics damping="0.1"/>
     </joint>
 

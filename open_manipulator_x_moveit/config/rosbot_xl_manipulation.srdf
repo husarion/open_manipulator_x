@@ -40,7 +40,7 @@
         <joint name="joint4" value="1.35"/>
     </group_state>
     <group_state name="Open" group="gripper">
-        <joint name="gripper_left_joint" value="0.019"/>
+        <joint name="gripper_left_joint" value="0.017"/>
     </group_state>
     <group_state name="Close" group="gripper">
         <joint name="gripper_left_joint" value="-0.005"/>

@@ -74,6 +74,6 @@
       trigger:
         control_type: single_button
         button_id: 5
-      max_position: 0.019
+      max_position: 0.015 # max 0.019 - reduce the risk of setting the wrong starting position
       min_position: -0.005
       joint_name: gripper_left_joint

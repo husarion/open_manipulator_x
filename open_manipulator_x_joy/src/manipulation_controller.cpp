@@ -239,6 +239,7 @@ void ManipulatorMoveGroupController::ParseParameters(
 void ManipulatorMoveGroupController::MoveToHome() {
   manipulator_group_->setNamedTarget("Home");
   manipulator_group_->move();
+  manipulator_group_->move(); // To make sure the action is finished
 }
 
 GripperMoveGroupController::GripperMoveGroupController(
@@ -280,14 +281,14 @@ void GripperMoveGroupController::ParseParameters(
   gripper_trigger_ = JoyControlFactory(node->get_node_parameters_interface(),
                                        node->get_node_logging_interface(),
                                        "gripper_control.trigger");
-  node->declare_parameter<double>("gripper_min_position", -0.005);
-  node->declare_parameter<double>("gripper_max_position", 0.019);
+  node->declare_parameter<double>("gripper_control.min_position", -0.005);
+  node->declare_parameter<double>("gripper_control.max_position", 0.019);
   node->declare_parameter<std::string>("joint_name", "gripper_left_joint");
   try {
     gripper_min_position_ =
-        node->get_parameter("gripper_min_position").as_double();
+        node->get_parameter("gripper_control.min_position").as_double();
     gripper_max_position_ =
-        node->get_parameter("gripper_max_position").as_double();
+        node->get_parameter("gripper_control.max_position").as_double();
     joint_name_gripper_ = node->get_parameter("joint_name").as_string();
   } catch (const rclcpp::exceptions::ParameterUninitializedException &e) {
     RCLCPP_ERROR_STREAM(node->get_logger(),

@@ -31,6 +31,7 @@ JoyServoNode::JoyServoNode(const rclcpp::NodeOptions &options)
 
   StartServo();
   ChangeCartesianDriftDimensions();
+  StartServo();
 }
 
 void JoyServoNode::StartServo() {
