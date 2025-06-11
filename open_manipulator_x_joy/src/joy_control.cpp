@@ -17,14 +17,20 @@
 namespace open_manipulator_x_joy {
 
 AxisControl::AxisControl(int axis_id, double axis_deadzone, double scaling,
-                         bool inverted_control) {
+                         bool inverted_control, double pressing_threshold) {
   axis_id_ = axis_id;
   axis_deadzone_ = axis_deadzone;
-  scaling_ = inverted_control ? -scaling : scaling;
+  inverted_ = inverted_control;
+  scaling_ = inverted_ ? -scaling : scaling;
+  pressing_threshold_ = pressing_threshold;
 }
 
 bool AxisControl::IsPressed(const sensor_msgs::msg::Joy::SharedPtr msg) const {
-  return std::fabs(msg->axes[axis_id_]) > axis_deadzone_;
+  if (pressing_threshold_ != 0.0) {
+    return (msg->axes[axis_id_] > pressing_threshold_) != inverted_;
+  } else {
+    return std::fabs(msg->axes[axis_id_]) > axis_deadzone_;
+  }
 }
 
 double
@@ -107,14 +113,19 @@ std::unique_ptr<JoyControl> JoyControlFactory(
         param_itf->get_parameter("axis_deadzone").as_double();
     param_itf->declare_parameter(param_namespace + ".axis_id",
                                  rclcpp::PARAMETER_INTEGER);
+    param_itf->declare_parameter(param_namespace + ".pressing_threshold",
+                                 rclcpp::ParameterValue(0.0));
     param_itf->declare_parameter(param_namespace + ".inverted",
                                  rclcpp::ParameterValue(false));
     int axis_id =
         param_itf->get_parameter(param_namespace + ".axis_id").as_int();
+    double pressing_threshold =
+        param_itf->get_parameter(param_namespace + ".pressing_threshold")
+            .as_double();
     bool inverted =
         param_itf->get_parameter(param_namespace + ".inverted").as_bool();
     controller = std::make_unique<AxisControl>(axis_id, axis_deadzone, scaling,
-                                               inverted);
+                                               inverted, pressing_threshold);
   } else {
     RCLCPP_ERROR_STREAM(logging_itf->get_logger(),
                         "Unknown control type "

@@ -23,14 +23,13 @@
 
 #include <sensor_msgs/msg/joy.hpp>
 
-#include <moveit_msgs/srv/servo_command_type.hpp>
 #include <open_manipulator_x_joy/joy_control.hpp>
 #include <open_manipulator_x_joy/manipulation_controller.hpp>
 
 namespace open_manipulator_x_joy {
 class JoyServoNode : public rclcpp::Node {
 public:
-  JoyServoNode(const rclcpp::NodeOptions &options);
+  JoyServoNode(const rclcpp::NodeOptions &options = rclcpp::NodeOptions());
 
 private:
   void JoyCb(const sensor_msgs::msg::Joy::SharedPtr msg);
@@ -54,7 +53,6 @@ private:
   bool dead_man_switch_stop_sent_ = false;
 
   rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr joy_sub_;
-  rclcpp::Client<moveit_msgs::srv::ServoCommandType>::SharedPtr cmd_type_srv_;
 };
 } // namespace open_manipulator_x_joy
 

@@ -24,11 +24,8 @@ Parameters description:
 * `collision_enabled` - due to lack of dedicated collision meshes of open_manipulator_x, visual ones are also used for collisions. This can result in a drop in simulation performance, you can opt to disable collisions in this case.
 * `usb_port` in case of using hardware, name of USB port where manipulator is connected (e.g. `/dev/ttyUSB0`).
 * `baud_rate` in case of using hardware, a baud rate of communication with servos.
-* `joint1_limit_min` and `joint1_limit_max` - with these parameters you can adjust limits on the first joint of the manipulator - it is constrained by the cable connecting the first and second servo, and it can differ depending on how this cable was connected and the length of it.
 
 Additionally, you have to add an appropriate controller, an example is provided in the `open_manipulator_x_hardware/config` directory.
-
-For an exact usage example of the manipulator please check out [rosbot_xl_manipulation_ros](https://github.com/husarion/rosbot_xl_manipulation_ros).
 
 ## Usage
 

@@ -25,18 +25,14 @@ endforeach()
 
 include_directories(include)
 
-add_library(joy_servo SHARED src/joy_servo_node.cpp src/joy_control.cpp
-                             src/manipulation_controller.cpp)
-ament_target_dependencies(joy_servo ${PACKAGE_INCLUDE_DEPENDS})
-rclcpp_components_register_node(
-  joy_servo PLUGIN "open_manipulator_x_joy::JoyServoNode" EXECUTABLE
-  joy_servo_node)
-
+# add_executable(joy_servo src/joy_servo_node.cpp src/joy_control.cpp
+# src/manipulation_controller.cpp) ament_target_dependencies(joy_servo
+# ${PACKAGE_INCLUDE_DEPENDS})
 add_executable(joy2servo src/joy2servo.cpp)
 ament_target_dependencies(joy2servo ${PACKAGE_INCLUDE_DEPENDS})
 
 install(DIRECTORY config DESTINATION share/${PROJECT_NAME})
 install(DIRECTORY include DESTINATION include)
-install(TARGETS joy2servo joy_servo DESTINATION lib/${PROJECT_NAME})
+install(TARGETS joy2servo DESTINATION lib/${PROJECT_NAME})
 
 ament_package()
