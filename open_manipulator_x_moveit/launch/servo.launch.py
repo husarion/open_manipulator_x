@@ -58,9 +58,9 @@ def generate_launch_description():
     )
 
     moveit_config = (
-        MoveItConfigsBuilder("robot_xl", package_name="open_manipulator_x_moveit")
-        .robot_description(file_path="config/rosbot_xl.urdf.xacro")
-        .joint_limits(file_path="config/joint_limits.yaml")
+        MoveItConfigsBuilder("robot_xl", package_name="open_manipulator_x_moveit").joint_limits(
+            file_path="config/joint_limits.yaml"
+        )
     ).to_moveit_configs()
 
     # Get parameters for the Servo node
@@ -77,7 +77,6 @@ def generate_launch_description():
             servo_params,
             # acceleration_filter_update_period,
             # planning_group_name,
-            moveit_config.robot_description,
             moveit_config.robot_description_semantic,
             moveit_config.robot_description_kinematics,
             moveit_config.joint_limits,

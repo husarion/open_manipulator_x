@@ -12,9 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <moveit/move_group_interface/move_group_interface.hpp>
+#include <moveit/move_group_interface/move_group_interface.h>
 #include <moveit_msgs/action/move_group.hpp>
 #include <rclcpp/rclcpp.hpp>
+
+using MGI = moveit::planning_interface::MoveGroupInterface;
 
 int main(int argc, char **argv) {
   rclcpp::init(argc, argv);
@@ -30,22 +32,27 @@ int main(int argc, char **argv) {
 
   auto gripper_action_client =
       rclcpp_action::create_client<moveit_msgs::action::MoveGroup>(
-          move_group_node, "/move_action");
+          move_group_node, "move_action");
   if (!gripper_action_client->wait_for_action_server(
-          std::chrono::seconds(10))) {
+          std::chrono::seconds(15))) {
     RCLCPP_ERROR(move_group_node->get_logger(),
                  "MoveGroup server not available!");
-    return -1;
+    rclcpp::shutdown();
+    return 1;
   }
 
-  moveit::planning_interface::MoveGroupInterface manipulator_group(
-      move_group_node, "manipulator");
-  manipulator_group.setNamedTarget("ready");
+  auto manipulator_options = MGI::Options("manipulator", "robot_description",
+                                          move_group_node->get_namespace());
+  MGI manipulator_group(move_group_node, manipulator_options);
+  manipulator_group.setMaxVelocityScalingFactor(0.2);
+  manipulator_group.setMaxAccelerationScalingFactor(0.1);
+  manipulator_group.setNamedTarget("Home");
   manipulator_group.move();
 
-  moveit::planning_interface::MoveGroupInterface gripper_group(move_group_node,
-                                                               "gripper");
-  gripper_group.setNamedTarget("open");
+  auto gripper_options = MGI::Options("gripper", "robot_description",
+                                      move_group_node->get_namespace());
+  MGI gripper_group(move_group_node, gripper_options);
+  gripper_group.setNamedTarget("Open");
   gripper_group.move();
 
   rclcpp::shutdown();
