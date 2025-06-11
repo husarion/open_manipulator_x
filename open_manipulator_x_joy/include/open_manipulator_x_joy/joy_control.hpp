@@ -33,7 +33,7 @@ public:
 class AxisControl : public JoyControl {
 public:
   AxisControl(int axis_id, double axis_deadzone, double scaling = 1.0,
-              bool inverted_control = false);
+              bool inverted_control = false, double pressing_threshold = 0.0);
 
   bool IsPressed(const sensor_msgs::msg::Joy::SharedPtr msg) const override;
   double
@@ -42,7 +42,9 @@ public:
 private:
   int axis_id_;
   double axis_deadzone_;
+  bool inverted_;
   double scaling_;
+  double pressing_threshold_;
 };
 
 class DoubleButtonControl : public JoyControl {

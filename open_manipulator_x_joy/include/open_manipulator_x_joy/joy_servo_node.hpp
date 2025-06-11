@@ -29,7 +29,7 @@
 namespace open_manipulator_x_joy {
 class JoyServoNode : public rclcpp::Node {
 public:
-  JoyServoNode(const rclcpp::NodeOptions &options);
+  JoyServoNode(const rclcpp::NodeOptions &options = rclcpp::NodeOptions());
 
 private:
   void JoyCb(const sensor_msgs::msg::Joy::SharedPtr msg);

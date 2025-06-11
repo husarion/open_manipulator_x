@@ -31,6 +31,9 @@
 
 namespace open_manipulator_x_joy {
 
+using MGI = moveit::planning_interface::MoveGroupInterface;
+using MGI_Ptr = moveit::planning_interface::MoveGroupInterfacePtr;
+
 class ManipulationController {
 public:
   virtual ~ManipulationController() = default;
@@ -112,13 +115,13 @@ private:
 
   void MoveToHome();
 
-  moveit::planning_interface::MoveGroupInterfacePtr move_group_manipulator_;
+  MGI_Ptr manipulator_group_;
 
   std::unique_ptr<JoyControl> home_manipulator_;
 
   // action of this controller should be triggered only once per button press
   //  and require releasing button before executing again
-  bool action_already_executed_ = false;
+  bool is_action_executing_ = false;
 };
 
 class GripperMoveGroupController : public ManipulationController {
@@ -129,20 +132,17 @@ public:
 
 private:
   void ParseParameters(const rclcpp::Node::SharedPtr &node);
+  void MoveGripper(double target_position);
 
-  void CloseGripper();
-  void OpenGripper();
+  std::unique_ptr<JoyControl> gripper_cmd_;
+  std::unique_ptr<JoyControl> gripper_trigger_;
 
-  moveit::planning_interface::MoveGroupInterfacePtr move_group_gripper_;
+  MGI_Ptr gripper_group_;
 
-  std::unique_ptr<JoyControl> toggle_gripper_position_;
-
-  enum GripperPosition { OPENED, CLOSED };
-  GripperPosition gripper_position_ = GripperPosition::CLOSED;
-
-  // action of this controller should be triggered only once per button press
-  //  and require releasing button before executing again
-  bool action_already_executed_ = false;
+  std::string joint_name_gripper_ = "gripper_finger_joint";
+  double gripper_position_ = 0.0;
+  double gripper_min_position_ = -0.005;
+  double gripper_max_position_ = 0.019;
 };
 
 } // namespace open_manipulator_x_joy
