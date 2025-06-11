@@ -10,9 +10,10 @@
                     prefix:=''">
 
     <xacro:property name="meshes_dir" value="package://open_manipulator_x_description/meshes"/>
+    <xacro:property name="link1_length" value="0.06"/>
 
     <xacro:if value="${parent_link != ''}">
-      <joint name="${prefix}${parent_link}_joint" type="fixed">
+      <joint name="${prefix}${parent_link}_to_link1" type="fixed">
         <origin xyz="${xyz}" rpy="${rpy}" />
         <parent link="${parent_link}"/>
         <child link="${prefix}link1"/>
@@ -21,20 +22,20 @@
 
     <link name="${prefix}link1">
       <visual>
-        <origin xyz="0 0 0.03" rpy="0 0 0"/>
+        <origin xyz="0 0 ${link1_length/2}" rpy="0 0 0"/>
         <geometry>
           <!-- We use custom cylinder -->
-          <cylinder radius="0.035" length="0.065" />
+          <cylinder radius="0.035" length="${link1_length}" />
           <!-- <mesh filename="${meshes_dir}/link1.stl" scale="0.001 0.001 0.001"/> -->
         </geometry>
         <material name="grey"/>
       </visual>
 
       <collision>
-        <origin xyz="0 0 0.03" rpy="0 0 0"/>
+        <origin xyz="0 0 ${link1_length/2}" rpy="0 0 0"/>
         <geometry>
           <!-- We use custom cylinder -->
-          <cylinder radius="0.035" length="0.065" />
+          <cylinder radius="0.035" length="${link1_length}" />
           <!-- <mesh filename="${meshes_dir}/link1.stl" scale="0.001 0.001 0.001"/> -->
         </geometry>
       </collision>
@@ -52,15 +53,15 @@
       <parent link="${prefix}link1"/>
       <child link="${prefix}link2"/>
       <!-- Fix origin on custom cylinder -->
-      <origin xyz="0.0 0.0 0.045" rpy="0 0 0"/>
+      <origin xyz="0.0 0.0 0.017" rpy="0 0 0"/>
       <axis xyz="0 0 1"/>
-      <limit velocity="4.8" effort="1" lower="${-pi}" upper="${pi}" />
+      <limit velocity="4.8" effort="1" lower="${-5/4*pi}" upper="${3/4*pi}" />
       <dynamics damping="0.1"/>
     </joint>
 
     <link name="${prefix}link2">
       <visual>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <origin xyz="0 0 0.019" rpy="0 0 0"/>
         <geometry>
           <mesh filename="${meshes_dir}/link2.stl" scale="0.001 0.001 0.001"/>
         </geometry>
@@ -68,7 +69,7 @@
       </visual>
 
       <collision>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <origin xyz="0 0 0.019" rpy="0 0 0"/>
         <geometry>
           <mesh filename="${meshes_dir}/link2.stl" scale="0.001 0.001 0.001"/>
         </geometry>
@@ -88,7 +89,7 @@
       <child link="${prefix}link3"/>
       <origin xyz="0.0 0.0 0.0595" rpy="0 0 0"/>
       <axis xyz="0 1 0"/>
-      <limit velocity="4.8" effort="1" lower="${-1.5}" upper="${1.5}" />
+      <limit velocity="4.8" effort="1" lower="${-pi/2}" upper="${pi/2}" />
       <dynamics damping="0.1"/>
     </joint>
 
