@@ -23,7 +23,7 @@
             <plugin>dynamixel_hardware_interface/DynamixelHardware</plugin>
             <param name="port_name">${port_name}</param>
             <param name="baud_rate">1000000</param>
-            <param name="error_timeout_ms">500</param>
+            <param name="error_timeout_ms">10000</param>
             <param name="dynamixel_model_folder">/param/dxl_model</param>
             <param name="number_of_joints">6</param>
             <param name="number_of_transmissions">5</param>

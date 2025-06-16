@@ -12,9 +12,14 @@
       inverted: true
       pressing_threshold: -0.5 # 50% of the axis range
 
+    dock_manipulator:
+      control_type: single_button
+      button_id: 6
+
     home_manipulator:
       control_type: single_button
       button_id: 7
+
     manipulator_move_group_velocity_scaling_factor: 0.3
     manipulator_move_group_acceleration_scaling_factor: 0.3
 

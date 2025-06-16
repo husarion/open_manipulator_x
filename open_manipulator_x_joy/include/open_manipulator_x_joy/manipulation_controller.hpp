@@ -113,10 +113,9 @@ public:
 private:
   void ParseParameters(const rclcpp::Node::SharedPtr &node);
 
-  void MoveToHome();
-
   MGI_Ptr manipulator_group_;
 
+  std::unique_ptr<JoyControl> dock_manipulator_;
   std::unique_ptr<JoyControl> home_manipulator_;
 
   // action of this controller should be triggered only once per button press
@@ -141,8 +140,8 @@ private:
 
   std::string joint_name_gripper_ = "gripper_finger_joint";
   double gripper_position_ = 0.0;
-  double gripper_min_position_ = -0.005;
-  double gripper_max_position_ = 0.019;
+  double gripper_min_position_;
+  double gripper_max_position_;
 };
 
 } // namespace open_manipulator_x_joy

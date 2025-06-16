@@ -219,10 +219,21 @@ ManipulatorMoveGroupController::ManipulatorMoveGroupController(
 
 bool ManipulatorMoveGroupController::Process(
     const sensor_msgs::msg::Joy::SharedPtr msg) {
-  if (home_manipulator_->IsPressed(msg)) {
+  if (dock_manipulator_->IsPressed(msg)) {
     if (!is_action_executing_) {
       is_action_executing_ = true;
-      MoveToHome();
+      manipulator_group_->setNamedTarget("Dock");
+      manipulator_group_->move();
+      manipulator_group_->move(); // To make sure the action is finished
+    }
+    return true;
+  }
+  else if (home_manipulator_->IsPressed(msg)) {
+    if (!is_action_executing_) {
+      is_action_executing_ = true;
+      manipulator_group_->setNamedTarget("Home");
+      manipulator_group_->move();
+      manipulator_group_->move(); // To make sure the action is finished
     }
     return true;
   }
@@ -232,15 +243,12 @@ bool ManipulatorMoveGroupController::Process(
 
 void ManipulatorMoveGroupController::ParseParameters(
     const rclcpp::Node::SharedPtr &node) {
+  dock_manipulator_ =
+      JoyControlFactory(node->get_node_parameters_interface(),
+                        node->get_node_logging_interface(), "dock_manipulator");
   home_manipulator_ =
       JoyControlFactory(node->get_node_parameters_interface(),
                         node->get_node_logging_interface(), "home_manipulator");
-}
-
-void ManipulatorMoveGroupController::MoveToHome() {
-  manipulator_group_->setNamedTarget("Home");
-  manipulator_group_->move();
-  manipulator_group_->move(); // To make sure the action is finished
 }
 
 GripperMoveGroupController::GripperMoveGroupController(
