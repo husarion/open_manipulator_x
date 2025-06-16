@@ -290,7 +290,7 @@ void GripperMoveGroupController::ParseParameters(
   gripper_trigger_ = JoyControlFactory(node->get_node_parameters_interface(),
                                        node->get_node_logging_interface(),
                                        "gripper_control.trigger");
-  node->declare_parameter<double>("gripper_control.min_position", -0.005);
+  node->declare_parameter<double>("gripper_control.min_position", -0.008);
   node->declare_parameter<double>("gripper_control.max_position", 0.019);
   node->declare_parameter<std::string>("joint_name", "gripper_left_joint");
   try {
