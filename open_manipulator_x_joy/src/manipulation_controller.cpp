@@ -269,7 +269,8 @@ void ManipulatorMoveGroupController::ParseParameters(
   }
 }
 
-void ManipulatorMoveGroupController::ControlGripper(const sensor_msgs::msg::Joy::SharedPtr msg) {
+void ManipulatorMoveGroupController::ControlGripper(
+    const sensor_msgs::msg::Joy::SharedPtr msg) {
   constexpr double AXIS_MIN = -1.0;
   constexpr double AXIS_MAX = 1.0;
 
