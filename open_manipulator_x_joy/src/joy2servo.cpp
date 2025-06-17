@@ -41,7 +41,14 @@ Joy2Servo::Joy2Servo() : Node("joy2servo") {
           "servo_node/switch_command_type");
 }
 
-void Joy2Servo::MoveToHomePose(const sensor_msgs::msg::Joy::SharedPtr msg) {
+void Joy2Servo::MoveToDockPose() {
+  gripper_group_->setNamedTarget("Close");
+  gripper_group_->move();
+  manipulator_group_->setNamedTarget("Dock");
+  manipulator_group_->move();
+}
+
+void Joy2Servo::MoveToHomePose() {
   manipulator_group_->setNamedTarget("Home");
   manipulator_group_->move();
 }
@@ -101,18 +108,13 @@ void Joy2Servo::ControlGripper(const sensor_msgs::msg::Joy::SharedPtr msg) {
   constexpr double AXIS_MIN = -1.0;
   constexpr double AXIS_MAX = 1.0;
   constexpr double POSITION_EPSILON = 0.001;
-  constexpr double GRIPPER_MIN_POSITION = -0.01;
-  constexpr double GRIPPER_MAX_POSITION = 0.019;
 
   double axis_value = msg->axes[Axis::LEFT_TRIGGER];
-  bool is_gripper_active = msg->buttons[Button::RIGHT_BUMPER];
-
   double target_position =
-      GRIPPER_MIN_POSITION + ((axis_value - AXIS_MIN) / (AXIS_MAX - AXIS_MIN)) *
-                                 (GRIPPER_MAX_POSITION - GRIPPER_MIN_POSITION);
+      GRIPPER_MIN_POSE + ((axis_value - AXIS_MIN) / (AXIS_MAX - AXIS_MIN)) *
+                             (GRIPPER_MAX_POSE - GRIPPER_MIN_POSE);
 
-  if (is_gripper_active &&
-      std::abs(target_position - gripper_position_) > POSITION_EPSILON) {
+  if (std::abs(target_position - gripper_position_) > POSITION_EPSILON) {
     std::map<std::string, double> joint_positions;
     joint_positions["gripper_left_joint"] = target_position;
     gripper_group_->setJointValueTarget(joint_positions);
@@ -170,8 +172,10 @@ void Joy2Servo::JoyCb(const sensor_msgs::msg::Joy::SharedPtr msg) {
   }
 
   if (IsDeadManSwitch(msg) && time_diff.seconds() > MAX_CMD_SENDING_PERIOD) {
-    if (msg->buttons[Button::START]) {
-      MoveToHomePose(msg);
+    if (msg->buttons[Button::BACK]) {
+      MoveToDockPose();
+    } else if (msg->buttons[Button::START]) {
+      MoveToHomePose();
     } else if (msg->buttons[Button::RIGHT_BUMPER]) {
       ControlGripper(msg);
     } else if (req_cmd_type_ == CommandType::JOINT_JOG) {

@@ -45,7 +45,6 @@ private:
   void ChangeCartesianDriftDimensions();
 
   std::vector<std::unique_ptr<ManipulationController>> manipulator_controllers_;
-  std::vector<std::unique_ptr<ManipulationController>> gripper_controllers_;
 
   bool controllers_initialized_ = false;
 
