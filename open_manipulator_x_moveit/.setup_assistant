@@ -4,7 +4,7 @@ moveit_setup_assistant_config:
     relative_path: urdf/rosbot_xl.urdf.xacro
   srdf:
     package: open_manipulator_x_moveit
-    relative_path: config/rosbot_xl_manipulation.srdf
+    relative_path: config/rosbot_xl.srdf
   package_settings:
     author_name: Rafal Gorecki
     author_email: support@husarion.com

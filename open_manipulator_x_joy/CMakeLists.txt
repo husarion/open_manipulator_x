@@ -10,9 +10,7 @@ set(PACKAGE_INCLUDE_DEPENDS
     control_msgs
     geometry_msgs
     rclcpp
-    rclcpp_components
     sensor_msgs
-    moveit_core
     moveit_msgs
     moveit_ros_planning
     moveit_ros_planning_interface

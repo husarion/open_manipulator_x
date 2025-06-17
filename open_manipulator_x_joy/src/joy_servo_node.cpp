@@ -99,14 +99,12 @@ void JoyServoNode::JoyCb(const sensor_msgs::msg::Joy::SharedPtr msg) {
       dead_man_switch_stop_sent_ = true;
       StartServo(); // Make sure servo is running
       StopControllers(manipulator_controllers_);
-      StopControllers(gripper_controllers_);
     }
     return;
   }
   dead_man_switch_stop_sent_ = false;
 
   ProcessControllers(msg, manipulator_controllers_);
-  ProcessControllers(msg, gripper_controllers_);
 }
 
 void JoyServoNode::ProcessControllers(
@@ -140,9 +138,6 @@ void JoyServoNode::InitializeControllers() {
       std::make_unique<CartesianController>(this->shared_from_this()));
   manipulator_controllers_.push_back(
       std::make_unique<JointController>(this->shared_from_this()));
-
-  gripper_controllers_.push_back(
-      std::make_unique<GripperMoveGroupController>(this->shared_from_this()));
 }
 
 } // namespace open_manipulator_x_joy

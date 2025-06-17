@@ -11,10 +11,10 @@ endforeach()
 
 add_executable(dock src/dock.cpp)
 ament_target_dependencies(dock ${PACKAGE_INCLUDE_DEPENDS})
-add_executable(ready src/ready.cpp)
-ament_target_dependencies(ready ${PACKAGE_INCLUDE_DEPENDS})
+add_executable(home src/home.cpp)
+ament_target_dependencies(home ${PACKAGE_INCLUDE_DEPENDS})
 
-install(TARGETS dock ready DESTINATION lib/${PROJECT_NAME})
+install(TARGETS dock home DESTINATION lib/${PROJECT_NAME})
 
 install(DIRECTORY config launch DESTINATION share/${PROJECT_NAME})
 install(FILES .setup_assistant DESTINATION share/${PROJECT_NAME})

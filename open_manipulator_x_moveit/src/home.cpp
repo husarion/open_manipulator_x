@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
   rclcpp::NodeOptions node_options;
   node_options.automatically_declare_parameters_from_overrides(true);
   auto move_group_node =
-      rclcpp::Node::make_shared("move_to_ready_pose", node_options);
+      rclcpp::Node::make_shared("move_to_home_pose", node_options);
 
   rclcpp::executors::SingleThreadedExecutor executor;
   executor.add_node(move_group_node);
