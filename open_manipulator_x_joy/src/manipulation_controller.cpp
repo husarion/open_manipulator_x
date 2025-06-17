@@ -195,23 +195,20 @@ void CartesianController::SendCartesianCommand(
 ManipulatorMoveGroupController::ManipulatorMoveGroupController(
     const rclcpp::Node::SharedPtr &node) {
 
-  auto moveit_options = MGI::Options("manipulator", "robot_description",
-                                    node->get_namespace());
-  manipulator_group_ = std::make_unique<MGI>(node, moveit_options);
+  auto manipulator_options =
+      MGI::Options("manipulator", "robot_description", node->get_namespace());
+  manipulator_group_ = std::make_unique<MGI>(node, manipulator_options);
+
+  auto gripper_options =
+      MGI::Options("gripper", "robot_description", node->get_namespace());
+  gripper_group_ = std::make_unique<MGI>(node, gripper_options);
+
   ParseParameters(node);
 
-  node->declare_parameter<double>(
-      "manipulator_move_group_velocity_scaling_factor", 0.1);
-  node->declare_parameter<double>(
-      "manipulator_move_group_acceleration_scaling_factor", 0.1);
   double velocity_scaling_factor =
-      node->get_parameter("manipulator_move_group_velocity_scaling_factor")
-          .as_double();
+      node->get_parameter("velocity_scaling_factor").as_double();
   double acceleration_scaling_factor =
-      node->get_parameter("manipulator_move_group_acceleration_scaling_factor")
-          .as_double();
-  // By default move group sets scaling factors to 0.1, which results in slow
-  // movement
+      node->get_parameter("acceleration_scaling_factor").as_double();
   manipulator_group_->setMaxVelocityScalingFactor(velocity_scaling_factor);
   manipulator_group_->setMaxAccelerationScalingFactor(
       acceleration_scaling_factor);
@@ -219,11 +216,21 @@ ManipulatorMoveGroupController::ManipulatorMoveGroupController(
 
 bool ManipulatorMoveGroupController::Process(
     const sensor_msgs::msg::Joy::SharedPtr msg) {
-  if (home_manipulator_->IsPressed(msg)) {
+  if (dock_manipulator_->IsPressed(msg)) {
     if (!is_action_executing_) {
       is_action_executing_ = true;
-      MoveToHome();
+      MoveToDockPose();
     }
+    return true;
+  } else if (home_manipulator_->IsPressed(msg)) {
+    if (!is_action_executing_) {
+      is_action_executing_ = true;
+      MoveToHomePose();
+    }
+    return true;
+  } else if (gripper_trigger_->IsPressed(msg)) {
+    is_action_executing_ = true;
+    ControlGripper(msg);
     return true;
   }
   is_action_executing_ = false;
@@ -232,63 +239,27 @@ bool ManipulatorMoveGroupController::Process(
 
 void ManipulatorMoveGroupController::ParseParameters(
     const rclcpp::Node::SharedPtr &node) {
+  dock_manipulator_ =
+      JoyControlFactory(node->get_node_parameters_interface(),
+                        node->get_node_logging_interface(), "dock_manipulator");
   home_manipulator_ =
       JoyControlFactory(node->get_node_parameters_interface(),
                         node->get_node_logging_interface(), "home_manipulator");
-}
-
-void ManipulatorMoveGroupController::MoveToHome() {
-  manipulator_group_->setNamedTarget("Home");
-  manipulator_group_->move();
-  manipulator_group_->move(); // To make sure the action is finished
-}
-
-GripperMoveGroupController::GripperMoveGroupController(
-    const rclcpp::Node::SharedPtr &node) {
-  auto moveit_options = MGI::Options("gripper", "robot_description",
-                                  node->get_namespace());
-  gripper_group_ = std::make_unique<MGI>(node, moveit_options);
-  ParseParameters(node);
-}
-
-bool GripperMoveGroupController::Process(
-    const sensor_msgs::msg::Joy::SharedPtr msg) {
-
-  constexpr double AXIS_MIN = -1.0;
-  constexpr double AXIS_MAX = 1.0;
-  constexpr double POSITION_EPSILON = 0.001;
-
-  double axis_value = gripper_cmd_->GetControlValue(msg);
-  bool is_gripper_active = gripper_trigger_->IsPressed(msg);
-
-  double target_position = gripper_min_position_ +
-                           ((axis_value - AXIS_MIN) / (AXIS_MAX - AXIS_MIN)) *
-                               (gripper_max_position_ - gripper_min_position_);
-
-  if (is_gripper_active &&
-      std::abs(target_position - gripper_position_) > POSITION_EPSILON) {
-    MoveGripper(target_position);
-    return true;
-  }
-
-  return false;
-}
-
-void GripperMoveGroupController::ParseParameters(
-    const rclcpp::Node::SharedPtr &node) {
   gripper_cmd_ = JoyControlFactory(node->get_node_parameters_interface(),
                                    node->get_node_logging_interface(),
                                    "gripper_control.control");
   gripper_trigger_ = JoyControlFactory(node->get_node_parameters_interface(),
                                        node->get_node_logging_interface(),
                                        "gripper_control.trigger");
-  node->declare_parameter<double>("gripper_control.min_position", -0.005);
+  node->declare_parameter<double>("velocity_scaling_factor", 0.1);
+  node->declare_parameter<double>("acceleration_scaling_factor", 0.1);
+  node->declare_parameter<double>("gripper_control.min_position", -0.009);
   node->declare_parameter<double>("gripper_control.max_position", 0.019);
   node->declare_parameter<std::string>("joint_name", "gripper_left_joint");
   try {
-    gripper_min_position_ =
+    gripper_min_pose_ =
         node->get_parameter("gripper_control.min_position").as_double();
-    gripper_max_position_ =
+    gripper_max_pose_ =
         node->get_parameter("gripper_control.max_position").as_double();
     joint_name_gripper_ = node->get_parameter("joint_name").as_string();
   } catch (const rclcpp::exceptions::ParameterUninitializedException &e) {
@@ -298,12 +269,34 @@ void GripperMoveGroupController::ParseParameters(
   }
 }
 
-void GripperMoveGroupController::MoveGripper(double target_position) {
+void ManipulatorMoveGroupController::ControlGripper(const sensor_msgs::msg::Joy::SharedPtr msg) {
+  constexpr double AXIS_MIN = -1.0;
+  constexpr double AXIS_MAX = 1.0;
+
+  double axis_value = gripper_trigger_->GetControlValue(msg);
+  double target_position =
+      gripper_min_pose_ + ((axis_value - AXIS_MIN) / (AXIS_MAX - AXIS_MIN)) *
+                              (gripper_max_pose_ - gripper_min_pose_);
+
   std::map<std::string, double> joint_positions;
   joint_positions["gripper_left_joint"] = target_position;
   gripper_group_->setJointValueTarget(joint_positions);
   gripper_group_->move();
   gripper_position_ = target_position;
 }
+
+void ManipulatorMoveGroupController::MoveToDockPose() {
+  gripper_group_->setNamedTarget("Close");
+  gripper_group_->move();
+  gripper_group_->move(); // To make sure the action is finished
+  manipulator_group_->setNamedTarget("Dock");
+  manipulator_group_->move();
+  manipulator_group_->move(); // To make sure the action is finished
+}
+
+void ManipulatorMoveGroupController::MoveToHomePose() {
+  manipulator_group_->setNamedTarget("Home");
+  manipulator_group_->move();
+  manipulator_group_->move(); // To make sure the action is finished}
 
 } // namespace open_manipulator_x_joy
