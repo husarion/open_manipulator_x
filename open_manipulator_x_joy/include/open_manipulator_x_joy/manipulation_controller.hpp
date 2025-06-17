@@ -112,37 +112,25 @@ public:
 
 private:
   void ParseParameters(const rclcpp::Node::SharedPtr &node);
+  void ControlGripper(const sensor_msgs::msg::Joy::SharedPtr msg);
+  void MoveToDockPose();
+  void MoveToHomePose();
 
-  void MoveToHome();
-
+  MGI_Ptr gripper_group_;
   MGI_Ptr manipulator_group_;
 
+  std::unique_ptr<JoyControl> gripper_cmd_;
+  std::unique_ptr<JoyControl> gripper_trigger_;
+  std::unique_ptr<JoyControl> dock_manipulator_;
   std::unique_ptr<JoyControl> home_manipulator_;
 
   // action of this controller should be triggered only once per button press
   //  and require releasing button before executing again
-  bool is_action_executing_ = false;
-};
-
-class GripperMoveGroupController : public ManipulationController {
-public:
-  GripperMoveGroupController(const rclcpp::Node::SharedPtr &node);
-  bool Process(const sensor_msgs::msg::Joy::SharedPtr msg) override;
-  void Stop() override {}
-
-private:
-  void ParseParameters(const rclcpp::Node::SharedPtr &node);
-  void MoveGripper(double target_position);
-
-  std::unique_ptr<JoyControl> gripper_cmd_;
-  std::unique_ptr<JoyControl> gripper_trigger_;
-
-  MGI_Ptr gripper_group_;
-
   std::string joint_name_gripper_ = "gripper_finger_joint";
+  bool is_action_executing_ = false;
   double gripper_position_ = 0.0;
-  double gripper_min_position_ = -0.005;
-  double gripper_max_position_ = 0.019;
+  double gripper_min_pose_;
+  double gripper_max_pose_;
 };
 
 } // namespace open_manipulator_x_joy

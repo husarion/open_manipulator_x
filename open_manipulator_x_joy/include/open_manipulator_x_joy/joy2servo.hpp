@@ -66,8 +66,8 @@ const std::string GRIPPER_ACTION = "gripper_controller/gripper_cmd";
 const size_t ROS_QUEUE_SIZE = 10;
 const std::string EE_FRAME_ID = "end_effector_link";
 const double DEAD_MAN_SWITCH_THRESHOLD = -0.3;
-const double GRIPPER_CLOSE = -0.01;
-const double GRIPPER_OPEN = 0.019;
+const double GRIPPER_MIN_POSE = -0.009;
+const double GRIPPER_MAX_POSE = 0.015;
 const double MAX_CMD_SENDING_PERIOD = 0.02;
 const double MAX_CMD_TYPE_REQ_PERIOD = 0.5;
 // const std::vector<double> GRIPPER_MAX_EFFORT = { 10.0 };
@@ -93,7 +93,8 @@ private:
   void ConvertAndPublishTwist(const sensor_msgs::msg::Joy::SharedPtr msg);
   bool IsDeadManSwitch(const sensor_msgs::msg::Joy::SharedPtr msg);
   void JoyCb(const sensor_msgs::msg::Joy::SharedPtr msg);
-  void MoveToHomePose(const sensor_msgs::msg::Joy::SharedPtr msg);
+  void MoveToDockPose();
+  void MoveToHomePose();
   void UpdateReqCommand(const sensor_msgs::msg::Joy::SharedPtr msg);
 
   rclcpp::Publisher<geometry_msgs::msg::TwistStamped>::SharedPtr twist_pub_;

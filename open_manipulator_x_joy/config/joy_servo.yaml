@@ -12,11 +12,16 @@
       inverted: true
       pressing_threshold: -0.5 # 50% of the axis range
 
+    dock_manipulator:
+      control_type: single_button
+      button_id: 6
+
     home_manipulator:
       control_type: single_button
       button_id: 7
-    manipulator_move_group_velocity_scaling_factor: 0.3
-    manipulator_move_group_acceleration_scaling_factor: 0.3
+
+    velocity_scaling_factor: 0.3
+    acceleration_scaling_factor: 0.3
 
     # max_velocity set to quite low values (for both cartesian and joints control)
     # so that collision checker will have enough time to stop manipulator
@@ -75,5 +80,5 @@
         control_type: single_button
         button_id: 5
       max_position: 0.015 # max 0.019 - reduce the risk of setting the wrong starting position
-      min_position: -0.005
+      min_position: -0.009
       joint_name: gripper_left_joint
