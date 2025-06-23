@@ -18,41 +18,61 @@
 
 using MGI = moveit::planning_interface::MoveGroupInterface;
 
+bool wait_for_moveit_server(const std::shared_ptr<rclcpp::Node> &node) {
+  auto client = rclcpp_action::create_client<moveit_msgs::action::MoveGroup>(node, "move_action");
+  if (!client->wait_for_action_server(std::chrono::seconds(5))) {
+    RCLCPP_ERROR(node->get_logger(), "MoveGroup server not available!");
+    return false;
+  }
+  return true;
+}
+
+bool move_to_named_target(MGI &group, const std::string &target_name,
+                          const std::shared_ptr<rclcpp::Node> &node,
+                          int max_attempts = 1) {
+  group.setNamedTarget(target_name);
+  bool success = false;
+  for (int attempt = 0; attempt < max_attempts && !success; ++attempt) {
+    auto result = group.move();
+    if (result == moveit::core::MoveItErrorCode::SUCCESS) {
+      success = true;
+    } else {
+      RCLCPP_WARN_STREAM(node->get_logger(),
+                         "Failed to move to '" << target_name << "' pose (attempt " << (attempt + 1) << "/" << max_attempts << "), retrying...");
+      rclcpp::sleep_for(std::chrono::seconds(1));
+    }
+  }
+  return success;
+}
+
 int main(int argc, char **argv) {
   rclcpp::init(argc, argv);
-
   rclcpp::NodeOptions node_options;
   node_options.automatically_declare_parameters_from_overrides(true);
-  auto move_group_node =
-      rclcpp::Node::make_shared("move_to_dock_pose", node_options);
+  auto node = rclcpp::Node::make_shared("move_to_dock_pose", node_options);
 
   rclcpp::executors::SingleThreadedExecutor executor;
-  executor.add_node(move_group_node);
+  executor.add_node(node);
   std::thread([&executor]() { executor.spin(); }).detach();
 
-  auto gripper_action_client =
-      rclcpp_action::create_client<moveit_msgs::action::MoveGroup>(
-          move_group_node, "move_action");
-  if (!gripper_action_client->wait_for_action_server(std::chrono::seconds(5))) {
-    RCLCPP_ERROR(move_group_node->get_logger(),
-                 "MoveGroup server not available!");
+  if (!wait_for_moveit_server(node)) {
     rclcpp::shutdown();
     return 1;
   }
 
-  auto gripper_options = MGI::Options("gripper", "robot_description",
-                                      move_group_node->get_namespace());
-  MGI gripper_group(move_group_node, gripper_options);
-  gripper_group.setNamedTarget("Close");
-  gripper_group.move();
+  MGI::Options gripper_opts("gripper", "robot_description", node->get_namespace());
+  MGI gripper_group(node, gripper_opts);
+  if (!move_to_named_target(gripper_group, "Close", node, 3)) {
+    RCLCPP_ERROR(node->get_logger(), "Failed to move to 'Close' pose after retries.");
+    rclcpp::shutdown();
+    return 1;
+  }
 
-  auto manipulator_options = MGI::Options("manipulator", "robot_description",
-                                          move_group_node->get_namespace());
-  MGI manipulator_group(move_group_node, manipulator_options);
+  MGI::Options manip_opts("manipulator", "robot_description", node->get_namespace());
+  MGI manipulator_group(node, manip_opts);
   manipulator_group.setMaxVelocityScalingFactor(0.2);
   manipulator_group.setMaxAccelerationScalingFactor(0.1);
-  manipulator_group.setNamedTarget("Dock");
-  manipulator_group.move();
+  move_to_named_target(manipulator_group, "Dock", node);
 
   rclcpp::shutdown();
   return 0;
