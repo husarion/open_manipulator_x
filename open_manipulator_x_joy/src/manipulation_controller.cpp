@@ -298,7 +298,10 @@ void ManipulatorMoveGroupController::MoveToDockPose() {
 void ManipulatorMoveGroupController::MoveToHomePose() {
   manipulator_group_->setNamedTarget("Home");
   manipulator_group_->move();
-  manipulator_group_->move(); // To make sure the action is finished}
+  manipulator_group_->move(); // To make sure the action is finished
+  gripper_group_->setNamedTarget("Open");
+  gripper_group_->move();
+  gripper_group_->move(); // To make sure the action is finished
 }
 
 } // namespace open_manipulator_x_joy
