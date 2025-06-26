@@ -51,6 +51,8 @@ void Joy2Servo::MoveToDockPose() {
 void Joy2Servo::MoveToHomePose() {
   manipulator_group_->setNamedTarget("Home");
   manipulator_group_->move();
+  gripper_group_->setNamedTarget("Open");
+  gripper_group_->move();
 }
 
 void Joy2Servo::InitializeMoveGroup() {

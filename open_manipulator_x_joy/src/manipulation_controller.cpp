@@ -229,10 +229,8 @@ bool ManipulatorMoveGroupController::Process(
     }
     return true;
   } else if (gripper_trigger_->IsPressed(msg)) {
-    if (!is_action_executing_) {
-      is_action_executing_ = true;
-      ControlGripper(msg);
-    }
+    is_action_executing_ = true;
+    ControlGripper(msg);
     return true;
   }
   is_action_executing_ = false;
@@ -276,7 +274,7 @@ void ManipulatorMoveGroupController::ControlGripper(
   constexpr double AXIS_MIN = -1.0;
   constexpr double AXIS_MAX = 1.0;
 
-  double axis_value = gripper_cmd_->GetControlValue(msg);
+  double axis_value = gripper_trigger_->GetControlValue(msg);
   double target_position =
       gripper_min_pose_ + ((axis_value - AXIS_MIN) / (AXIS_MAX - AXIS_MIN)) *
                               (gripper_max_pose_ - gripper_min_pose_);
@@ -300,7 +298,10 @@ void ManipulatorMoveGroupController::MoveToDockPose() {
 void ManipulatorMoveGroupController::MoveToHomePose() {
   manipulator_group_->setNamedTarget("Home");
   manipulator_group_->move();
-  manipulator_group_->move(); // To make sure the action is finished}
+  manipulator_group_->move(); // To make sure the action is finished
+  gripper_group_->setNamedTarget("Open");
+  gripper_group_->move();
+  gripper_group_->move(); // To make sure the action is finished
 }
 
 } // namespace open_manipulator_x_joy
