@@ -17,6 +17,7 @@
 #include <geometry_msgs/msg/twist_stamped.hpp>
 #include <moveit/move_group_interface/move_group_interface.hpp>
 #include <moveit_msgs/srv/servo_command_type.hpp>
+#include <mutex>
 #include <rclcpp/rclcpp.hpp>
 #include <rclcpp_action/rclcpp_action.hpp>
 #include <sensor_msgs/msg/joy.hpp>
@@ -68,7 +69,6 @@ const std::string EE_FRAME_ID = "end_effector_link";
 const double DEAD_MAN_SWITCH_THRESHOLD = -0.3;
 const double GRIPPER_MIN_POSE = -0.009;
 const double GRIPPER_MAX_POSE = 0.015;
-const double MAX_CMD_SENDING_PERIOD = 0.02;
 const double MAX_CMD_TYPE_REQ_PERIOD = 0.5;
 // const std::vector<double> GRIPPER_MAX_EFFORT = { 10.0 };
 const double GRIPPER_MAX_EFFORT = 10.0;
@@ -109,6 +109,7 @@ private:
   CommandType cmd_type_ = CommandType::NONE;
   double joint_vel_cmd_; // TODO: Add scaler
   double gripper_position_;
+  std::mutex joy_mutex_;  // Add this to your class
 };
 
 } // namespace open_manipulator_x_joy

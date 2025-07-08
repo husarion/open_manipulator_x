@@ -41,20 +41,6 @@ Joy2Servo::Joy2Servo() : Node("joy2servo") {
           "servo_node/switch_command_type");
 }
 
-void Joy2Servo::MoveToDockPose() {
-  gripper_group_->setNamedTarget("Close");
-  gripper_group_->move();
-  manipulator_group_->setNamedTarget("Dock");
-  manipulator_group_->move();
-}
-
-void Joy2Servo::MoveToHomePose() {
-  manipulator_group_->setNamedTarget("Home");
-  manipulator_group_->move();
-  gripper_group_->setNamedTarget("Open");
-  gripper_group_->move();
-}
-
 void Joy2Servo::InitializeMoveGroup() {
   gripper_group_ =
       std::make_unique<moveit::planning_interface::MoveGroupInterface>(
@@ -66,6 +52,26 @@ void Joy2Servo::InitializeMoveGroup() {
           shared_from_this(), "manipulator");
   manipulator_group_->setMaxVelocityScalingFactor(0.4);
   manipulator_group_->setMaxAccelerationScalingFactor(0.2);
+}
+
+void Joy2Servo::MoveToDockPose() {
+  gripper_group_->setNamedTarget("Close");
+  gripper_group_->move();
+  gripper_group_->move(); // To make sure the action is finished
+
+  manipulator_group_->setNamedTarget("Dock");
+  manipulator_group_->move();
+  manipulator_group_->move(); // To make sure the action is finished
+}
+
+void Joy2Servo::MoveToHomePose() {
+  manipulator_group_->setNamedTarget("Home");
+  manipulator_group_->move();
+  manipulator_group_->move(); // To make sure the action is finished
+
+  gripper_group_->setNamedTarget("Open");
+  gripper_group_->move();
+  gripper_group_->move(); // To make sure the action is finished
 }
 
 void Joy2Servo::ChangeCommandType(CommandType cmd_type) {
@@ -163,17 +169,18 @@ bool Joy2Servo::IsDeadManSwitch(const sensor_msgs::msg::Joy::SharedPtr msg) {
 }
 
 void Joy2Servo::JoyCb(const sensor_msgs::msg::Joy::SharedPtr msg) {
-  static auto last_send_time = this->now();
-  auto current_time = this->now();
-  auto time_diff = current_time - last_send_time;
-  UpdateReqCommand(msg);
-  if (req_cmd_type_ != cmd_type_ &&
-      time_diff.seconds() > MAX_CMD_TYPE_REQ_PERIOD) {
-    ChangeCommandType(req_cmd_type_);
-    last_send_time = current_time;
+  std::unique_lock<std::mutex> lock(joy_mutex_, std::try_to_lock);
+  if (!lock.owns_lock()) {
+    // Previous callback is still running, skip this one
+    return;
   }
 
-  if (IsDeadManSwitch(msg) && time_diff.seconds() > MAX_CMD_SENDING_PERIOD) {
+  UpdateReqCommand(msg);
+  if (req_cmd_type_ != cmd_type_) {
+    ChangeCommandType(req_cmd_type_);
+  }
+
+  if (IsDeadManSwitch(msg)) {
     if (msg->buttons[Button::BACK]) {
       MoveToDockPose();
     } else if (msg->buttons[Button::START]) {
