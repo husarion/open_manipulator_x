@@ -16,6 +16,7 @@
 #define OPEN_MANIPULATOR_X_JOY__JOY_SERVO_NODE_HPP_
 
 #include <memory>
+#include <mutex>
 #include <vector>
 
 #include <rclcpp/parameter.hpp>
@@ -52,6 +53,8 @@ private:
   bool dead_man_switch_stop_sent_ = false;
 
   rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr joy_sub_;
+
+  std::mutex joy_mutex_;
 };
 } // namespace open_manipulator_x_joy
 

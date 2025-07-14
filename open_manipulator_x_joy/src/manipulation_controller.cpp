@@ -274,16 +274,20 @@ void ManipulatorMoveGroupController::ControlGripper(
   constexpr double AXIS_MIN = -1.0;
   constexpr double AXIS_MAX = 1.0;
 
-  double axis_value = gripper_trigger_->GetControlValue(msg);
-  double target_position =
-      gripper_min_pose_ + ((axis_value - AXIS_MIN) / (AXIS_MAX - AXIS_MIN)) *
-                              (gripper_max_pose_ - gripper_min_pose_);
+  double trigger_value = gripper_trigger_->GetControlValue(msg);
 
-  std::map<std::string, double> joint_positions;
-  joint_positions["gripper_left_joint"] = target_position;
-  gripper_group_->setJointValueTarget(joint_positions);
-  gripper_group_->move();
-  gripper_position_ = target_position;
+  if (trigger_value) {
+    double axis_value = gripper_cmd_->GetControlValue(msg);
+    double target_position =
+        gripper_min_pose_ + ((axis_value - AXIS_MIN) / (AXIS_MAX - AXIS_MIN)) *
+                                (gripper_max_pose_ - gripper_min_pose_);
+
+    std::map<std::string, double> joint_positions;
+    joint_positions["gripper_left_joint"] = target_position;
+    gripper_group_->setJointValueTarget(joint_positions);
+    gripper_group_->move();
+    gripper_position_ = target_position;
+  }
 }
 
 void ManipulatorMoveGroupController::MoveToDockPose() {

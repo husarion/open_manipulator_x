@@ -84,6 +84,12 @@ void JoyServoNode::ChangeCartesianDriftDimensions() {
 }
 
 void JoyServoNode::JoyCb(const sensor_msgs::msg::Joy::SharedPtr msg) {
+  std::unique_lock<std::mutex> lock(joy_mutex_, std::try_to_lock);
+  if (!lock.owns_lock()) {
+    // Previous callback is still running, skip this one
+    return;
+  }
+
   // Lazy initialization of controlles - they require having fully constructed
   // node and shared_from_this can be called only after constructor
   if (!controllers_initialized_) {
