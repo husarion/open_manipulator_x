@@ -9,7 +9,7 @@
                     namespace:=''
                     prefix:=''">
 
-    <xacro:property name="meshes_dir" value="package://open_manipulator_x_description/meshes"/>
+    <xacro:property name="meshes_dir" value="package://open_manipulator_description/meshes/open_manipulator_x"/>
     <xacro:property name="link1_length" value="0.06"/>
 
     <xacro:if value="${parent_link != ''}">
