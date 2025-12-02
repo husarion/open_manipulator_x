@@ -59,7 +59,7 @@
     <disable_collisions link1="antenna_link" link2="link3" reason="Never"/>
     <disable_collisions link1="antenna_link" link2="rl_wheel_link" reason="Never"/>
     <disable_collisions link1="antenna_link" link2="rr_wheel_link" reason="Never"/>
-    <disable_collisions link1="antenna_link" link2="slamtec_rplidar_link" reason="Adjacent"/>
+    <disable_collisions link1="antenna_link" link2="rplidar_link" reason="Adjacent"/>
     <disable_collisions link1="antenna_connector_link" link2="body_link" reason="Adjacent"/>
     <disable_collisions link1="antenna_connector_link" link2="fl_wheel_link" reason="Never"/>
     <disable_collisions link1="antenna_connector_link" link2="fr_wheel_link" reason="Never"/>
@@ -68,7 +68,7 @@
     <disable_collisions link1="antenna_connector_link" link2="link3" reason="Never"/>
     <disable_collisions link1="antenna_connector_link" link2="rl_wheel_link" reason="Never"/>
     <disable_collisions link1="antenna_connector_link" link2="rr_wheel_link" reason="Never"/>
-    <disable_collisions link1="antenna_connector_link" link2="slamtec_rplidar_link" reason="Adjacent"/>
+    <disable_collisions link1="antenna_connector_link" link2="rplidar_link" reason="Adjacent"/>
     <disable_collisions link1="body_link" link2="fl_wheel_link" reason="Adjacent"/>
     <disable_collisions link1="body_link" link2="fr_wheel_link" reason="Adjacent"/>
     <disable_collisions link1="body_link" link2="link1" reason="Adjacent"/>
@@ -76,7 +76,7 @@
     <disable_collisions link1="body_link" link2="link3" reason="Never"/>
     <disable_collisions link1="body_link" link2="rl_wheel_link" reason="Adjacent"/>
     <disable_collisions link1="body_link" link2="rr_wheel_link" reason="Adjacent"/>
-    <disable_collisions link1="body_link" link2="slamtec_rplidar_link" reason="Adjacent"/>
+    <disable_collisions link1="body_link" link2="rplidar_link" reason="Adjacent"/>
     <disable_collisions link1="fl_wheel_link" link2="fr_wheel_link" reason="Never"/>
     <disable_collisions link1="fl_wheel_link" link2="link1" reason="Never"/>
     <disable_collisions link1="fl_wheel_link" link2="link2" reason="Never"/>
@@ -84,14 +84,14 @@
     <disable_collisions link1="fl_wheel_link" link2="link4" reason="Never"/>
     <disable_collisions link1="fl_wheel_link" link2="rl_wheel_link" reason="Never"/>
     <disable_collisions link1="fl_wheel_link" link2="rr_wheel_link" reason="Never"/>
-    <disable_collisions link1="fl_wheel_link" link2="slamtec_rplidar_link" reason="Never"/>
+    <disable_collisions link1="fl_wheel_link" link2="rplidar_link" reason="Never"/>
     <disable_collisions link1="fr_wheel_link" link2="link1" reason="Never"/>
     <disable_collisions link1="fr_wheel_link" link2="link2" reason="Never"/>
     <disable_collisions link1="fr_wheel_link" link2="link3" reason="Never"/>
     <disable_collisions link1="fr_wheel_link" link2="link4" reason="Never"/>
     <disable_collisions link1="fr_wheel_link" link2="rl_wheel_link" reason="Never"/>
     <disable_collisions link1="fr_wheel_link" link2="rr_wheel_link" reason="Never"/>
-    <disable_collisions link1="fr_wheel_link" link2="slamtec_rplidar_link" reason="Never"/>
+    <disable_collisions link1="fr_wheel_link" link2="rplidar_link" reason="Never"/>
     <disable_collisions link1="gripper_left_link" link2="gripper_right_link" reason="Never"/>
     <disable_collisions link1="gripper_left_link" link2="link4" reason="Never"/>
     <disable_collisions link1="gripper_left_link" link2="link5" reason="Adjacent"/>
@@ -101,17 +101,17 @@
     <disable_collisions link1="link1" link2="link3" reason="Never"/>
     <disable_collisions link1="link1" link2="rl_wheel_link" reason="Never"/>
     <disable_collisions link1="link1" link2="rr_wheel_link" reason="Never"/>
-    <disable_collisions link1="link1" link2="slamtec_rplidar_link" reason="Adjacent"/>
+    <disable_collisions link1="link1" link2="rplidar_link" reason="Adjacent"/>
     <disable_collisions link1="link2" link2="link3" reason="Adjacent"/>
     <disable_collisions link1="link2" link2="rl_wheel_link" reason="Never"/>
     <disable_collisions link1="link2" link2="rr_wheel_link" reason="Never"/>
-    <disable_collisions link1="link2" link2="slamtec_rplidar_link" reason="Never"/>
+    <disable_collisions link1="link2" link2="rplidar_link" reason="Never"/>
     <disable_collisions link1="link3" link2="link4" reason="Adjacent"/>
     <disable_collisions link1="link3" link2="rl_wheel_link" reason="Never"/>
     <disable_collisions link1="link3" link2="rr_wheel_link" reason="Never"/>
-    <disable_collisions link1="link3" link2="slamtec_rplidar_link" reason="Never"/>
+    <disable_collisions link1="link3" link2="rplidar_link" reason="Never"/>
     <disable_collisions link1="link4" link2="link5" reason="Adjacent"/>
     <disable_collisions link1="rl_wheel_link" link2="rr_wheel_link" reason="Never"/>
-    <disable_collisions link1="rl_wheel_link" link2="slamtec_rplidar_link" reason="Never"/>
-    <disable_collisions link1="rr_wheel_link" link2="slamtec_rplidar_link" reason="Never"/>
+    <disable_collisions link1="rl_wheel_link" link2="rplidar_link" reason="Never"/>
+    <disable_collisions link1="rr_wheel_link" link2="rplidar_link" reason="Never"/>
 </robot>

@@ -156,7 +156,7 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          slamtec_rplidar_link:
+          rplidar_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -297,7 +297,7 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          slamtec_rplidar_link:
+          rplidar_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
