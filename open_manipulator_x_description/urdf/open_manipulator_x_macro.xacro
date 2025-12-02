@@ -18,6 +18,7 @@
 
     <!-- INCLUDE ROBOT MACRO -->
     <xacro:include filename="$(find open_manipulator_x_description)/urdf/body.xacro" ns="body"/>
+    <xacro:include filename="$(find open_manipulator_x_description)/urdf/materials.xacro" />
     <xacro:include filename="$(find open_manipulator_description)/gazebo/open_manipulator_x.gazebo.xacro"  ns="gazebo" />
     <xacro:include filename="$(find open_manipulator_description)/ros2_control/open_manipulator_x_position.ros2_control.xacro" ns="ros2_control" />
 

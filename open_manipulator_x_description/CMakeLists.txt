@@ -20,7 +20,7 @@ find_package(ament_cmake REQUIRED)
 # ##############################################################################
 # Install
 # ##############################################################################
-install(DIRECTORY meshes urdf DESTINATION share/${PROJECT_NAME})
+install(DIRECTORY urdf DESTINATION share/${PROJECT_NAME})
 
 # ##############################################################################
 # Macro for ament package
