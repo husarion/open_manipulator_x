@@ -25,7 +25,7 @@
 #include <termios.h>
 #include <unistd.h>
 
-namespace open_manipulator_x_joy {
+namespace husarion_open_manipulator_joy {
 
 enum CommandType {
   NONE = -1,
@@ -111,4 +111,4 @@ private:
   double gripper_position_;
 };
 
-} // namespace open_manipulator_x_joy
+} // namespace husarion_open_manipulator_joy

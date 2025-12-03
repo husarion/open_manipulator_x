@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <open_manipulator_x_joy/joy_control.hpp>
+#include <husarion_open_manipulator_joy/joy_control.hpp>
 
-namespace open_manipulator_x_joy {
+namespace husarion_open_manipulator_joy {
 
 AxisControl::AxisControl(int axis_id, double axis_deadzone, double scaling,
                          bool inverted_control, double pressing_threshold) {
@@ -139,4 +139,4 @@ std::unique_ptr<JoyControl> JoyControlFactory(
   return controller;
 }
 
-} // namespace open_manipulator_x_joy
+} // namespace husarion_open_manipulator_joy

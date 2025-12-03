@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef OPEN_MANIPULATOR_X_JOY__JOY_CONTROL_HPP_
-#define OPEN_MANIPULATOR_X_JOY__JOY_CONTROL_HPP_
+#ifndef HUSARION_OPEN_MANIPULATOR_JOY__JOY_CONTROL_HPP_
+#define HUSARION_OPEN_MANIPULATOR_JOY__JOY_CONTROL_HPP_
 
 #include <rclcpp/parameter.hpp>
 #include <rclcpp/rclcpp.hpp>
 
 #include <sensor_msgs/msg/joy.hpp>
 
-namespace open_manipulator_x_joy {
+namespace husarion_open_manipulator_joy {
 class JoyControl {
 public:
   virtual ~JoyControl() = default;
@@ -88,6 +88,6 @@ std::unique_ptr<JoyControl> JoyControlFactory(
     const rclcpp::node_interfaces::NodeLoggingInterface::SharedPtr &logging_itf,
     std::string param_namespace, double scaling = 1.0);
 
-} // namespace open_manipulator_x_joy
+} // namespace husarion_open_manipulator_joy
 
-#endif // OPEN_MANIPULATOR_X_JOY__JOY_CONTROL_HPP_
+#endif // HUSARION_OPEN_MANIPULATOR_JOY__JOY_CONTROL_HPP_

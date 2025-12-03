@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef OPEN_MANIPULATOR_X_JOY__JOY_SERVO_NODE_HPP_
-#define OPEN_MANIPULATOR_X_JOY__JOY_SERVO_NODE_HPP_
+#ifndef HUSARION_OPEN_MANIPULATOR_JOY__JOY_SERVO_NODE_HPP_
+#define HUSARION_OPEN_MANIPULATOR_JOY__JOY_SERVO_NODE_HPP_
 
 #include <memory>
 #include <mutex>
@@ -24,10 +24,10 @@
 
 #include <sensor_msgs/msg/joy.hpp>
 
-#include <open_manipulator_x_joy/joy_control.hpp>
-#include <open_manipulator_x_joy/manipulation_controller.hpp>
+#include <husarion_open_manipulator_joy/joy_control.hpp>
+#include <husarion_open_manipulator_joy/manipulation_controller.hpp>
 
-namespace open_manipulator_x_joy {
+namespace husarion_open_manipulator_joy {
 class JoyServoNode : public rclcpp::Node {
 public:
   JoyServoNode(const rclcpp::NodeOptions &options = rclcpp::NodeOptions());
@@ -56,6 +56,6 @@ private:
 
   std::mutex joy_mutex_;
 };
-} // namespace open_manipulator_x_joy
+} // namespace husarion_open_manipulator_joy
 
-#endif // OPEN_MANIPULATOR_X_JOY__JOY_SERVO_NODE_HPP_
+#endif // HUSARION_OPEN_MANIPULATOR_JOY__JOY_SERVO_NODE_HPP_

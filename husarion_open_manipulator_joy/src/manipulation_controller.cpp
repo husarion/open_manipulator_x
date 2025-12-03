@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <open_manipulator_x_joy/manipulation_controller.hpp>
+#include <husarion_open_manipulator_joy/manipulation_controller.hpp>
 
 #include <rclcpp/parameter.hpp>
 
-namespace open_manipulator_x_joy {
+namespace husarion_open_manipulator_joy {
 
 bool ManipulationController::CheckIfPressed(
     const sensor_msgs::msg::Joy::SharedPtr msg,
@@ -308,4 +308,4 @@ void ManipulatorMoveGroupController::MoveToHomePose() {
   gripper_group_->move(); // To make sure the action is finished
 }
 
-} // namespace open_manipulator_x_joy
+} // namespace husarion_open_manipulator_joy

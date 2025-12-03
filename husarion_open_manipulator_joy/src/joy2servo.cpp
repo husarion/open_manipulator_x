@@ -19,13 +19,13 @@
 #include <memory>
 #include <moveit/move_group_interface/move_group_interface.hpp>
 #include <moveit_msgs/srv/servo_command_type.hpp>
-#include <open_manipulator_x_joy/joy2servo.hpp>
+#include <husarion_open_manipulator_joy/joy2servo.hpp>
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/joy.hpp>
 #include <string>
 #include <unordered_map>
 
-namespace open_manipulator_x_joy {
+namespace husarion_open_manipulator_joy {
 
 Joy2Servo::Joy2Servo() : Node("joy2servo") {
   twist_pub_ = this->create_publisher<geometry_msgs::msg::TwistStamped>(
@@ -197,11 +197,11 @@ void Joy2Servo::UpdateReqCommand(const sensor_msgs::msg::Joy::SharedPtr msg) {
   }
 }
 
-} // namespace open_manipulator_x_joy
+} // namespace husarion_open_manipulator_joy
 
 int main(int argc, char **argv) {
   rclcpp::init(argc, argv);
-  auto node = std::make_shared<open_manipulator_x_joy::Joy2Servo>();
+  auto node = std::make_shared<husarion_open_manipulator_joy::Joy2Servo>();
   node->InitializeMoveGroup();
   rclcpp::spin(node);
   rclcpp::shutdown();

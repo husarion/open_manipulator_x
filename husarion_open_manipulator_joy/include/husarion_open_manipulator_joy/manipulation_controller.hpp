@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef OPEN_MANIPULATOR_X_JOY__MANIPULATION_CONTROLLER_HPP_
-#define OPEN_MANIPULATOR_X_JOY__MANIPULATION_CONTROLLER_HPP_
+#ifndef HUSARION_OPEN_MANIPULATOR_JOY__MANIPULATION_CONTROLLER_HPP_
+#define HUSARION_OPEN_MANIPULATOR_JOY__MANIPULATION_CONTROLLER_HPP_
 
 #include <map>
 #include <vector>
@@ -27,9 +27,9 @@
 #include <moveit/move_group_interface/move_group_interface.h>
 #include <moveit/planning_scene_interface/planning_scene_interface.h>
 
-#include <open_manipulator_x_joy/joy_control.hpp>
+#include <husarion_open_manipulator_joy/joy_control.hpp>
 
-namespace open_manipulator_x_joy {
+namespace husarion_open_manipulator_joy {
 
 using MGI = moveit::planning_interface::MoveGroupInterface;
 using MGI_Ptr = moveit::planning_interface::MoveGroupInterfacePtr;
@@ -133,6 +133,6 @@ private:
   double gripper_max_pose_;
 };
 
-} // namespace open_manipulator_x_joy
+} // namespace husarion_open_manipulator_joy
 
-#endif // OPEN_MANIPULATOR_X_JOY__MANIPULATION_CONTROLLER_HPP_
+#endif // HUSARION_OPEN_MANIPULATOR_JOY__MANIPULATION_CONTROLLER_HPP_

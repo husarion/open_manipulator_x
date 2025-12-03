@@ -47,7 +47,7 @@ def generate_launch_description():
         "joy_servo_params_file",
         default_value=PathJoinSubstitution(
             [
-                FindPackageShare("open_manipulator_x_joy"),
+                FindPackageShare("husarion_open_manipulator_joy"),
                 "config",
                 "joy_servo.yaml",
             ]
@@ -74,7 +74,7 @@ def generate_launch_description():
     ).to_moveit_configs()
 
     # Get parameters for the Servo node
-    servo_yaml = load_yaml("open_manipulator_x_joy", "config/servo.yaml")
+    servo_yaml = load_yaml("husarion_open_manipulator_joy", "config/servo.yaml")
     servo_params = {
         "moveit_servo": servo_yaml,
         "moveit_servo.use_gazebo": use_sim,
@@ -133,7 +133,7 @@ def generate_launch_description():
     )
 
     joy_servo_node = Node(
-        package="open_manipulator_x_joy",
+        package="husarion_open_manipulator_joy",
         executable="joy_servo",
         parameters=[joy_servo_config],
     )

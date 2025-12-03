@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <open_manipulator_x_joy/joy_servo_node.hpp>
+#include <husarion_open_manipulator_joy/joy_servo_node.hpp>
 
 #include <std_srvs/srv/trigger.hpp>
 
 #include <moveit_msgs/srv/change_drift_dimensions.hpp>
 
-namespace open_manipulator_x_joy {
+namespace husarion_open_manipulator_joy {
 
 JoyServoNode::JoyServoNode(const rclcpp::NodeOptions &options)
     : Node("joy_servo", options) {
@@ -146,11 +146,11 @@ void JoyServoNode::InitializeControllers() {
       std::make_unique<JointController>(this->shared_from_this()));
 }
 
-} // namespace open_manipulator_x_joy
+} // namespace husarion_open_manipulator_joy
 
 int main(int argc, char **argv) {
   rclcpp::init(argc, argv);
-  rclcpp::spin(std::make_shared<open_manipulator_x_joy::JoyServoNode>());
+  rclcpp::spin(std::make_shared<husarion_open_manipulator_joy::JoyServoNode>());
   rclcpp::shutdown();
   return 0;
 }

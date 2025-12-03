@@ -27,7 +27,7 @@
   <exec_depend>moveit_servo</exec_depend>
   <exec_depend>moveit_setup_assistant</exec_depend>
   <exec_depend>moveit_simple_controller_manager</exec_depend>
-  <exec_depend>open_manipulator_x_joy</exec_depend>
+  <exec_depend>husarion_open_manipulator_joy</exec_depend>
   <exec_depend>rosbot_description</exec_depend>
   <exec_depend>rviz2</exec_depend>
   <exec_depend>rviz_common</exec_depend>
