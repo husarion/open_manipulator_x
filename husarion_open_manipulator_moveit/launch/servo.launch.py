@@ -70,7 +70,7 @@ def generate_launch_description():
     )
 
     moveit_config = MoveItConfigsBuilder(
-        "rosbot_xl", package_name="open_manipulator_x_moveit"
+        "rosbot_xl", package_name="husarion_open_manipulator_moveit"
     ).to_moveit_configs()
 
     # Get parameters for the Servo node

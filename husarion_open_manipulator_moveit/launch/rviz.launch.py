@@ -30,12 +30,12 @@ def generate_launch_description():
     )
 
     moveit_config = MoveItConfigsBuilder(
-        "rosbot_xl", package_name="open_manipulator_x_moveit"
+        "rosbot_xl", package_name="husarion_open_manipulator_moveit"
     ).to_moveit_configs()
 
     rviz_config = PathJoinSubstitution(
         [
-            FindPackageShare("open_manipulator_x_moveit"),
+            FindPackageShare("husarion_open_manipulator_moveit"),
             "config",
             "moveit.rviz",
         ]

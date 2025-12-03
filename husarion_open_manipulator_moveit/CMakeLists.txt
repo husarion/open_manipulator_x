@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.22)
-project(open_manipulator_x_moveit)
+project(husarion_open_manipulator_moveit)
 
 set(PACKAGE_INCLUDE_DEPENDS
     ament_cmake moveit_core moveit_msgs moveit_ros_planning
