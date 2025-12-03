@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>open_manipulator_x_description</name>
+  <name>husarion_open_manipulator_description</name>
   <version>3.0.0</version>
-  <description>open_manipulator_x_description ROS 2 package.</description>
+  <description>Open manipulator description ROS 2 package.</description>
   <maintainer email="pyo@robotis.com">Pyo</maintainer>
   <license>Apache 2.0</license>
   <url type="website">http://wiki.ros.org/open_manipulator</url>

@@ -2,7 +2,7 @@
 # Set minimum required version of cmake, project name and compile options
 # ##############################################################################
 cmake_minimum_required(VERSION 3.5)
-project(open_manipulator_x_description)
+project(husarion_open_manipulator_description)
 
 if(NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 14)
