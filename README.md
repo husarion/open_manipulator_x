@@ -1,4 +1,4 @@
-# open_manipulator_x
+# husarion_open_manipulator
 
 In this repo, you can find the integration of OpenManipulatorX with `ros2_control`. Based on the [code provided by Robotis](https://github.com/ROBOTIS-GIT/open_manipulator), updated to work with the Humble distribution of ROS 2. You can use it by including `open_manipulator_x_macro` in the URDF of your robot, for example:
 
