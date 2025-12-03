@@ -20,9 +20,8 @@ find_package(ament_cmake REQUIRED)
 # ##############################################################################
 # Install
 # ##############################################################################
-install(DIRECTORY meshes urdf DESTINATION share/${PROJECT_NAME})
+install(DIRECTORY urdf DESTINATION share/${PROJECT_NAME})
 
-ament_environment_hooks("${CMAKE_CURRENT_SOURCE_DIR}/hooks/setup_envs.sh.in")
 # ##############################################################################
 # Macro for ament package
 # ##############################################################################
