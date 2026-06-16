@@ -114,6 +114,9 @@
     <disable_collisions link1="rl_wheel_link" link2="rr_wheel_link" reason="Never"/>
     <disable_collisions link1="rl_wheel_link" link2="slamtec_rplidar_link" reason="Never"/>
     <disable_collisions link1="rr_wheel_link" link2="slamtec_rplidar_link" reason="Never"/>
+
+    <!--HOTFIX: Collision pairs below are disabled to prevent need to orient arm to the rear to
+    operate and stop collision detection warnings. -->
     <disable_collisions link1="antenna_link" link2="gripper_left_link" reason="Never"/>
     <disable_collisions link1="antenna_link" link2="gripper_right_link" reason="Never"/>
     <disable_collisions link1="antenna_link" link2="link4" reason="Never"/>
